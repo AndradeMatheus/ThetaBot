@@ -1,0 +1,24 @@
+{
+  "name": "tetabot",
+  "version": "0.1pm install --global eslint",
+  "description": "TetaBot powered by Discord.JS",
+  "main": "index.js",
+  "dependencies": {
+    "discord": "^0.8.2",
+    "discord.js": "^12.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "TetaBot"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "Matheus Andrade",
+  "license": "ISC"
+}
