@@ -1,6 +1,6 @@
 {
   "name": "tetabot",
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "TetaBot powered by Discord.JS",
   "main": "./scripts/tests.js",
   "dependencies": {
