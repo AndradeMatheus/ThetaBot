@@ -1,43 +1,31 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
 const config = require('../config');
+const axios = require('axios');
+const ytdl = require('ytdl-core');
+const client = new Discord.Client();
 const token = config.configs.auth.token;
 const prefix = config.configs.config.prefix;
 const botId = '799778892780011530'
-const axios = require('axios');
-const ytdl = require('ytdl-core');
 
-client.once('ready', () => {
-  console.log(`EAE MACACO!`);
-});
+const botCommands = {
+  [`${prefix}agu`]: handleAgu,
+  [`${prefix}instant`]: handleInstant,
+  [`${prefix}dilera`]: handleDilera,
+  [`${prefix}tey`]: handleTey,
+};
 
-client.on('message', async msg => {
-  if(msg.author.id != botId && msg.channel.name == 'theta-bot'){
-    if(msg.content.startsWith(`${prefix}agu`)){
-      msg.channel.send(new Discord.MessageAttachment(`https://cdn.discordapp.com/attachments/785238813919805451/785707669125464104/unknown.png`))
-    }
-    else if(msg.content.startsWith(`${prefix}instant`)){
-      let search = msg.content.replace(`${prefix}macaco-instants `, "");
-      let instant = await getMyInstants(search);
-      if (msg.member.voice.channel) {
-        const connection = await msg.member.voice.channel.join();
-        connection.play(instant.sound);
-      }
-    }
-    else if(msg.content.startsWith(`${prefix}dilera`)){
-      const connection = await msg.member.voice.channel.join();
-      connection.play("https://www.myinstants.com/api/v1/instants/buzina-dilera-35795");
-    }
-    else if(msg.content.startsWith(`${prefix}tey`)){
-      const connection = await msg.member.voice.channel.join();
-      connection.play("https://www.myinstants.com/api/v1/instants/tey-quietinho-bydilera-40676");
-    }
-    else if(msg.content.includes("bot") && msg.content.includes("funcionand")){
-      msg.channel.reply("eu nao to funcionando direito nao seu animal")
-    }
+async function handleAgu(msg){
+  msg.channel.send(new Discord.MessageAttachment(`https://cdn.discordapp.com/attachments/785238813919805451/785707669125464104/unknown.png`));
+}
+
+async function handleInstant(msg){
+  let search = msg.content.replace(`${prefix}instant `, '');
+  let instant = await getMyInstants(search);
+  if (msg.member.voice.channel) {
+    const connection = await msg.member.voice.channel.join();
+    connection.play(instant.sound);
   }
-  console.log(`${msg.content} do autor ${msg.author.name}`)
-});
+}
 
 async function getMyInstants(search) {
   let query = search.replace(/ /g, "-");
@@ -51,5 +39,36 @@ async function getMyInstants(search) {
     return err;
   }
 }
+
+async function handleDilera(msg){
+  const connection = await msg.member.voice.channel.join();
+  connection.play("https://www.myinstants.com/media/sounds/buzinaprolongada.mp3");
+}
+
+async function handleTey(msg){
+  const connection = await msg.member.voice.channel.join();
+  connection.play("https://www.myinstants.com/media/sounds/tey-quietinho-bydilera.mp3");
+}
+
+client.on('message', async msg => {
+  if(msg.author.id != botId && msg.channel.name == 'theta-bot'){
+    const command = msg.content.split(' ')[0];
+    if (command
+      && command in botCommands){
+        const fn = botCommands[command];
+        await fn(msg);
+    }
+    
+    if(msg.content.includes("bot") && msg.content.includes("funcionand")){
+      msg.channel.reply("eu nao to funcionando direito nao seu animal");
+    }
+
+    console.log(`${msg.content} do autor ${msg.author.name}`);
+  }  
+});
+
+client.once('ready', () => {
+  console.log(`EAE MACACO!`);
+});
 
 client.login(token);
