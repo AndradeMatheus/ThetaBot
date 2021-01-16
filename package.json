@@ -24,5 +24,8 @@
     "bot"
   ],
   "author": "Matheus Andrade",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": "^12.13.1"
+  }
 }
