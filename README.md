@@ -14,4 +14,4 @@ npm i
 
 ## Uso
 
-A aplicação está em desenvolvimento e 
+A aplicação está em desenvolvimento
