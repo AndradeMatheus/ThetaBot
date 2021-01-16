@@ -15,3 +15,5 @@ npm i
 ## Uso
 
 A aplicação está em desenvolvimento
+
+![ThetaBot](https://i.imgur.com/BzxGYHn.png)
