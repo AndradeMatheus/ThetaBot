@@ -16,7 +16,7 @@ client.on('message', async msg => {
     if(msg.content.startsWith(`${prefix}agu`)){
       msg.channel.send(new Discord.MessageAttachment(`https://cdn.discordapp.com/attachments/785238813919805451/785707669125464104/unknown.png`))
     }
-    else if(msg.content.startsWith(`${prefix}macaco-instants`)){
+    else if(msg.content.startsWith(`${prefix}instant`)){
       let search = msg.content.replace(`${prefix}macaco-instants `, "");
       let instant = await getMyInstants(search);
       if (msg.member.voice.channel) {
@@ -24,8 +24,16 @@ client.on('message', async msg => {
         connection.play(instant.sound);
       }
     }
-    else{
-      msg.channel.send("eu nao to funcionando direito nao seu animal")
+    else if(msg.content.startsWith(`${prefix}dilera`)){
+      const connection = await msg.member.voice.channel.join();
+      connection.play("https://www.myinstants.com/api/v1/instants/buzina-dilera-35795");
+    }
+    else if(msg.content.startsWith(`${prefix}tey`)){
+      const connection = await msg.member.voice.channel.join();
+      connection.play("https://www.myinstants.com/api/v1/instants/tey-quietinho-bydilera-40676");
+    }
+    else if(msg.content.includes("bot") && msg.content.includes("funcionand")){
+      msg.channel.reply("eu nao to funcionando direito nao seu animal")
     }
   }
   console.log(`${msg.content} do autor ${msg.author.name}`)
