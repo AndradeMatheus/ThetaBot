@@ -1,8 +1,8 @@
 {
   "name": "tetabot",
-  "version": "0.1pm install --global eslint",
+  "version": "0.1",
   "description": "TetaBot powered by Discord.JS",
-  "main": "index.js",
+  "main": "./scripts/tests.js",
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
     "axios": "^0.21.1",
