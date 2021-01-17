@@ -9,7 +9,7 @@ const botId = '799778892780011530'
 
 const botCommands = {
   [`${prefix}agu`]: handleAgu,
-  [`${prefix}instant`]: handleInstant,
+  [`${prefix}inst`]: handleInstant,
   [`${prefix}dilera`]: handleDilera,
   [`${prefix}tey`]: handleTey,
 };
@@ -19,7 +19,7 @@ async function handleAgu(msg){
 }
 
 async function handleInstant(msg){
-  let search = msg.content.replace(`${prefix}instant `, '');
+  let search = msg.content.replace(`${prefix}inst `, '');
   let instant = await getMyInstants(search);
   if (msg.member.voice.channel) {
     const connection = await msg.member.voice.channel.join();
