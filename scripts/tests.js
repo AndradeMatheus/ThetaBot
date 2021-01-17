@@ -60,7 +60,7 @@ client.on('message', async msg => {
     }
     
     if(msg.content.includes("bot") && msg.content.includes("funcionand")){
-      msg.channel.reply("eu nao to funcionando direito nao seu animal");
+      msg.reply("eu nao to funcionando direito nao seu animal");
     }
 
     console.log(`${msg.content} do autor ${msg.author.name}`);
