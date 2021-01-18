@@ -20,23 +20,24 @@ async function handleAgu(msg){
 
 async function handleInstant(msg){
   let search = msg.content.replace(`${prefix}inst `, '');
-  let instant = await getMyInstants(msg, search);
+  let instant = await getMyInstants(search);
 
-  if (msg.member.voice.channel) {
+  if (instant?.sound && msg.member.voice.channel) {
     const connection = await msg.member.voice.channel.join();
     connection.play(instant.sound);
   }
+  else{
+    msg.reply("instant não encontrado");
+  }
 }
 
-async function getMyInstants(msg, search) {
+async function getMyInstants(search) {
   let query = search.replace(/ /g, "-");
   try{
     const response = await axios.get(`https://www.myinstants.com/api/v1/instants/${query}`)
     if(response.data.sound){
       return response.data;
-    } else {
-      msg.channel.reply('Nenhum instant encontrado');
-    }
+    }     
   }
   catch(err){
     return err;
