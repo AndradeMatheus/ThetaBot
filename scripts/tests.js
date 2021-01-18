@@ -9,7 +9,7 @@ const botId = '799778892780011530'
 
 const botCommands = {
   [`${prefix}agu`]: handleAgu,
-  [`${prefix}instant`]: handleInstant,
+  [`${prefix}inst`]: handleInstant,
   [`${prefix}dilera`]: handleDilera,
   [`${prefix}tey`]: handleTey,
 };
@@ -19,7 +19,7 @@ async function handleAgu(msg){
 }
 
 async function handleInstant(msg){
-  let search = msg.content.replace(`${prefix}instant `, '');
+  let search = msg.content.replace(`${prefix}inst `, '');
   let instant = await getMyInstants(msg, search);
 
   if (msg.member.voice.channel) {
@@ -63,7 +63,7 @@ client.on('message', async msg => {
     }
     
     if(msg.content.includes("bot") && msg.content.includes("funcionand")){
-      msg.channel.reply("eu nao to funcionando direito nao seu animal");
+      msg.reply("eu nao to funcionando direito nao seu animal");
     }
 
     console.log(`${msg.content} do autor ${msg.author.name}`);
