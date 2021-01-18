@@ -22,7 +22,7 @@ async function handleInstant(msg){
   let search = msg.content.replace(`${prefix}inst `, '');
   let instant = await getMyInstants(search);
 
-  if (instant?.sound && msg.member.voice.channel) {
+  if (!!instant.sound && msg.member.voice.channel) {
     const connection = await msg.member.voice.channel.join();
     connection.play(instant.sound);
   }
