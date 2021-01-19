@@ -2,7 +2,7 @@
   "name": "tetabot",
   "version": "0.1.0",
   "description": "TetaBot powered by Discord.JS",
-  "main": "./scripts/tests.js",
+  "main": "./scripts/index.js",
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
     "axios": "^0.21.1",
@@ -14,7 +14,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./scripts/tests.js"
+    "start": "node ./scripts/index.js"
   },
   "repository": {
     "type": "git",

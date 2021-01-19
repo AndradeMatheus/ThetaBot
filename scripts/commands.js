@@ -43,16 +43,24 @@ const handleTey = async (msg) => {
 }
 
 const handleHelp = async (msg) => {
-    let help = '';
+    let help = [];
 
     for (key in commands) {
         const command = commands[key];
 
-        if (command.description) help += `${command.name}\t\t\t\t${command.description}\n`;
+        if (command.description) help.push({name:command.name, value: command.description});
     }
 
-    if (help) msg.reply(`\nSegue a lista de comandos disponíveis: \n${help}`);
-};
+    if (help){
+        const embed = new Discord.MessageEmbed()
+        .setTitle('Help')
+        .setColor(0x5b34eb)
+        .addFields(help)
+        .setThumbnail('https://i.kym-cdn.com/photos/images/newsfeed/001/931/959/2e4.gif')
+        
+        msg.channel.send(embed);
+    } 
+}
 
 const commands = {
     [`${prefix}agu`]: new Command(`${prefix}agu`, 'Exibe retrato verocímio de Lucão e Ninext', handleAgu),
