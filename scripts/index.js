@@ -6,10 +6,10 @@ const commands = require('./commands');
 client.on('message', async msg => {
   if(msg.author.id != config.botId && msg.channel.name == 'theta-bot'){
     const commandName = msg.content.split(' ')[0];
-    if (commandName
-      && commandName in commands){
-        const cmd = commands[commandName];
-        await cmd.execute(msg);
+    if (commandName){
+        const cmd = commands.find(c => c.name === commandName);
+
+        if (cmd) await cmd.execute(msg);
     }
     
     if(msg.content.includes("bot") && msg.content.includes("funcionand")){
