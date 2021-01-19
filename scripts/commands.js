@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const axios = require('axios');
 const config = require('../config');
 const Command = require('./command');
