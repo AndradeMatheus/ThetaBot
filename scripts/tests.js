@@ -1,12 +1,10 @@
 const Discord = require('discord.js');
-const config = require('../config');
+const { config, auth } = require('../config');
 const client = new Discord.Client();
-const token = config.auth.token;
-const { botId } = config.config;
 const commands = require('./commands');
 
 client.on('message', async msg => {
-  if(msg.author.id != botId && msg.channel.name == 'theta-bot'){
+  if(msg.author.id != config.botId && msg.channel.name == 'theta-bot'){
     const commandName = msg.content.split(' ')[0];
     if (commandName
       && commandName in commands){
@@ -26,4 +24,4 @@ client.once('ready', () => {
   console.log(`EAE MACACO!`);
 });
 
-client.login(token);
+client.login(auth.token);

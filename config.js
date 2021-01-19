@@ -1,9 +1,10 @@
-exports.configs = 
+module.exports = 
 {
     auth: {
         token: process.env.BOT_TOKEN
     },
     config: {
-        prefix: "."
+        prefix: ".",
+        botId: '799778892780011530'
     }
 }
