@@ -14,7 +14,7 @@ client.on('message', async msg => {
         else getInstantAlias(commandName, msg);
     }
 
-    if(msg.content.includes("bot") && msg.content.includes("funcionand")){
+    if(msg.content.includes("bot") && msg.content.includes("funcion")){
       msg.reply("eu nao to funcionando direito nao seu animal");
     }
 

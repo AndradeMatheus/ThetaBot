@@ -1,11 +1,12 @@
 const Discord = require('discord.js');
+const assets = require('./assets')
 const axios = require('axios');
 const Command = require('./command');
 const fs = require('fs');
 const { BOT_PREFIX: prefix } = process.env;
 
 const handleAgu = async (msg) => {
-    msg.channel.send(new Discord.MessageAttachment(`https://cdn.discordapp.com/attachments/785238813919805451/785707669125464104/unknown.png`));
+    msg.channel.send(new Discord.MessageAttachment(assets.lucasNinext));
 }
 
 const handleInstant = async (msg, command = null) => {
@@ -108,7 +109,7 @@ const handleInstantListAlias = async (msg) => {
                 .setTitle('Lista de alias')
                 .setColor(0x5b34eb)
                 .addFields(aliases)
-                .setThumbnail('https://i.gifer.com/iXR.gif')
+                .setThumbnail(assets.macacoNotebook)
                 
                 msg.channel.send(embed);
             }
@@ -127,7 +128,7 @@ const handleInstantEditAlias = async (msg) => {
 
 const handleDilera = async (msg) => {
   const connection = await msg.member.voice.channel.join();
-  connection.play("https://www.myinstants.com/media/sounds/buzinaprolongada.mp3");
+  connection.play(assets.dileraBuzina);
 }
 
 const handleHelp = async (msg) => {
@@ -142,7 +143,7 @@ const handleHelp = async (msg) => {
         .setTitle('Help')
         .setColor(0x5b34eb)
         .addFields(help)
-        .setThumbnail('https://i.kym-cdn.com/photos/images/newsfeed/001/931/959/2e4.gif')
+        .setThumbnail(assets.gatoPop)
         
         msg.channel.send(embed);
     } 
