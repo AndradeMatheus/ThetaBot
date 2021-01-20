@@ -2,7 +2,8 @@ require('dotenv').config()
 const Discord = require('discord.js');
 const { BOT_ID: botId, BOT_TOKEN: token } = process.env;
 const client = new Discord.Client();
-const {commands, getInstantAlias} = require('./commands');
+const commands = require('./commands');
+const { getInstantAlias } = require('./myinstants.commands');
 
 client.on('message', async msg => {
   if(msg.author.id != botId && msg.channel.name == 'theta-bot'){
