@@ -40,7 +40,7 @@ const getInstantAlias = async(command, msg) => {
         if (err) {
             console.log("ocorreu um erro ao ler o arquivo de aliases.");
             msg.reply("ocorreu um erro ao ler o arquivo de aliases ou ele não existe.");
-        }else{
+        }else if(command.startsWith(prefix)){
             command = command.replace(prefix, '');
             const file =  JSON.parse(data.toString());
             let server = file.servers[msg.guild.id];
@@ -64,9 +64,12 @@ const handleInstantCreateAlias = async(msg) => {
         let alias = command.split(' ')[0];
         let sound = command.split(' ')[1].includes('myinstants.com') ? command
                                                                     .split(' ')[1]
-                                                                    .slice(command.split(' ')[1].lastIndexOf("instant/")+9, 
-                                                                    command.split(' ')[1].length).replace("/", "") 
-                                                                    : command.split(' ')[1].replace("/", "");
+                                                                    .replace("https://", "")
+                                                                    .replace("http://", "")
+                                                                    .replace("www.", "")
+                                                                    .replace("myinstants.com/instant/", "")
+                                                                    .replace("/", "")
+                                                                    : command.replace("/", "");
 
         fs.readFile('./storage/instants-aliases.json', (err, data) => {
             if (err) {
