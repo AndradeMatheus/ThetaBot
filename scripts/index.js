@@ -1,7 +1,9 @@
 require('dotenv').config()
 const Discord = require('discord.js');
 const { BOT_ID: botId, BOT_TOKEN: token } = process.env;
-const client = new Discord.Client();
+const client = new Discord.Client({
+  restTimeOffset: 25
+});
 const commands = require('./commands');
 const { getInstantAlias } = require('./myinstants.commands');
 
