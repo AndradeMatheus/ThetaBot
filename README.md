@@ -1,6 +1,6 @@
 # O que é isso?
 
-O ThetaBot é um bot para uso no [Discord](https://discord.com/) criado por mim e com a contribuição do (Lucas)[https://github.com/lucasvsouza28] para fins de estudo e também pra me divertir um pouco com os amigos.
+O ThetaBot é um bot para uso no [Discord](https://discord.com/) criado por mim e com a contribuição do [Lucas](https://github.com/lucasvsouza28) para fins de estudo e também pra me divertir um pouco com os amigos.
 
 Totalmente baseado na biblioteca própria do Discord, o [Discord.js](https://discord.js.org/#/).
 
