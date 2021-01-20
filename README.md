@@ -1,4 +1,4 @@
-# O que é isso?
+## O que é isso?
 
 O ThetaBot é um bot para uso no [Discord](https://discord.com/) criado por mim e com a contribuição do [Lucas](https://github.com/lucasvsouza28) para fins de estudo e também pra me divertir um pouco com os amigos.
 
@@ -32,8 +32,20 @@ Caso o deploy seja feito no Heroku, há um guia para utilizar as [config vars](h
 
 A aplicação está em desenvolvimento.
 
-Atualmente a única usabilidade é a pesquisa de sons no [myInstants](http://myinstants.com/) com o comando .inst nome-do-som.
+Atualmente as funcionalidades principais são o uso, reprodução e manipulação dos botões/sons do [MyInstants](https://www.myinstants.com/index/br/), com os comandos abaixo:
+
+* .inst nome do som - Utiliza a api aberta do MyInstants para pesquisar e reproduzir um som a partir do bot no canal de voz em que o usuário está.
+
+* inst.create alias url-do-som - Define um alias para algum som do MyInstants, podendo chamar o som apenas com o comando .nome-do-alias
+
+* inst.list - Lista todos os aliases criados no servidor e quais sons irá reproduzir
 
 Escreva .help no chat para as demais funcionalidades.
 
 ![ThetaBot](https://i.imgur.com/BzxGYHn.png)
+
+## Licenças
+
+[Discord libraries](https://discord.com/licenses)
+
+[MyInstants TOF](https://www.myinstants.com/terms_of_use.html)
