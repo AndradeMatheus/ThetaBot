@@ -8,6 +8,7 @@
     "axios": "^0.21.1",
     "discord": "^0.8.2",
     "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.7",
     "ytdl-core": "^4.4.3"
   },

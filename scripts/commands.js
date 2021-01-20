@@ -1,9 +1,8 @@
 const Discord = require('discord.js');
 const axios = require('axios');
-const config = require('../config');
 const Command = require('./command');
 const fs = require('fs');
-const { prefix, botId } = config.config;
+const { BOT_PREFIX: prefix } = process.env;
 
 const handleAgu = async (msg) => {
     msg.channel.send(new Discord.MessageAttachment(`https://cdn.discordapp.com/attachments/785238813919805451/785707669125464104/unknown.png`));
@@ -62,14 +61,14 @@ const handleInstantCreateAlias = async(msg) => {
     try{
         let command = msg.content.replace(`${prefix}inst-create `, '');
         let alias = command.split(' ')[0];
-        let sound = command.split(' ')[1].includes('myinstants.com') ? command
-                                                                    .split(' ')[1]
-                                                                    .replace("https://", "")
-                                                                    .replace("http://", "")
-                                                                    .replace("www.", "")
-                                                                    .replace("myinstants.com/instant/", "")
-                                                                    .replace("/", "")
-                                                                    : command.replace("/", "");
+        let arrSound = command.split(' ')[1];
+        let sound = arrSound.includes('myinstants.com') ? arrSound
+                                                          .replace("https://", "")
+                                                          .replace("http://", "")
+                                                          .replace("www.", "")
+                                                          .replace("myinstants.com/instant/", "")
+                                                          .replace("/", "")
+                                                          : arrSound.replace("/", "");
 
         fs.readFile('./storage/instants-aliases.json', (err, data) => {
             if (err) {

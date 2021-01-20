@@ -1,10 +1,11 @@
+require('dotenv').config()
 const Discord = require('discord.js');
-const { config, auth } = require('../config');
+const { BOT_ID: botId, BOT_TOKEN: token } = process.env;
 const client = new Discord.Client();
 const {commands, getInstantAlias} = require('./commands');
 
 client.on('message', async msg => {
-  if(msg.author.id != config.botId && msg.channel.name == 'theta-bot'){
+  if(msg.author.id != botId && msg.channel.name == 'theta-bot'){
     const commandName = msg.content.split(' ')[0];
     if (commandName){
         const cmd = commands.find(c => c.name === commandName);
@@ -25,4 +26,4 @@ client.once('ready', () => {
   console.log(`EAE MACACO!`);
 });
 
-client.login(auth.token);
+client.login(token);
