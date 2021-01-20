@@ -36,11 +36,13 @@ const getMyInstants = async(search) => {
 }
 
 const getInstantAlias = async(command, msg) => {
-    fs.readFile('./storage/instants-aliases.json', (err, data) => {
-        if (err) {
-            console.log("ocorreu um erro ao ler o arquivo de aliases.");
-            msg.reply("ocorreu um erro ao ler o arquivo de aliases ou ele não existe.");
-        }else if(command.startsWith(prefix)){
+    if(command.startsWith(prefix)){
+        fs.readFile('./storage/instants-aliases.json', (err, data) => {
+            if (err) {
+                console.log("ocorreu um erro ao ler o arquivo de aliases.");
+                msg.reply("ocorreu um erro ao ler o arquivo de aliases ou ele não existe.");
+                return;
+            }
             command = command.replace(prefix, '');
             const file =  JSON.parse(data.toString());
             let server = file.servers[msg.guild.id];
@@ -49,8 +51,8 @@ const getInstantAlias = async(command, msg) => {
                 handleInstant(msg, server.aliases[command])
             }
             else msg.reply("Não existem aliases nesse servidor.");
-        }
-    });
+        });
+    }
 }
 
 const handleInstantCreateAlias = async(msg) => {
