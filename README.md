@@ -4,6 +4,8 @@ O ThetaBot é um bot para uso no [Discord](https://discord.com/) criado por mim 
 
 Totalmente baseado na biblioteca própria do Discord, o [Discord.js](https://discord.js.org/#/).
 
+O nosso histórico de implementações, idéias e vontades para implementações futuras, estão no nosso [Trello](https://trello.com/b/bArWp6KZ/thetabot)
+
 ## Instalação
 
 As dependências podem ser instaladas com:
@@ -16,7 +18,15 @@ O guia de como configurar o bot no painel de desenvolvimento do Discord está no
 
 Recomenda-se usar o Heroku para hostear a aplicação, todas as configurações dos dynos estão no arquivo [Procfile](https://github.com/AndradeMatheus/ThetaBot/blob/master/Procfile)
 
-Após subir a aplicação no Heroku como um worker, é necessário adicionar uma chave de enviroment 'BOT_TOKEN' com o valor da Token fornecida pelo painel de desenvolvimento do Discord.
+Algumas variáveis de ambiente estão baseadas no node.env, elas serão definidas no host da sua aplicação, como abaixo:
+
+```bash
+BOT_TOKEN="TOKEN" #Token fornecida pelo painel de admnistrador do Discord
+BOT_ID="ID" #Id do bot
+BOT_PREFIX="." #Prefixo para utilizar os comandos do bot, à vontade do usuário
+```
+
+Caso o deploy seja feito no Heroku, há um guia para utilizar as [config vars](https://devcenter.heroku.com/articles/config-vars).
 
 ## Uso
 
