@@ -64,7 +64,7 @@ const handleInstantCreateAlias = async(msg) => {
         let alias = command.split(' ')[0];
         let sound = command.split(' ')[1].includes('myinstants.com') ? command
                                                                     .split(' ')[1]
-                                                                    .slice(command.split(' ')[1].lastIndexOf("instants/")+9, 
+                                                                    .slice(command.split(' ')[1].lastIndexOf("instant/")+9, 
                                                                     command.split(' ')[1].length).replace("/", "") 
                                                                     : command.split(' ')[1].replace("/", "");
 
