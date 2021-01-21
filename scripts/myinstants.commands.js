@@ -82,12 +82,11 @@ const handleInstantListAlias = async (msg) => {
 
     if (file){
         let server = file.servers[msg.guild.id];
-        const fileAliases = Object.entries(server.aliases);
 
-        if(server && fileAliases.length){
+        if(server && Object.entries(server.aliases).length){
             let aliases = []
             
-            fileAliases.map(([k, v]) => aliases.push({name:`${prefix}${k}`, value:v}))
+            Object.entries(server.aliases).map(([k, v]) => aliases.push({name:`${prefix}${k}`, value:v}))
             
             const embed = new Discord.MessageEmbed()
             .setTitle('Lista de alias')
