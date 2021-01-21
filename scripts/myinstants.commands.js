@@ -51,7 +51,7 @@ const handleInstantCreateAlias = async (msg) => {
     try{        
         const { alias, sound } = parseInstantCommand(msg, 'inst-create');
         const file = await getInstantsAliasFromFile();
-        const instant = getMyInstants(sound);
+        const instant = await getMyInstants(sound);
 
         if (alias &&
             sound &&
