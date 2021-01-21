@@ -51,8 +51,12 @@ const handleInstantCreateAlias = async (msg) => {
     try{        
         const { alias, sound } = parseInstantCommand(msg, 'inst-create');
         const file = await getInstantsAliasFromFile();
+        const instant = getMyInstants(sound);
 
-        if (alias && sound && file){
+        if (alias &&
+            sound &&
+            file &&
+            !!instant.sound){
             let server = file.servers[msg.guild.id];
     
             if(server){
@@ -112,7 +116,7 @@ const handleInstantDeleteAlias = async (msg) => {
 
                     if (alias in server.aliases &&
                         delete server.aliases[alias]){
-                            msg.reply(`Alias '${alias}' removido`);
+                            msg.reply(`Alias **${alias}** removido`);
                             persistInstantsAlias(file);
                     }
                 }
