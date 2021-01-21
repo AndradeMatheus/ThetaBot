@@ -47,22 +47,12 @@ const getInstantAlias = async(command, msg) => {
     }
 }
 
-const handleInstantCreateAlias = async(msg) => {
-    try{
-        let command = msg.content.replace(`${prefix}inst-create `, '');
-        let alias = command.split(' ')[0];
-        let arrSound = command.split(' ')[1];
-        let sound = arrSound.includes('myinstants.com') ? arrSound
-                                                          .replace("https://", "")
-                                                          .replace("http://", "")
-                                                          .replace("www.", "")
-                                                          .replace("myinstants.com/instant/", "")
-                                                          .replace("/", "")
-                                                          : arrSound.replace("/", "");
-
+const handleInstantCreateAlias = async (msg) => {
+    try{        
+        const { alias, sound } = parseInstantCommand(msg, 'inst-create');
         const file = await getInstantsAliasFromFile();
 
-        if (file){
+        if (alias && sound && file){
             let server = file.servers[msg.guild.id];
     
             if(server){
@@ -109,12 +99,58 @@ const handleInstantListAlias = async (msg) => {
 }   
 
 const handleInstantDeleteAlias = async (msg) => {
-    msg.reply("esse comando não funciona ainda, não saber ler, macaco?")
+    const file = await getInstantsAliasFromFile();
+
+    if (file.servers &&
+        msg.guild.id in file.servers){
+            const server = file.servers[msg.guild.id];
+            const arrCommand = msg.content.split(' ');
+
+            if (server &&
+                arrCommand.length > 1){
+                    const alias = arrCommand[1].replace('.', '');
+
+                    if (alias in server.aliases &&
+                        delete server.aliases[alias]){
+                            msg.reply(`Alias '${alias}' removido`);
+                            persistInstantsAlias(file);
+                    }
+                }
+    }
 }
 
 const handleInstantEditAlias = async (msg) => {
-    msg.reply("esse comando não funciona ainda, não saber ler, macaco?")
+    const file = await getInstantsAliasFromFile();
+    const { alias, sound } = parseInstantCommand(msg, 'inst-edit');
+
+    if (file.servers &&
+        alias &&
+        sound &&
+        msg.guild.id in file.servers){
+            const server = file.servers[msg.guild.id];            
+            
+            if (alias in server.aliases){
+                server.aliases[alias] = sound;
+                persistInstantsAlias(file);
+                msg.reply(`Alias **${alias}** alterado para o som **${sound}**`);
+            }                
+    }
 }
+
+const parseInstantCommand = (msg, commandName) => {
+    let command = msg.content.replace(`${prefix}${commandName} `, '');
+    let alias = command.split(' ')[0];
+    let arrSound = command.split(' ')[1];
+    let sound = arrSound.includes('myinstants.com') ? arrSound
+                                                        .replace("https://", "")
+                                                        .replace("http://", "")
+                                                        .replace("www.", "")
+                                                        .replace("myinstants.com/instant/", "")
+                                                        .replace("/", "")
+                                                        : arrSound.replace("/", "");
+
+    return { command, alias, sound };
+};
 
 const getInstantsAliasFromFile = async () => {
 
@@ -141,8 +177,8 @@ const myInstantsCommands = [
     new Command(`${prefix}inst`, 'Busca áudio no MyInstants', handleInstant),
     new Command(`${prefix}inst-create`, 'Define um alias pra uma url do MyInstants', handleInstantCreateAlias),
     new Command(`${prefix}inst-list`, 'Lista os aliases criados nesse servidor', handleInstantListAlias),
-    new Command(`${prefix}inst-edit`, 'Não implementado', handleInstantDeleteAlias),
-    new Command(`${prefix}inst-delete`, 'Não implementado', handleInstantEditAlias),
+    new Command(`${prefix}inst-edit`, 'Edita um alias', handleInstantEditAlias),
+    new Command(`${prefix}inst-delete`, 'Deleta um alias', handleInstantDeleteAlias),
 ];
 
 module.exports = {
