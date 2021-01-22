@@ -42,7 +42,7 @@ Atualmente as funcionalidades principais são o uso, reprodução e manipulaçã
 
 Escreva .help no chat para as demais funcionalidades.
 
-![ThetaBot](https://i.imgur.com/BzxGYHn.png)
+![ThetaBot](https://i.imgur.com/ipvZ1t9.png)
 
 ## Licenças
 
