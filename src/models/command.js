@@ -1,4 +1,4 @@
-module.exports = class Command {
+export default class Command {
     constructor(name, description, handler){
         this.name = name;
         this.description = description;

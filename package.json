@@ -2,20 +2,32 @@
   "name": "tetabot",
   "version": "0.1.0",
   "description": "TetaBot powered by Discord.JS",
-  "main": "./scripts/index.js",
+  "main": "./dist/index.js",
+  "type": "module",
   "dependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/runtime": "^7.12.5",
     "@discordjs/opus": "^0.3.3",
     "axios": "^0.21.1",
+    "babel-plugin-dotenv": "^0.1.1",
     "discord": "^0.8.2",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.7",
+    "nodemon": "^2.0.7",
     "ytdl-core": "^4.4.3"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./scripts/index.js"
+    "babel-node": "babel-node --presets=@babel/env",
+    "start": "nodemon ./dist/index.js",
+    "build": "./node_modules/.bin/babel src -d dist --source-maps --copy-files",
+    "dev": "nodemon --exec npm run babel-node -- ./src/index.js",
+    "heroku-postbuild": "npm i --no-shrinkwrap && npm run build"
   },
   "repository": {
     "type": "git",

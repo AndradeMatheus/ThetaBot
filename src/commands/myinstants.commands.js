@@ -1,11 +1,13 @@
-const fs = require('fs');
-const { promisify } = require('util');
+import fs from 'fs';
+import path from 'path';
+import { promisify } from 'util';
 const readFile = promisify(fs.readFile);   
-const Discord = require('discord.js');
-const assets = require('./assets')
-const axios = require('axios');
-const Command = require('./command');
-const { BOT_PREFIX: prefix } = process.env;
+import * as Discord from 'discord.js';
+import assets from '../assets';
+import axios from 'axios';
+import Command from '../models/command';
+import { BOT_PREFIX as prefix } from 'babel-dotenv';
+const instantsStoragePath = path.join(__dirname, '../storage/instants-aliases.json');
 
 const handleInstant = async (msg, command = null) => {
     let search = !command ? msg.content.replace(`${prefix}inst `, '') : command;
@@ -33,7 +35,7 @@ const getMyInstants = async(search) => {
     }
 }
 
-const getInstantAlias = async(command, msg) => {
+export const getInstantAlias = async(command, msg) => {
     if (command.startsWith(prefix)){
         const file = await getInstantsAliasFromFile();
         if(file){
@@ -77,22 +79,23 @@ const handleInstantCreateAlias = async (msg) => {
     }
 }
 
-const handleInstantListAlias = async (msg) => {    
+const handleInstantListAlias = async (msg) => {
     const file = await getInstantsAliasFromFile();
 
     if (file){
-        let server = file.servers[msg.guild.id];
+        const server = file.servers[msg.guild.id];
+        const aliasesEntries = server && server.aliases ? Object.entries(server.aliases) : [];
 
-        if(server && Object.entries(server.aliases).length){
-            let aliases = []
+        if(aliasesEntries.length){
+            const aliases = [];
             
-            Object.entries(server.aliases).map(([k, v]) => aliases.push({name:`${prefix}${k}`, value:v}))
+            aliasesEntries.map(([k, value]) => aliases.push({ name: `${prefix}${k}`, value }));
             
             const embed = new Discord.MessageEmbed()
             .setTitle('Lista de alias')
             .setColor(0x5b34eb)
             .addFields(aliases)
-            .setThumbnail(assets.macacoNotebook)
+            .setThumbnail(assets.macacoNotebook);
             
             msg.channel.send(embed);
         }
@@ -159,13 +162,13 @@ const parseInstantCommand = (msg, commandName) => {
 const getInstantsAliasFromFile = async () => {
 
     try {
-        if (!fs.existsSync('./storage/instants-aliases.json')){
+        if (!fs.existsSync(instantsStoragePath)){
             const data = { servers: {} };
             persistInstantsAlias(data);
             return data;
         }
 
-        const data = await readFile('./storage/instants-aliases.json');
+        const data = await readFile(instantsStoragePath);
         return JSON.parse(data.toString());
     } catch (error) {
         console.log('Ocorreu um erro ao ler arquivo de alias de instants');
@@ -174,18 +177,13 @@ const getInstantsAliasFromFile = async () => {
 }
 
 const persistInstantsAlias = async (data) => {
-    fs.writeFileSync('./storage/instants-aliases.json', typeof data !== 'string' ? JSON.stringify(data) : data);
+    fs.writeFileSync(instantsStoragePath, typeof data !== 'string' ? JSON.stringify(data) : data);
 }
 
-const myInstantsCommands = [
+export const myInstantsCommands = [
     new Command(`${prefix}inst`, 'Busca áudio no MyInstants', handleInstant),
     new Command(`${prefix}inst-create`, 'Define um alias pra uma url do MyInstants', handleInstantCreateAlias),
     new Command(`${prefix}inst-list`, 'Lista os aliases criados nesse servidor', handleInstantListAlias),
     new Command(`${prefix}inst-edit`, 'Edita um alias', handleInstantEditAlias),
     new Command(`${prefix}inst-delete`, 'Deleta um alias', handleInstantDeleteAlias),
 ];
-
-module.exports = {
-    myInstantsCommands,
-    getInstantAlias
-};

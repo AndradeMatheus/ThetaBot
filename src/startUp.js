@@ -1,11 +1,11 @@
 require('dotenv').config()
-const Discord = require('discord.js');
-const { BOT_ID: botId, BOT_TOKEN: token } = process.env;
+import * as Discord from 'discord.js';
+import { BOT_ID as botId, BOT_TOKEN as token } from 'babel-dotenv';
+import commands from './commands';
+import { getInstantAlias } from './commands/myinstants.commands';
 const client = new Discord.Client({
   restTimeOffset: 25
 });
-const commands = require('./commands');
-const { getInstantAlias } = require('./myinstants.commands');
 
 client.on('message', async msg => {
   if(msg.author.id != botId && msg.channel.name.startsWith('theta-bot')){
