@@ -1,8 +1,8 @@
 require('dotenv').config()
 import * as Discord from 'discord.js';
-import { BOT_ID as botId, BOT_TOKEN as token } from 'babel-dotenv';
 import commands from './commands';
 import { getInstantAlias } from './commands/myinstants.commands';
+const { BOT_ID: botId, BOT_TOKEN: token } = process.env;
 const client = new Discord.Client({
   restTimeOffset: 25
 });

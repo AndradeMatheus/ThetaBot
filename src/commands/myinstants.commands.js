@@ -6,7 +6,7 @@ import * as Discord from 'discord.js';
 import assets from '../assets';
 import axios from 'axios';
 import Command from '../models/command';
-import { BOT_PREFIX as prefix } from 'babel-dotenv';
+const { BOT_PREFIX: prefix } = process.env;
 const instantsStoragePath = path.join(__dirname, '../storage/instants-aliases.json');
 
 const handleInstant = async (msg, command = null) => {

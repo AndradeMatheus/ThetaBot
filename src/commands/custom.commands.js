@@ -1,7 +1,7 @@
 import * as Discord from 'discord.js';
 import assets from '../assets';
 import Command from '../models/command';
-import { BOT_PREFIX as prefix } from 'babel-dotenv';
+const { BOT_PREFIX: prefix } = process.env;
 
 const handleAgu = async (msg) => {
     msg.channel.send(new Discord.MessageAttachment(assets.lucasNinext));

@@ -1,6 +1,6 @@
 import * as Discord from 'discord.js';
 import Command from '../models/command';
-import { BOT_PREFIX as prefix } from 'babel-dotenv';
+const { BOT_PREFIX: prefix } = process.env;
 
 const handleLeave = async (msg) => {
     await msg.member.voice.channel.leave();
