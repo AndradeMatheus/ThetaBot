@@ -1,6 +1,7 @@
 import * as Discord from 'discord.js';
 import assets from '../assets';
 import Command from '../models/command';
+import allCommands from './index';
 const { BOT_PREFIX: prefix } = process.env;
 
 const handleAgu = async (msg) => {
@@ -14,8 +15,7 @@ const handleDilera = async (msg) => {
 
 const handleHelp = async (msg) => {
     let help = [];
-
-    commands.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0).forEach((command) => {
+    allCommands.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0).forEach((command) => {
         if (command.description) help.push({name:command.name, value: command.description});
     });
 
@@ -30,8 +30,10 @@ const handleHelp = async (msg) => {
     } 
 }
 
-export default [
+const customCommands = [
     new Command(`${prefix}agu`, 'Exibe retrato verossímil de Lucão e Ninext', handleAgu),    
     new Command(`${prefix}dilera`, 'Buzina dilera', handleDilera),
     new Command(`${prefix}help`, 'Help!', handleHelp)    
-]
+];
+
+export default customCommands;
