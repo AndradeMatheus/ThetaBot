@@ -1,11 +1,26 @@
-const { promisify } = require('util');
 const Discord = require('discord.js');
 const assets = require('./assets')
 const axios = require('axios');
 const Command = require('./command');
 const { BOT_PREFIX: prefix } = process.env;
+const ytdl = require('ytdl-core');
 
-const handleMusic = async (msg)=> {
+const handlePlay = async (msg)=> {
+    const command = parseMusicCommand(msg, 'play')
+
+    if (msg.member.voice.channel) {
+
+
+
+        const connection = await msg.member.voice.channel.join();
+        connection.play(instant.sound);
+
+        setTimeout(_ => msg.member.voice.channel.leave(), 300000);
+    }
+    else {
+        msg.reply("você não está em um canal de voz");
+    }
+
     const embed = new Discord.MessageEmbed()
     .setAuthor('YouTube', assets.youtube.logo, 'http://youtube.com')
     .setColor(assets.youtube.color)
@@ -16,21 +31,27 @@ const handleMusic = async (msg)=> {
         { name: '\u200B', value: '\u200B' },
 		{ name: 'Pedido por:⠀⠀⠀⠀⠀', value: msg.author.username , inline: true },
         { name: 'Duração:⠀⠀⠀⠀⠀⠀', value: '13:25m', inline: true },
-		{ name: 'Próxima:', value: 'nenhuma', inline: true },
+		{ name: 'Próxima:', value: 'undefined', inline: true },
 	)
     .setFooter('Playing on TEST', assets.musicPlayer.playing);
 
-    msg.channel.send({embed: embed}).then(message => {
-        message.react("⏮️")
-        .then(()=> message.react("⏹️"))
-        .then(()=> message.react("⏸️"))
-        .then(()=> message.react("▶️"))
-        .then(()=> message.react("⏭️"));
-    });
+    msg.channel.send({embed: embed})
+    // .then(message => {
+    //     message.react("⏹️"))
+    //     .then(()=> message.react("⏸️"))
+    //     .then(()=> message.react("▶️"))
+    //     .then(()=> message.react("⏭️"));
+    // });
+};
+
+const parseMusicCommand = (msg, commandName) => {
+    let command = msg.content.replace(`${prefix}${commandName} `, '');
+
+    return command;
 };
 
 const musicCommands = [
-    new Command(`${prefix}music`, 'Traz card mockado de música', handleMusic)
+    new Command(`${prefix}play`, 'Toca uma música por URL do youtube', '[link]', handlePlay)
 ];
 
 module.exports = {
