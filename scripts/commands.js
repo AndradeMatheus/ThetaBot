@@ -48,7 +48,8 @@ const handleHelp = async (msg) => {
         .setColor(assets.theta.color)
         .addFields(help)
         .setThumbnail(assets.gatoPop)
-        .setFooter('Use .help [comando] para saber mais sobre um comando \nDesconsidere os \'[ ]\'');
+        .setFooter(`---------------------------------------------------------------------
+Use .help [comando] para saber mais sobre um comando \nDesconsidere os \'[ ]\'\n\ngithub.com/AndradeMatheus/ThetaBot`);
         
         msg.channel.send(embed);
     } 
