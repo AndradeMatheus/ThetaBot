@@ -73,7 +73,7 @@ const handleInstantCreateAlias = async (msg) => {
 
     }
     catch(err){
-        msg.reply("Não foi possível criar o alias, verifique o seu comando.")
+        msg.reply("não foi possível criar o alias, verifique o seu comando.")
     }
 }
 
@@ -97,7 +97,7 @@ const handleInstantListAlias = async (msg) => {
             msg.channel.send(embed);
         }
         else {
-            msg.reply("Não existem aliases nesse servidor.");
+            msg.reply("não existem aliases nesse servidor.");
         }
     }
 }   
@@ -116,7 +116,7 @@ const handleInstantDeleteAlias = async (msg) => {
 
                     if (alias in server.aliases &&
                         delete server.aliases[alias]){
-                            msg.reply(`Alias **${alias}** removido`);
+                            msg.reply(`alias **${alias}** removido`);
                             persistInstantsAlias(file);
                     }
                 }
@@ -136,7 +136,7 @@ const handleInstantEditAlias = async (msg) => {
             if (alias in server.aliases){
                 server.aliases[alias] = sound;
                 persistInstantsAlias(file);
-                msg.reply(`Alias **${alias}** alterado para o som **${sound}**`);
+                msg.reply(`alias **${alias}** alterado para o som **${sound}**`);
             }                
     }
 }
