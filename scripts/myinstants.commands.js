@@ -92,7 +92,7 @@ const handleInstantListAlias = async (msg) => {
             .setTitle('Lista de alias')
             .setColor(assets.theta.color)
             .addFields(aliases)
-            .setThumbnail(assets.macacoNotebook)
+            .setThumbnail(assets.macacoSpin)
             
             msg.channel.send(embed);
         }

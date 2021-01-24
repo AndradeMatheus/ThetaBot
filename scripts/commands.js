@@ -47,7 +47,7 @@ const handleHelp = async (msg) => {
         .setTitle('Help')
         .setColor(assets.theta.color)
         .addFields(help)
-        .setThumbnail(assets.gatoPop)
+        .setThumbnail(assets.macacoWakey)
         .setFooter(`---------------------------------------------------------------------
 Use .help [comando] para saber mais sobre um comando \nDesconsidere os \'[ ]\'\n\ngithub.com/AndradeMatheus/ThetaBot`);
         

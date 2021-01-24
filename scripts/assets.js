@@ -8,6 +8,8 @@ module.exports = {
     lucasNinext: 'https://cdn.discordapp.com/attachments/785238813919805451/785707669125464104/unknown.png',
     dileraBuzina: 'https://www.myinstants.com/media/sounds/buzinaprolongada.mp3',
     gatoPop: 'https://i.kym-cdn.com/photos/images/newsfeed/001/931/959/2e4.gif',
+    macacoSpin: 'https://i.pinimg.com/originals/4f/5c/2e/4f5c2e7f2de45f7989bd952cee86bedd.gif',
+    macacoWakey: 'https://media1.tenor.com/images/f2d5a0d9211d5e16e2a0f3563e076136/tenor.gif',
     macacoNotebook: 'https://i.gifer.com/iXR.gif',
     macacoSurpreso: 'https://media.tenor.com/images/b29f432f97b95caa805fa7f44ab1b49b/tenor.gif',
     musicPlayer:
