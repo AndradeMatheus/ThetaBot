@@ -1,3 +1,5 @@
+![ThetaBot](https://i.imgur.com/rQEYFnt.png)
+
 ## O que é isso?
 
 O ThetaBot é um bot para uso no [Discord](https://discord.com/) criado por mim e com a contribuição do [Lucas](https://github.com/lucasvsouza28) para fins de estudo e também pra me divertir um pouco com os amigos.
@@ -5,6 +7,8 @@ O ThetaBot é um bot para uso no [Discord](https://discord.com/) criado por mim 
 Totalmente baseado na biblioteca própria do Discord, o [Discord.js](https://discord.js.org/#/).
 
 O nosso histórico de implementações, idéias e vontades para implementações futuras, estão no nosso [Trello](https://trello.com/b/bArWp6KZ/thetabot)
+
+Quer convidar o nosso bot para o seu Discord? [Clique neste link](https://discord.com/oauth2/authorize?client_id=799778892780011530&scope=bot). O bot ainda não está completo, então sinta-se à vontade para testar :) qualquer dúvida, escreva uma issue, entre em contato comigo no discord (Tetis#1234) ou no [nosso servidor](https://discord.gg/mnXbckAU)!
 
 ## Instalação
 
@@ -35,13 +39,15 @@ Atualmente as funcionalidades principais são o uso, reprodução e manipulaçã
 
 * .inst nome do som - Utiliza a api aberta do MyInstants para pesquisar e reproduzir um som a partir do bot no canal de voz em que o usuário está.
 
-* inst.create alias url-do-som - Define um alias para algum som do MyInstants, podendo chamar o som apenas com o comando .nome-do-alias
+* inst-create alias url-do-som - Define um alias para algum som do MyInstants, podendo chamar o som apenas com o comando .nome-do-alias
 
-* inst.list - Lista todos os aliases criados no servidor e quais sons irá reproduzir
+* inst-list - Lista todos os aliases criados no servidor e quais sons irá reproduzir
+
+* inst-edit - Edita um som atribuído a um alias
+
+* inst-delete - Deleta um alias criado
 
 Escreva .help no chat para as demais funcionalidades.
-
-![ThetaBot](https://i.imgur.com/rQEYFnt.png)
 
 ## Licenças
 
