@@ -16,17 +16,39 @@ const handleDilera = async (msg) => {
 
 const handleHelp = async (msg) => {
     let help = [];
+    const helpParameter = msg.content.split(' ')[1];
 
     commands.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0).forEach((command) => {
         if (command.description) help.push({name:command.name, value: command.description});
     });
 
-    if (help.length){
+    let helpCommand = commands.find(c => c.name == `${prefix}${helpParameter}`);
+
+    if(helpCommand){
+        const embed = new Discord.MessageEmbed()
+        .setTitle(helpCommand.name)
+        .setDescription(helpCommand.description)
+        .setColor(0x5b34eb)
+        .addFields(
+        {
+            name: 'Exemplo de uso:',
+            value: helpCommand.help ? `${helpCommand.name} ${helpCommand.help}` : 'Este comando não possui parâmetros adicionais'
+        })
+        .setFooter(helpCommand.help ? 'Desconsidere os \'[ ]\'' : '')
+        
+        msg.channel.send(embed);
+    }
+    else if(helpParameter && !helpCommand)
+    {
+        msg.reply('esse comando não existe');
+    }
+    else if (help.length){
         const embed = new Discord.MessageEmbed()
         .setTitle('Help')
         .setColor(0x5b34eb)
         .addFields(help)
         .setThumbnail(assets.gatoPop)
+        .setFooter('Use .help [comando] para saber mais sobre um comando \nDesconsidere os \'[ ]\'');
         
         msg.channel.send(embed);
     } 
@@ -52,8 +74,6 @@ const handleStop = async (msg) => {
     const player = getPlayer(msg);
     if (player) player.dispatcher.destroy();
 };
-
-
 
 const commands = [
     new Command(`${prefix}agu`, 'Exibe retrato verossímil de Lucão e Ninext', '', handleAgu),    
