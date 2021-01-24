@@ -78,12 +78,13 @@ const handleStop = async (msg) => {
 const handleListServers = async (msg, client) =>{
     let guilds = 
     {
-        list: client.guilds.cache.array().join('\n'),
+        list: '- ' + client.guilds.cache.array().join('\n- '),
         count: client.guilds.cache.array().length
     }
 
     const serverlist = new Discord.MessageEmbed()
       .setTitle(`Estou em ${guilds.count} servidores:`)
+      .setColor(assets.theta.color)
       .setDescription(guilds.list)
       .setThumbnail(assets.macacoSurpreso)
       .setFooter(`Me convide para o seu servidor!\n${assets.theta.inviteShort}`)
