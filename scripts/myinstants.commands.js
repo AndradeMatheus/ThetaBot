@@ -179,7 +179,7 @@ const persistInstantsAlias = async (data) => {
 
 const myInstantsCommands = [
     new Command(`${prefix}inst`, 'Busca áudio no MyInstants', '[link ou nome do audio]', handleInstant),
-    new Command(`${prefix}inst-create`, 'Define um alias pra uma url do MyInstants', '[alias] [link ou nome do audio]\n**ATENÇÃO: OS ALIASES RESETAM DIARIAMENTE [DESENVOLVIMENTO]**', handleInstantCreateAlias),
+    new Command(`${prefix}inst-create`, 'Define um alias pra uma url do MyInstants', '[alias] [link ou nome do audio]\n**ATENÇÃO: OS ALIASES RESETAM [DESENVOLVIMENTO]**', handleInstantCreateAlias),
     new Command(`${prefix}inst-list`, 'Lista os aliases criados nesse servidor', '', handleInstantListAlias),
     new Command(`${prefix}inst-edit`, 'Edita um alias', '[alias] [novo link ou nome do audio]', handleInstantEditAlias),
     new Command(`${prefix}inst-delete`, 'Deleta um alias', '[alias]', handleInstantDeleteAlias),
