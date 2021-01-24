@@ -13,7 +13,7 @@ client.on('message', async msg => {
     if (commandName){
         const cmd = commands.find(c => c.name === commandName);
 
-        if (cmd) await cmd.execute(msg);
+        if (cmd) await cmd.execute(msg, client);
         else getInstantAlias(commandName, msg);
     }
 

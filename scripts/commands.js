@@ -75,6 +75,17 @@ const handleStop = async (msg) => {
     if (player) player.dispatcher.destroy();
 };
 
+const handleListServers = async (msg, client) =>{
+    let guilds = client.guilds.cache.array().join('\n')
+
+    const serverlist = new Discord.MessageEmbed()
+      .setTitle(`Estou nesses servidores:`)
+      .setDescription(guilds)
+      .setFooter(`Me convide para o seu servidor!\nhttps://tinyurl.com/y28dv3cv`)
+
+      msg.channel.send(serverlist)
+}
+
 const commands = [
     new Command(`${prefix}agu`, 'Exibe retrato verossímil de Lucão e Ninext', '', handleAgu),    
     new Command(`${prefix}dilera`, 'Buzina dilera', '', handleDilera),
@@ -83,6 +94,8 @@ const commands = [
     new Command(`${prefix}resume`, 'Resume o áudio pausado', '', handleResume),
     new Command(`${prefix}stop`, 'Cancela a reprodução do áudio', '', handleStop),
     new Command(`${prefix}help`, 'Help!', '[comando]', handleHelp),
+    new Command(`${prefix}server-list`, 'Lista todos os servidores que o bot está', '', handleListServers),
+
     ...myInstantsCommands,
     ...musicCommands
 ]
