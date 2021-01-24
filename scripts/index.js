@@ -26,6 +26,11 @@ client.on('message', async msg => {
 });
 
 client.once('ready', () => {
+  client.user.setActivity('.help', { 
+    type: 'STREAMING',
+    url: 'http://twitch.tv/tetistiger' 
+  })
+
   console.log(`EAE MACACO!`);
 });
 
