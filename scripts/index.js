@@ -8,7 +8,7 @@ const commands = require('./commands');
 const { getInstantAlias } = require('./myinstants.commands');
 
 client.on('message', async msg => {
-  if(msg.author.id != botId){
+  if(!msg.author.bot){
     const commandName = msg.content.split(' ')[0];
     if (commandName){
         const cmd = commands.find(c => c.name === commandName);
