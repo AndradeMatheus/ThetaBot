@@ -28,7 +28,7 @@ const handleHelp = async (msg) => {
         const embed = new Discord.MessageEmbed()
         .setTitle(helpCommand.name)
         .setDescription(helpCommand.description)
-        .setColor(0x5b34eb)
+        .setColor(assets.theta.color)
         .addFields(
         {
             name: 'Exemplo de uso:',
@@ -45,7 +45,7 @@ const handleHelp = async (msg) => {
     else if (help.length){
         const embed = new Discord.MessageEmbed()
         .setTitle('Help')
-        .setColor(0x5b34eb)
+        .setColor(assets.theta.color)
         .addFields(help)
         .setThumbnail(assets.gatoPop)
         .setFooter('Use .help [comando] para saber mais sobre um comando \nDesconsidere os \'[ ]\'');
@@ -76,12 +76,17 @@ const handleStop = async (msg) => {
 };
 
 const handleListServers = async (msg, client) =>{
-    let guilds = client.guilds.cache.array().join('\n')
+    let guilds = 
+    {
+        list: client.guilds.cache.array().join('\n'),
+        count: client.guilds.cache.array().length
+    }
 
     const serverlist = new Discord.MessageEmbed()
-      .setTitle(`Estou nesses servidores:`)
-      .setDescription(guilds)
-      .setFooter(`Me convide para o seu servidor!\nhttps://tinyurl.com/y28dv3cv`)
+      .setTitle(`Estou em ${guilds.count} servidores:`)
+      .setDescription(guilds.list)
+      .setThumbnail(assets.macacoSurpreso)
+      .setFooter(`Me convide para o seu servidor!\n${assets.theta.inviteShort}`)
 
       msg.channel.send(serverlist)
 }
@@ -96,8 +101,7 @@ const commands = [
     new Command(`${prefix}help`, 'Help!', '[comando]', handleHelp),
     new Command(`${prefix}server-list`, 'Lista todos os servidores que o bot está', '', handleListServers),
 
-    ...myInstantsCommands,
-    ...musicCommands
+    ...myInstantsCommands
 ]
 
 module.exports = commands;

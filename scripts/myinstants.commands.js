@@ -7,7 +7,7 @@ const axios = require('axios');
 const Command = require('./command');
 const { BOT_PREFIX: prefix } = process.env;
 
-const handleInstant = async (msg, command = null) => {
+const handleInstant = async (msg, client, command = null) => {
     let search = !command ? msg.content.replace(`${prefix}inst `, '') : command;
     let instant = await getMyInstants(search);
   
@@ -41,7 +41,7 @@ const getInstantAlias = async(command, msg) => {
             let server = file.servers[msg.guild.id];
             
             if(server && command in server.aliases){
-                handleInstant(msg, server.aliases[command])
+                handleInstant(msg, null, server.aliases[command])
             }
         }
     }
@@ -90,7 +90,7 @@ const handleInstantListAlias = async (msg) => {
             
             const embed = new Discord.MessageEmbed()
             .setTitle('Lista de alias')
-            .setColor(0x5b34eb)
+            .setColor(assets.theta.color)
             .addFields(aliases)
             .setThumbnail(assets.macacoNotebook)
             
