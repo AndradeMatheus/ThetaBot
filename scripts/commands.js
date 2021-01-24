@@ -56,13 +56,13 @@ const handleStop = async (msg) => {
 
 
 const commands = [
-    new Command(`${prefix}agu`, 'Exibe retrato verossímil de Lucão e Ninext', handleAgu),    
-    new Command(`${prefix}dilera`, 'Buzina dilera', handleDilera),
-    new Command(`${prefix}leave`, 'Remove o bot do canal de voz :(', handleLeave),
-    new Command(`${prefix}pause`, 'Pausa a reprodução do aúdio atual', handlePause),
-    new Command(`${prefix}resume`, 'Resume o áudio pausado', handleResume),
-    new Command(`${prefix}stop`, 'Cancela a reprodução do áudio', handleStop),
-    new Command(`${prefix}help`, 'Help!', handleHelp),
+    new Command(`${prefix}agu`, 'Exibe retrato verossímil de Lucão e Ninext', '', handleAgu),    
+    new Command(`${prefix}dilera`, 'Buzina dilera', '', handleDilera),
+    new Command(`${prefix}leave`, 'Remove o bot do canal de voz :(', '', handleLeave),
+    new Command(`${prefix}pause`, 'Pausa a reprodução do aúdio atual', '', handlePause),
+    new Command(`${prefix}resume`, 'Resume o áudio pausado', '', handleResume),
+    new Command(`${prefix}stop`, 'Cancela a reprodução do áudio', '', handleStop),
+    new Command(`${prefix}help`, 'Help!', '[comando]', handleHelp),
     ...myInstantsCommands,
     ...musicCommands
 ]
