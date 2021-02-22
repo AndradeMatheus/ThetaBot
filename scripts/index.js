@@ -21,7 +21,7 @@ client.on('message', async msg => {
       msg.reply("eu nao to funcionando direito nao seu animal");
     }
 
-    console.log(`${msg.content} do autor ${msg.author.username}`);
+    //console.log(`${msg.content} do autor ${msg.author.username}`);
   }  
 });
 
