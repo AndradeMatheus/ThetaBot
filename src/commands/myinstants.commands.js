@@ -9,7 +9,7 @@ import Command from '../models/command';
 const { BOT_PREFIX: prefix } = process.env;
 const instantsStoragePath = path.join(__dirname, '../storage/instants-aliases.json');
 
-const handleInstant = async (msg, command = null) => {
+const handleInstant = async (msg, client, command = null) => {
     let search = !command ? msg.content.replace(`${prefix}inst `, '') : command;
     let instant = await getMyInstants(search);
   
@@ -43,7 +43,7 @@ export const getInstantAlias = async(command, msg) => {
             let server = file.servers[msg.guild.id];
             
             if(server && command in server.aliases){
-                handleInstant(msg, server.aliases[command])
+                handleInstant(msg, null, server.aliases[command])
             }
         }
     }
@@ -58,7 +58,7 @@ const handleInstantCreateAlias = async (msg) => {
         if (alias &&
             sound &&
             file &&
-            !!instant.sound){
+            instant.sound){
             let server = file.servers[msg.guild.id];
     
             if(server){
@@ -75,7 +75,7 @@ const handleInstantCreateAlias = async (msg) => {
 
     }
     catch(err){
-        msg.reply("Não foi possível criar o alias, verifique o seu comando.")
+        msg.reply("não foi possível criar o alias, verifique o seu comando.")
     }
 }
 
@@ -93,14 +93,14 @@ const handleInstantListAlias = async (msg) => {
             
             const embed = new Discord.MessageEmbed()
             .setTitle('Lista de alias')
-            .setColor(0x5b34eb)
+            .setColor(assets.theta.color)
             .addFields(aliases)
-            .setThumbnail(assets.macacoNotebook);
+            .setThumbnail(assets.macacoSpin);
             
             msg.channel.send(embed);
         }
         else {
-            msg.reply("Não existem aliases nesse servidor.");
+            msg.reply("não existem aliases nesse servidor.");
         }
     }
 }   
@@ -119,7 +119,7 @@ const handleInstantDeleteAlias = async (msg) => {
 
                     if (alias in server.aliases &&
                         delete server.aliases[alias]){
-                            msg.reply(`Alias **${alias}** removido`);
+                            msg.reply(`alias **${alias}** removido`);
                             persistInstantsAlias(file);
                     }
                 }
@@ -139,7 +139,7 @@ const handleInstantEditAlias = async (msg) => {
             if (alias in server.aliases){
                 server.aliases[alias] = sound;
                 persistInstantsAlias(file);
-                msg.reply(`Alias **${alias}** alterado para o som **${sound}**`);
+                msg.reply(`alias **${alias}** alterado para o som **${sound}**`);
             }                
     }
 }
@@ -181,9 +181,9 @@ const persistInstantsAlias = async (data) => {
 }
 
 export const myInstantsCommands = [
-    new Command(`${prefix}inst`, 'Busca áudio no MyInstants', handleInstant),
-    new Command(`${prefix}inst-create`, 'Define um alias pra uma url do MyInstants', handleInstantCreateAlias),
+    new Command(`${prefix}inst`, 'Busca áudio no MyInstants', handleInstant, '[link ou nome do audio]'),
+    new Command(`${prefix}inst-create`, 'Define um alias pra uma url do MyInstants', handleInstantCreateAlias, '[alias] [link ou nome do audio]\n**ATENÇÃO: OS ALIASES RESETAM [DESENVOLVIMENTO]**'),
     new Command(`${prefix}inst-list`, 'Lista os aliases criados nesse servidor', handleInstantListAlias),
-    new Command(`${prefix}inst-edit`, 'Edita um alias', handleInstantEditAlias),
-    new Command(`${prefix}inst-delete`, 'Deleta um alias', handleInstantDeleteAlias),
+    new Command(`${prefix}inst-edit`, 'Edita um alias', handleInstantEditAlias, '[alias] [novo link ou nome do audio]'),
+    new Command(`${prefix}inst-delete`, 'Deleta um alias', handleInstantDeleteAlias, '[alias]'),
 ];
