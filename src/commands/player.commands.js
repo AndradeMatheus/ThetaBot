@@ -6,7 +6,7 @@ const handleLeave = async (msg) => {
     await msg.member.voice.channel.leave();
 };
 
-const getPlayer = (msg) => msg.guild.voice && msg.guild.voice.connection && msg.guild.voice.connection.player;
+const getPlayer = (msg) => msg.guild.voice?.connection?.player;
 
 const handlePause = async (msg) => {
     const player = getPlayer(msg);
