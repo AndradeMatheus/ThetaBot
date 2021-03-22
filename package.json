@@ -2,7 +2,7 @@
   "name": "tetabot",
   "version": "0.1.0",
   "description": "TetaBot powered by Discord.JS",
-  "main": "./dist/index.js",
+  "main": "./src/index.js",
   "scripts": {
     "babel-node": "babel-node --presets=@babel/env",
     "start": "nodemon ./dist/index.js",

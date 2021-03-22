@@ -43,6 +43,4 @@ const musicCommands = [
     new Command(`${prefix}play`, 'Toca uma música por URL do youtube', handlePlay, '[link]')
 ];
 
-module.exports = {
-    musicCommands
-};
+export default musicCommands;

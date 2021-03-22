@@ -4,6 +4,6 @@
         ["@babel/transform-runtime"],
         ["@babel/plugin-proposal-optional-chaining"]
     ],
-    "sourceMaps": true,
+    "sourceMaps": "inline",
     "retainLines": true
 }

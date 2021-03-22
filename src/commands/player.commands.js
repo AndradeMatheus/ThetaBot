@@ -23,9 +23,11 @@ const handleStop = async (msg) => {
     if (player) player.dispatcher.destroy();
 };
 
-export default [
+const playerCommands = [
     new Command(`${prefix}leave`, 'Remove o bot do canal de voz :(', handleLeave),
     new Command(`${prefix}pause`, 'Pausa a reprodução do aúdio atual', handlePause),
     new Command(`${prefix}resume`, 'Resume o áudio pausado', handleResume),
     new Command(`${prefix}stop`, 'Cancela a reprodução do áudio', handleStop)
-]
+];
+
+export default playerCommands;
