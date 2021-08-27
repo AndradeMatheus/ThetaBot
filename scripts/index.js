@@ -22,7 +22,7 @@ client.on('message', async msg => {
       msg.reply("eu nao to funcionando direito nao seu animal");
     }
 
-    if(msg.content.includes("gamersclub.com.br/j/")) await handleDeleteMessage(msg, 15000);
+    if(msg.content.includes("gamersclub.com.br/j/")) await handleDeleteMessage(msg, 300000);
 
     //console.log(`${msg.content} do autor ${msg.author.username}`);
   }  
