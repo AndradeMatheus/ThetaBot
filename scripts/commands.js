@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const assets = require('./assets');
 const Command = require('./command');
 const { myInstantsCommands } = require('./myinstants.commands');
+const { commands: scrapersCommands } = require('./scrapers.commands');
 const { musicCommands } = require('./music.commands')
 const { BOT_PREFIX: prefix } = process.env;
 
@@ -103,7 +104,8 @@ const commands = [
     new Command(`${prefix}help`, 'Help!', '[comando]', handleHelp),
     new Command(`${prefix}server-list`, 'Lista todos os servidores que o bot está', '', handleListServers),
 
-    ...myInstantsCommands
+    ...myInstantsCommands,
+    ...scrapersCommands
 ]
 
 module.exports = commands;
