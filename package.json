@@ -6,6 +6,7 @@
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
     "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.10",
     "discord": "^0.8.2",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
