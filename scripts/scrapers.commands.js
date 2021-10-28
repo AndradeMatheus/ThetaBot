@@ -1,3 +1,4 @@
+const { MessageEmbed } = require('discord.js');
 const { BOT_PREFIX } = process.env;
 const Command = require('./command');
 const { getImage } = require('../scrapers/google-images');
@@ -9,7 +10,12 @@ const handleSearchImage = async (msg) => {
 
     const imageUri = await getImage(query);
 
-    msg.reply(imageUri);
+    if (imageUri) {
+        const embed = new MessageEmbed();
+        embed.setImage(imageUri);
+        embed.setURL(imageUri);
+        msg.reply(embed);
+    }
 }
 
 const commands = [

@@ -5,15 +5,14 @@ module.exports = {
 
     getImage: async function (query) {
         try {
-            const { data } = await axios(`https://www.google.com/search?q=${query}&tbm=isch&sclient=img`);
+            const { data } = await axios(`https://www.google.com/search?q=${query}&tbm=isch&sclient=img&safe=off`);
     
             if (data) {
                 const $ = cheerio.load(data);
 
                 let img = $('table table a img').first();
 
-                if (img)
-                    return decodeURI(img.attr('src'));
+                if (img) return decodeURI(img.attr('src'));
 
             }            
         } catch (error) {
