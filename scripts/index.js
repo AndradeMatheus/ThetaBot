@@ -21,10 +21,6 @@ client.on('message', async msg => {
     if(msg.content.includes("bot") && msg.content.includes("funcion")){
       msg.reply("eu nao to funcionando direito nao seu animal");
     }
-
-    if(msg.content.includes("gamersclub.com.br/j/")) await handleDeleteMessage(msg, 300000);
-
-    //console.log(`${msg.content} do autor ${msg.author.username}`);
   }  
 });
 
