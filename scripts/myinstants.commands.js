@@ -7,7 +7,9 @@ const axios = require('axios');
 const Command = require('./command');
 const { BOT_PREFIX: prefix } = process.env;
 
-const handleInstant = async (msg, client, command = null) => {
+const myInstantsRepository = require('../repositories/myinstants-repository');
+
+const handleInstant = async (msg, command = null) => {
     let search = !command ? msg.content.replace(`${prefix}inst `, '') : command;
     let instant = await getMyInstants(search);
   
@@ -35,14 +37,18 @@ const getMyInstants = async(search) => {
 
 const getInstantAlias = async(command, msg) => {
     if (command.startsWith(prefix)){
-        const file = await getInstantsAliasFromFile();
-        if(file){
-            command = command.replace(prefix, '');
-            let server = file.servers[msg.guild.id];
-            
-            if(server && command in server.aliases){
-                handleInstant(msg, null, server.aliases[command])
-            }
+        const server = await myInstantsRepository.getServer(msg.guild.id);
+
+        if (!server){
+            console.log(`server ${msg.guild.id} not found`);
+            return;
+        }
+
+        command = command.replace(prefix, '');
+        const serverCommand = server.commands.find(c => c.alias == command);
+
+        if (command){
+            handleInstant(msg, serverCommand.value);
         }
     }
 }
@@ -50,43 +56,32 @@ const getInstantAlias = async(command, msg) => {
 const handleInstantCreateAlias = async (msg) => {
     try{        
         const { alias, sound } = parseInstantCommand(msg, 'inst-create');
-        const file = await getInstantsAliasFromFile();
         const instant = await getMyInstants(sound);
+        const commandValid = alias && sound && !!instant.sound;
 
-        if (alias &&
-            sound &&
-            file &&
-            !!instant.sound){
-            let server = file.servers[msg.guild.id];
-    
-            if(server){
-                server.aliases[alias] = sound;
+        if (commandValid){
+            const createServerCommandError = await myInstantsRepository.createServerCommand(msg.guild.id, alias, sound);
+
+            if (createServerCommandError) {
+                errorReply(msg, '', createServerCommandError)
             }
-            else{
-                file.servers[msg.guild.id] = {aliases: {[alias]: sound}};
+            else {
+                msg.reply(`seu alias **${alias}** do som **${sound}** foi criado com sucesso!`);
             }
-            
-            persistInstantsAlias(file);
-    
-            msg.reply(`seu alias **${alias}** do som **${sound}** foi criado com sucesso!`)            
         }
-
     }
     catch(err){
         msg.reply("não foi possível criar o alias, verifique o seu comando.")
     }
 }
 
-const handleInstantListAlias = async (msg) => {    
-    const file = await getInstantsAliasFromFile();
+const handleInstantListAlias = async (msg) => {
+    let server = await myInstantsRepository.getServer(msg.guild.id);
 
-    if (file){
-        let server = file.servers[msg.guild.id];
+    if (server){
 
-        if(server && Object.entries(server.aliases).length){
-            let aliases = []
-            
-            Object.entries(server.aliases).map(([k, v]) => aliases.push({name:`${prefix}${k}`, value:v}))
+        if(server.commands.length){
+            let aliases = server.commands.map(c => ({ name:`${prefix}${c.alias}`, value: c.value }));
             
             const embed = new Discord.MessageEmbed()
             .setTitle('Lista de alias')
@@ -103,42 +98,44 @@ const handleInstantListAlias = async (msg) => {
 }   
 
 const handleInstantDeleteAlias = async (msg) => {
-    const file = await getInstantsAliasFromFile();
+    const arrCommand = msg.content.split(' ');
 
-    if (file.servers &&
-        msg.guild.id in file.servers){
-            const server = file.servers[msg.guild.id];
-            const arrCommand = msg.content.split(' ');
+    if (arrCommand.length > 1){
+        const alias = arrCommand[1].replace('.', '');
 
-            if (server &&
-                arrCommand.length > 1){
-                    const alias = arrCommand[1].replace('.', '');
+        if (alias){
+            const deleteAliasError = await myInstantsRepository.deleteServerCommand(msg.guild.id, alias);
 
-                    if (alias in server.aliases &&
-                        delete server.aliases[alias]){
-                            msg.reply(`alias **${alias}** removido`);
-                            persistInstantsAlias(file);
-                    }
-                }
-    }
+            if (deleteAliasError) {
+                errorReply(msg, `não foi possível editar o alias ${alias}`, deleteAliasError)
+            } else {
+                msg.reply(`alias **${alias}** removido`);
+            }
+        }
+    }    
 }
 
 const handleInstantEditAlias = async (msg) => {
-    const file = await getInstantsAliasFromFile();
     const { alias, sound } = parseInstantCommand(msg, 'inst-edit');
-
-    if (file.servers &&
-        alias &&
-        sound &&
-        msg.guild.id in file.servers){
-            const server = file.servers[msg.guild.id];            
-            
-            if (alias in server.aliases){
-                server.aliases[alias] = sound;
-                persistInstantsAlias(file);
-                msg.reply(`alias **${alias}** alterado para o som **${sound}**`);
-            }                
+    const commandValid = await isCommandValid(alias, sound);
+    
+    if (commandValid){
+        const commandEditError = await myInstantsRepository.editServerCommand(msg.guild.id, alias, sound)
+        
+        if(commandEditError){
+            errorReply(msg, `não foi possível editar o alias ${alias}`, commandEditError)
+        }
+        else {
+            msg.reply(`alias **${alias}** alterado para o som **${sound}**`);
+        }
     }
+}
+
+const isCommandValid = async (alias, sound) => {
+    const instant = await getMyInstants(sound);
+    const commandValid = alias && sound && !!instant.sound;
+
+    return commandValid;
 }
 
 const parseInstantCommand = (msg, commandName) => {
@@ -156,25 +153,9 @@ const parseInstantCommand = (msg, commandName) => {
     return { command, alias, sound };
 };
 
-const getInstantsAliasFromFile = async () => {
-
-    try {
-        if (!fs.existsSync('./storage/instants-aliases.json')){
-            const data = { servers: {} };
-            persistInstantsAlias(data);
-            return data;
-        }
-
-        const data = await readFile('./storage/instants-aliases.json');
-        return JSON.parse(data.toString());
-    } catch (error) {
-        console.log('Ocorreu um erro ao ler arquivo de alias de instants');
-    }
-
-}
-
-const persistInstantsAlias = async (data) => {
-    fs.writeFileSync('./storage/instants-aliases.json', typeof data !== 'string' ? JSON.stringify(data) : data);
+const errorReply = (msg, reply, logMessage) => {
+    msg.reply(reply)
+    console.log(logMessage)
 }
 
 const myInstantsCommands = [
