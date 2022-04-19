@@ -3,3 +3,4 @@ config.js
 storage/instants-aliases.json
 .env
 *.lock.json
+.tool-versions
