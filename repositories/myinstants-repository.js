@@ -28,7 +28,7 @@ const createServerCommand = async(serverUid, commandAlias, commandValue) => {
     }
 }
 
-const getCommandByAlias = (server, alias) => server.commands?.find(c => c.alias == alias);
+const getCommandByAlias = (server, alias) => !server.commands ? null : server.commands.find(c => c.alias == alias);
 
 const deleteServerCommand = async (serverUid, commandAlias) => {
     const server = await getServer(serverUid);
