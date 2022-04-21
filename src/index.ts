@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 
 import { Client, Message } from 'discord.js';
-import commands from './commands';
+import Commands from './commands';
 import { getInstantAlias } from './commands/myinstants.commands';
 import './utils/startDb.ts';
 
@@ -16,9 +16,9 @@ client.on('message', async (msg: Message) => {
   if(!msg?.author?.bot){
     const commandName = msg?.content?.split(' ')[0];
     if (commandName){
-        const cmd = commands.find(c => c.name === commandName);
+        const command = Commands.find(c => c.name === commandName);
 
-        if (cmd) await cmd.execute(msg, client);
+        if (command) await command.execute(msg, client);
         else getInstantAlias(commandName, msg);
     }
 

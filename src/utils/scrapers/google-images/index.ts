@@ -11,7 +11,7 @@ export const getImage = async function (query: string) : Promise<string | undefi
             const img = $('table table a img').first();
             const src = img?.attr('src');
 
-            if (src) decodeURI(src);
+            if (src) return decodeURI(src);
 
             return undefined;
         }            
