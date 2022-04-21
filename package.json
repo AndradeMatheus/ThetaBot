@@ -4,7 +4,6 @@
   "description": "TetaBot powered by Discord.JS",
   "main": "./scripts/index.js",
   "dependencies": {
-    "node-pre-gyp": "^0.17.0",
     "@discordjs/opus": "^0.3.3",
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.10",
@@ -12,10 +11,11 @@
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.7",
+    "mongoose": "^6.3.0",
+    "node-pre-gyp": "^0.17.0",
     "redis": "^3.0.2",
     "ytdl-core": "^4.4.3"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./scripts/index.js"

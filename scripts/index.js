@@ -6,7 +6,8 @@ const client = new Discord.Client({
 });
 const commands = require('./commands');
 const { getInstantAlias } = require('./myinstants.commands');
-const { handleDeleteMessage } = require('./helper.js');
+
+require('../utils/startDb')
 
 client.on('message', async msg => {
   if(!msg.author.bot){

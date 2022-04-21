@@ -27,6 +27,7 @@ Algumas variáveis de ambiente estão baseadas no node.env, elas serão definida
 ```bash
 BOT_TOKEN="TOKEN" #Token fornecida pelo painel de admnistrador do Discord
 BOT_PREFIX="." #Prefixo para utilizar os comandos do bot, à vontade do usuário
+MONGO_URI="" #Uri para conexão com mongodb
 ```
 
 Caso o deploy seja feito no Heroku, há um guia para utilizar as [config vars](https://devcenter.heroku.com/articles/config-vars).
