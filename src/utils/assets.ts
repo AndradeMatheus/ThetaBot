@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     theta:
         {
             invite: 'https://discord.com/oauth2/authorize?client_id=799778892780011530&scope=bot',

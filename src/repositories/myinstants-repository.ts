@@ -1,13 +1,15 @@
-const { ServerModel } = require('../schemas/server.schema')
-const { CommandModel } = require('../schemas/command.schema')
+import { ICommand } from './../schemas/command.schema';
+import { Document } from 'mongoose';
+import { ServerModel, IServer } from '../schemas/server.schema';
+import { CommandModel } from '../schemas/command.schema';
 
-const getServer = async (uid) => {
-    const server = await ServerModel.findOne({ uid }).populate('commands').exec()
+export const getServer = async (uid: string): Promise<Document & IServer> => {
+    const server = await ServerModel.findOne<Document & IServer>({ uid }).populate('commands').exec()
 
     return server;
 }
 
-const createServerCommand = async(serverUid, commandAlias, commandValue) => {
+export const createServerCommand = async(serverUid: string, commandAlias: string, commandValue: string): Promise<string | null> => {
     const existingServer = await getServer(serverUid);
     const commandModel = new CommandModel({ alias: commandAlias, value: commandValue });
 
@@ -26,11 +28,13 @@ const createServerCommand = async(serverUid, commandAlias, commandValue) => {
         existingServer.commands.push(commandModel)
         existingServer.save()
     }
+
+    return null;
 }
 
-const getCommandByAlias = (server, alias) => !server.commands ? null : server.commands.find(c => c.alias == alias);
+export const getCommandByAlias = (server: IServer, alias: string): ICommand | undefined => server?.commands?.find(c => c.alias == alias);
 
-const deleteServerCommand = async (serverUid, commandAlias) => {
+export const deleteServerCommand = async (serverUid: string, commandAlias: string): Promise<string | null> => {
     const server = await getServer(serverUid);
 
     if (!server) {
@@ -44,10 +48,12 @@ const deleteServerCommand = async (serverUid, commandAlias) => {
     }
 
     server.commands.pull(command._id);
-    server.save()
+    server.save();
+
+    return null;
 }
 
-const editServerCommand = async(serverUid, commandAlias, commandValue) => {
+export const editServerCommand = async(serverUid: string, commandAlias: string, commandValue: string): Promise<string | null> => {
     const server = await getServer(serverUid);
     const deleteCommandError = await deleteServerCommand(serverUid, commandAlias)
 
@@ -58,11 +64,6 @@ const editServerCommand = async(serverUid, commandAlias, commandValue) => {
         server.commands.push(new CommandModel({ alias: commandAlias, value: commandValue }));    
         server.save();
     }
-}
 
-module.exports = {
-    getServer,
-    createServerCommand,
-    deleteServerCommand,
-    editServerCommand
+    return null;
 }

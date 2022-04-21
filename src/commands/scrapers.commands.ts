@@ -1,10 +1,10 @@
-const { MessageEmbed } = require('discord.js');
+import { Message, MessageEmbed } from "discord.js";
+import Command from '../models/command';
+import { getImage } from '../utils/scrapers/google-images';
 const { BOT_PREFIX } = process.env;
-const Command = require('./command');
-const { getImage } = require('../scrapers/google-images');
 
-const handleSearchImage = async (msg) => {
-    const query = msg.content.replace(`${BOT_PREFIX}img`, '').trim();
+const handleSearchImage = async (msg: Message) => {
+    const query = msg?.content?.replace(`${BOT_PREFIX}img`, '')?.trim();
 
     if (!query) return;
 
@@ -18,10 +18,6 @@ const handleSearchImage = async (msg) => {
     }
 }
 
-const commands = [
+export default [
     new Command(`${BOT_PREFIX}img`, 'Busca imagem no google', '[texto para procurar imagem]', handleSearchImage),
 ];
-
-module.exports = {
-    commands,
-};

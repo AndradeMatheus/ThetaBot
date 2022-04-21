@@ -1,35 +1,37 @@
-const Discord = require('discord.js');
-const assets = require('./assets');
-const Command = require('./command');
-const { myInstantsCommands } = require('./myinstants.commands');
-const { commands: scrapersCommands } = require('./scrapers.commands');
-const { musicCommands } = require('./music.commands')
+import { Message, MessageAttachment, MessageEmbed, Client } from 'discord.js';
+import Assets from '../utils/assets';
+import Command from '../models/command';
+import MyInstantsCommands from './myinstants.commands';
+import ScrapersCommands from './scrapers.commands';
 const { BOT_PREFIX: prefix } = process.env;
 
-const handleAgu = async (msg) => {
-    msg.channel.send(new Discord.MessageAttachment(assets.lucasNinext));
+const handleAgu = async (msg: Message) => {
+    msg?.channel?.send(new MessageAttachment(Assets.lucasNinext));
 }
 
-const handleDilera = async (msg) => {
-  const connection = await msg.member.voice.channel.join();
-  connection.play(assets.dileraBuzina);
+const handleDilera = async (msg: Message) => {
+  const connection = await msg?.member?.voice?.channel?.join();
+  connection?.play(Assets.dileraBuzina);
 }
 
-const handleHelp = async (msg) => {
-    let help = [];
+const handleHelp = async (msg: Message) => {
+    const help: { name: string, value: string }[] = [];
     const helpParameter = msg.content.split(' ')[1];
 
-    commands.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0).forEach((command) => {
-        if (command.description) help.push({name:command.name, value: command.description});
-    });
+    commands
+        .sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
+        .filter(c => c.description)
+        .forEach((command) => {
+            help.push({ name:command.name, value: command.description });
+        });
 
     let helpCommand = commands.find(c => c.name == `${prefix}${helpParameter}`);
 
     if(helpCommand){
-        const embed = new Discord.MessageEmbed()
+        const embed = new MessageEmbed()
         .setTitle(helpCommand.name)
         .setDescription(helpCommand.description)
-        .setColor(assets.theta.color)
+        .setColor(Assets.theta.color)
         .addFields(
         {
             name: 'Exemplo de uso:',
@@ -37,64 +39,63 @@ const handleHelp = async (msg) => {
         })
         .setFooter(helpCommand.help ? 'Desconsidere os \'[ ]\'' : '')
         
-        msg.channel.send(embed);
+        msg?.channel?.send(embed);
     }
     else if(helpParameter && !helpCommand)
     {
-        msg.reply('esse comando não existe');
+        msg?.reply('esse comando não existe');
     }
     else if (help.length){
-        const embed = new Discord.MessageEmbed()
+        const embed = new MessageEmbed()
         .setTitle('Help')
-        .setColor(assets.theta.color)
+        .setColor(Assets.theta.color)
         .addFields(help)
-        .setThumbnail(assets.macacoWakey)
+        .setThumbnail(Assets.macacoWakey)
         .setFooter(`---------------------------------------------------------------------
 Use .help [comando] para saber mais sobre um comando \nDesconsidere os \'[ ]\'\n\ngithub.com/AndradeMatheus/ThetaBot`);
         
-        msg.channel.send(embed);
+        msg?.channel?.send(embed);
     } 
 }
 
-const handleLeave = async (msg) => {
-    await msg.member.voice.channel.leave();
-};
+const handleLeave = (msg: Message) => msg?.member?.voice?.channel?.leave();
 
-const getPlayer = (msg) => msg.guild.voice && msg.guild.voice.connection && msg.guild.voice.connection.player;
+// TODO: procurar tipo correto do player
+const getPlayer = (msg: Message): any => msg?.guild?.voice?.connection?.player;
 
-const handlePause = async (msg) => {
+const handlePause = async (msg: Message) => {
     const player = getPlayer(msg);
     if (player) player.dispatcher.pause();
 };
 
-const handleResume = async (msg) => {
+const handleResume = async (msg: Message) => {
     const player = getPlayer(msg);
     if (player) player.dispatcher.resume();
 };
 
-const handleStop = async (msg) => {
+const handleStop = async (msg: Message) => {
     const player = getPlayer(msg);
     if (player) player.dispatcher.destroy();
 };
 
-const handleListServers = async (msg, client) =>{
+const handleListServers = async (msg: Message, client: Client) =>{
     let guilds = 
     {
         list: '- ' + client.guilds.cache.array().join('\n- '),
         count: client.guilds.cache.array().length
     }
 
-    const serverlist = new Discord.MessageEmbed()
+    const serverlist = new MessageEmbed()
       .setTitle(`Estou em ${guilds.count} servidores:`)
-      .setColor(assets.theta.color)
+      .setColor(Assets.theta.color)
       .setDescription(guilds.list)
-      .setThumbnail(assets.macacoSurpreso)
-      .setFooter(`Me convide para o seu servidor!\n${assets.theta.inviteShort}`)
+      .setThumbnail(Assets.macacoSurpreso)
+      .setFooter(`Me convide para o seu servidor!\n${Assets.theta.inviteShort}`)
 
       msg.channel.send(serverlist)
 }
 
-const commands = [
+const commands: Command[] = [
     new Command(`${prefix}agu`, 'Exibe retrato verossímil de Lucão e Ninext', '', handleAgu),    
     new Command(`${prefix}dilera`, 'Buzina dilera', '', handleDilera),
     new Command(`${prefix}leave`, 'Remove o bot do canal de voz :(', '', handleLeave),
@@ -104,8 +105,8 @@ const commands = [
     new Command(`${prefix}help`, 'Help!', '[comando]', handleHelp),
     new Command(`${prefix}server-list`, 'Lista todos os servidores que o bot está', '', handleListServers),
 
-    ...myInstantsCommands,
-    ...scrapersCommands
+    ...MyInstantsCommands,
+    ...ScrapersCommands
 ]
 
-module.exports = commands;
+export default commands;

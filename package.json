@@ -5,6 +5,7 @@
   "main": "./scripts/index.js",
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
+    "@types/node": "^17.0.25",
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.10",
     "discord": "^0.8.2",
@@ -14,11 +15,16 @@
     "mongoose": "^6.3.0",
     "node-pre-gyp": "^0.17.0",
     "redis": "^3.0.2",
+    "ts-node": "^10.7.0",
+    "ts-node-dev": "^1.1.8",
+    "tsconfig-paths": "^3.14.1",
+    "typescript": "^4.6.3",
     "ytdl-core": "^4.4.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./scripts/index.js"
+    "start": "ts-node --transpile-only ./src/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --inspect=0.0.0.0:7001 --transpile-only --ignore-watch node_modules src/index.ts --respawn",
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",
@@ -32,5 +38,8 @@
   "license": "ISC",
   "engines": {
     "node": "^12.13.1"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.11.97"
   }
 }

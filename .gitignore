@@ -2,5 +2,6 @@ config.js
 /node_modules
 storage/instants-aliases.json
 .env
-*.lock.json
+package-lock.json
 .tool-versions
+/dist
