@@ -1,7 +1,21 @@
-export default class Command {
-    public execute: Function;
+import { Client, Message } from "discord.js";
 
-    constructor(public name: string, public description: string, public help: string, public handler: Function){
-        this.execute = handler;
-    }
+export type CommandHandlerType = Client | undefined | string;
+export default class Command {
+  public execute: (
+    message: Message,
+    client: CommandHandlerType
+  ) => Promise<void>;
+
+  constructor(
+    public name: string,
+    public description: string,
+    public help: string,
+    public handler: (
+      message: Message,
+      client: CommandHandlerType
+    ) => Promise<void>
+  ) {
+    this.execute = handler;
+  }
 }

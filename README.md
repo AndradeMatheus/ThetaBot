@@ -38,15 +38,15 @@ A aplicação está em desenvolvimento.
 
 Atualmente as funcionalidades principais são o uso, reprodução e manipulação dos botões/sons do [MyInstants](https://www.myinstants.com/index/br/), com os comandos abaixo:
 
-* .inst nome do som - Utiliza a api aberta do MyInstants para pesquisar e reproduzir um som a partir do bot no canal de voz em que o usuário está.
+- .inst nome do som - Utiliza a api aberta do MyInstants para pesquisar e reproduzir um som a partir do bot no canal de voz em que o usuário está.
 
-* inst-create alias url-do-som - Define um alias para algum som do MyInstants, podendo chamar o som apenas com o comando .nome-do-alias
+- inst-create alias url-do-som - Define um alias para algum som do MyInstants, podendo chamar o som apenas com o comando .nome-do-alias
 
-* inst-list - Lista todos os aliases criados no servidor e quais sons irá reproduzir
+- inst-list - Lista todos os aliases criados no servidor e quais sons irá reproduzir
 
-* inst-edit - Edita um som atribuído a um alias
+- inst-edit - Edita um som atribuído a um alias
 
-* inst-delete - Deleta um alias criado
+- inst-delete - Deleta um alias criado
 
 Escreva .help no chat para as demais funcionalidades.
 
