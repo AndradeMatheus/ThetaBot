@@ -35,7 +35,7 @@ const handleInstant = async (
   commandArg: CommandHandlerType
 ): Promise<void> => {
   const command = commandArg as Exclude<CommandHandlerType, Client | undefined>;
-  const search = !command
+  const search = typeof command === 'object'
     ? msg?.content?.replace(`${prefix}inst `, "")
     : command;
   const instant = await getMyInstants(search);
