@@ -10,5 +10,6 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-non-null-assertion": "warn",
     "@typescript-eslint/no-non-null-asserted-optional-chain": "warn",
+    "ban-ts-comment": "warn",
   },
 };

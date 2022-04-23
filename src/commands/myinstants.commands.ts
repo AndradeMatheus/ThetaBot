@@ -1,4 +1,4 @@
-import { Client, Message, MessageEmbed } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import axios from "axios";
 import Assets from "../utils/assets";
 import Command, { CommandHandlerType } from "../models/command";
@@ -34,10 +34,11 @@ const handleInstant = async (
   msg: Message,
   commandArg: CommandHandlerType
 ): Promise<void> => {
-  const command = commandArg as Exclude<CommandHandlerType, Client | undefined>;
-  const search = typeof command === 'object'
-    ? msg?.content?.replace(`${prefix}inst `, "")
-    : command;
+  const command = commandArg as Extract<CommandHandlerType, string>;
+  const search =
+    typeof command === "object"
+      ? msg?.content?.replace(`${prefix}inst `, "")
+      : command;
   const instant = await getMyInstants(search);
 
   if (!!instant?.sound && msg?.member?.voice?.channel) {

@@ -85,7 +85,7 @@ const handleListServers = async (
   msg: Message,
   commandArg: CommandHandlerType
 ): Promise<void> => {
-  const client = commandArg as Exclude<CommandHandlerType, undefined | string>;
+  const client = commandArg as Extract<CommandHandlerType, Client>;
   const guilds = {
     list: "- " + client?.guilds.cache.array().join("\n- "),
     count: client?.guilds.cache.array().length,

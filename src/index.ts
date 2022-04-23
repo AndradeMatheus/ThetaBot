@@ -1,30 +1,29 @@
+import { Client } from "discord.js";
+
 import dotenv from "dotenv";
 dotenv.config();
 
-import { Client, Message } from "discord.js";
-import Commands from "./commands";
-import { getInstantAlias } from "./commands/myinstants.commands";
-import "./utils/startDb.ts";
-
+// import "./utils/startDb.ts";
+import SlashCommandsService from "services/slash-commands.service";
 const { BOT_TOKEN: token } = process.env;
 
+const slashCommandService = new SlashCommandsService();
+slashCommandService.loadCommands();
+
 const client = new Client({
+  intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_VOICE_STATES"],
   restTimeOffset: 25,
 });
 
-client.on("message", async (msg: Message) => {
-  if (!msg?.author?.bot) {
-    const commandName = msg?.content?.split(" ")[0];
-    if (commandName) {
-      const command = Commands.find((c) => c.name === commandName);
+client.login(token);
 
-      if (command) await command.execute(msg, client);
-      else getInstantAlias(commandName, msg);
-    }
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isCommand()) return;
 
-    if (msg?.content.includes("bot") && msg?.content?.includes("funcion")) {
-      msg?.reply("eu nao to funcionando direito nao seu animal");
-    }
+  const command = slashCommandService.getCommand(interaction.commandName);
+
+  if (command) {
+    await command.handle(interaction, client);
   }
 });
 
@@ -36,5 +35,3 @@ client.once("ready", () => {
 
   console.log(`EAE MACACO!`);
 });
-
-client.login(token);
