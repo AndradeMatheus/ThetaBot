@@ -4,7 +4,7 @@ import axios from "axios";
 import { RESTPostAPIApplicationCommandsJSONBody } from "discord-api-types/v10";
 import IMyInstantResponse from "interfaces/IMyInstantResponse";
 import SlashCommand, { CommandHandlerType } from "models/slash-command";
-import logger from '../utils/logger'
+import logger from "../utils/logger";
 
 export default class MyInstantsSlashCommand extends SlashCommand {
   constructor() {
@@ -45,7 +45,9 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return response.data as IMyInstantResponse;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      logger.error(`there was an error while searching myinstant '${query}': ${err.message}`);
+      logger.error(
+        `there was an error while searching myinstant '${query}': ${err.message}`
+      );
       return null;
     }
   }
@@ -80,7 +82,8 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
   handlePlay = async (interaction: BaseCommandInteraction) => {
     const option = interaction.options.get("value");
-    const instant = await this.getMyInstants(option?.value as string);
+    const search = this.extractSearch(option?.value as string);
+    const instant = await this.getMyInstants(search);
 
     if (!instant?.sound) {
       interaction.editReply("instant not found");
@@ -102,5 +105,18 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
     const FIVE_MINUTES_IN_MILISECONDS = 5 * 60 * 1000;
     setTimeout(() => connection.disconnect(), FIVE_MINUTES_IN_MILISECONDS);
+  };
+
+  private extractSearch = (input: string): string => {
+    const search = input.includes("myinstants.com")
+      ? input
+          .replace("https://", "")
+          .replace("http://", "")
+          .replace("www.", "")
+          .replace("myinstants.com/instant/", "")
+          .replace("/", "")
+      : input.replace("/", "");
+
+    return search;
   };
 }
