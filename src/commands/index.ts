@@ -2,7 +2,6 @@ import { Message, MessageEmbed } from "discord.js";
 import Assets from "../utils/assets";
 import Command from "../models/command";
 import MyInstantsCommands from "./myinstants.commands";
-import ScrapersCommands from "./scrapers.commands";
 const { BOT_PREFIX: prefix } = process.env;
 
 const handleHelp = async (msg: Message): Promise<void> => {
@@ -90,7 +89,6 @@ const commands: Command[] = [
   new Command(`${prefix}help`, "Help!", "[comando]", handleHelp),
 
   ...MyInstantsCommands,
-  ...ScrapersCommands,
 ];
 
 export default commands;
