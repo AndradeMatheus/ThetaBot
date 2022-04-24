@@ -1,14 +1,9 @@
-import { Message, MessageAttachment, MessageEmbed, Client } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import Assets from "../utils/assets";
 import Command from "../models/command";
 import MyInstantsCommands from "./myinstants.commands";
 import ScrapersCommands from "./scrapers.commands";
 const { BOT_PREFIX: prefix } = process.env;
-
-const handleDilera = async (msg: Message): Promise<void> => {
-  const connection = await msg?.member?.voice?.channel?.join();
-  connection?.play(Assets.dileraBuzina);
-};
 
 const handleHelp = async (msg: Message): Promise<void> => {
   const help: { name: string; value: string }[] = [];
@@ -78,13 +73,6 @@ const handleStop = async (msg: Message) => {
 };
 
 const commands: Command[] = [
-  new Command(
-    `${prefix}agu`,
-    "Exibe retrato verossímil de Lucão e Ninext",
-    "",
-    handleAgu
-  ),
-  new Command(`${prefix}dilera`, "Buzina dilera", "", handleDilera),
   new Command(
     `${prefix}leave`,
     "Remove o bot do canal de voz :(",
