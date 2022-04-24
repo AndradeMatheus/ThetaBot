@@ -1,13 +1,9 @@
 import { Message, MessageAttachment, MessageEmbed, Client } from "discord.js";
 import Assets from "../utils/assets";
-import Command, { CommandHandlerType } from "../models/command";
+import Command from "../models/command";
 import MyInstantsCommands from "./myinstants.commands";
 import ScrapersCommands from "./scrapers.commands";
 const { BOT_PREFIX: prefix } = process.env;
-
-const handleAgu = async (msg: Message): Promise<void> => {
-  await msg?.channel?.send(new MessageAttachment(Assets.lucasNinext));
-};
 
 const handleDilera = async (msg: Message): Promise<void> => {
   const connection = await msg?.member?.voice?.channel?.join();
@@ -81,26 +77,6 @@ const handleStop = async (msg: Message) => {
   if (player) player.dispatcher.destroy();
 };
 
-const handleListServers = async (
-  msg: Message,
-  commandArg: CommandHandlerType
-): Promise<void> => {
-  const client = commandArg as Extract<CommandHandlerType, Client>;
-  const guilds = {
-    list: "- " + client?.guilds.cache.array().join("\n- "),
-    count: client?.guilds.cache.array().length,
-  };
-
-  const serverlist = new MessageEmbed()
-    .setTitle(`Estou em ${guilds.count} servidores:`)
-    .setColor(Assets.theta.color)
-    .setDescription(guilds.list)
-    .setThumbnail(Assets.macacoSurpreso)
-    .setFooter(`Me convide para o seu servidor!\n${Assets.theta.inviteShort}`);
-
-  msg.channel.send(serverlist);
-};
-
 const commands: Command[] = [
   new Command(
     `${prefix}agu`,
@@ -124,12 +100,6 @@ const commands: Command[] = [
   new Command(`${prefix}resume`, "Resume o áudio pausado", "", handleResume),
   new Command(`${prefix}stop`, "Cancela a reprodução do áudio", "", handleStop),
   new Command(`${prefix}help`, "Help!", "[comando]", handleHelp),
-  new Command(
-    `${prefix}server-list`,
-    "Lista todos os servidores que o bot está",
-    "",
-    handleListServers
-  ),
 
   ...MyInstantsCommands,
   ...ScrapersCommands,
