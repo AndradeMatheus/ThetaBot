@@ -3,6 +3,7 @@ import axios from "axios";
 import Assets from "../utils/assets";
 import Command, { CommandHandlerType } from "../models/command";
 import IMyInstantResponse from "../interfaces/IMyInstantResponse";
+import logger from '../utils/logger';
 const { BOT_PREFIX: prefix } = process.env;
 
 import {
@@ -17,7 +18,7 @@ export const getInstantAlias = async (command: string, msg: Message) => {
     const server = await getServer(msg.guild?.id!);
 
     if (!server) {
-      console.log(`server ${msg.guild?.id!} not found`);
+      logger.info(`server ${msg.guild?.id!} not found`);
       return;
     }
 
@@ -191,7 +192,7 @@ const parseInstantCommand = (msg: Message, commandName: string) => {
 
 const errorReply = (msg: Message, reply: string, logMessage: string) => {
   msg.reply(reply);
-  console.log(logMessage);
+  logger.info(logMessage);
 };
 
 export default [

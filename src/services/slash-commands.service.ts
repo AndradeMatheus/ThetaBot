@@ -5,6 +5,7 @@ import {
   RESTPostAPIApplicationCommandsJSONBody,
   Routes,
 } from "discord-api-types/v10";
+import logger from '../utils/logger'
 const { BOT_TOKEN, BOT_CLIENTID } = process.env;
 
 export default class SlashCommandsService {
@@ -21,7 +22,7 @@ export default class SlashCommandsService {
 
     this.registerCommands();
 
-    console.log(`[INFO] Loaded and registered ${this.commands.size} commands`);
+    logger.info(`Loaded and registered ${this.commands.size} commands`);
   }
 
   private async registerCommands() {

@@ -1,9 +1,10 @@
+import { BaseCommandInteraction } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import axios from "axios";
 import { RESTPostAPIApplicationCommandsJSONBody } from "discord-api-types/v10";
-import { BaseCommandInteraction } from "discord.js";
 import IMyInstantResponse from "interfaces/IMyInstantResponse";
 import SlashCommand, { CommandHandlerType } from "models/slash-command";
+import logger from '../utils/logger'
 
 export default class MyInstantsSlashCommand extends SlashCommand {
   constructor() {
@@ -44,7 +45,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return response.data as IMyInstantResponse;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.error(`there was an error while searching myinstant '${query}'`);
+      logger.error(`there was an error while searching myinstant '${query}': ${err.message}`);
       return null;
     }
   }
@@ -66,7 +67,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     subcommands.set("play", this.handlePlay);
 
     if (!subcommands.has(subCommandName)) {
-      await interaction.reply(`invalid command '${subCommandName}'`);
+      await interaction.editReply(`invalid command '${subCommandName}'`);
       return;
     }
 
