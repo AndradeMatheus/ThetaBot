@@ -1,20 +1,11 @@
-import { Client } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import axios from "axios";
 import { RESTPostAPIApplicationCommandsJSONBody } from "discord-api-types/v10";
 import { BaseCommandInteraction } from "discord.js";
 import IMyInstantResponse from "interfaces/IMyInstantResponse";
 import SlashCommand, { CommandHandlerType } from "models/slash-command";
-import {
-  createAudioPlayer,
-  createAudioResource,
-  NoSubscriberBehavior,
-} from "@discordjs/voice";
 
 export default class MyInstantsSlashCommand extends SlashCommand {
-  /**
-   *
-   */
   constructor() {
     super(
       "inst",
@@ -63,7 +54,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     commandArgs: CommandHandlerType
   ): Promise<void> => {
     await interaction.deferReply();
-    // @ts-ignore: find proper type
+    // @ts-ignore
     const subCommandName = interaction.options.getSubcommand() as string;
     const subcommands = new Map<
       string,
@@ -81,14 +72,12 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
     const action = subcommands.get(subCommandName);
 
-    // @ts-ignore: already checked for key existance
+    // @ts-ignore
     await action(interaction, commandArgs);
     await interaction.editReply("done");
   };
 
-  handlePlay = async (
-    interaction: BaseCommandInteraction
-  ) => {
+  handlePlay = async (interaction: BaseCommandInteraction) => {
     const option = interaction.options.get("value");
     const instant = await this.getMyInstants(option?.value as string);
 
