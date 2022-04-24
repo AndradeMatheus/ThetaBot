@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // import "./utils/startDb.ts";
-import logger from './utils/logger'
+import logger from "./utils/logger";
 import SlashCommandsService from "services/slash-commands.service";
 const { BOT_TOKEN: token } = process.env;
 
@@ -34,5 +34,5 @@ client.once("ready", () => {
     url: "http://twitch.tv/tetistiger",
   });
 
-  logger.info('EAE MACACO!');
+  logger.info("EAE MACACO!");
 });

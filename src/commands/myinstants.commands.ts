@@ -3,7 +3,7 @@ import axios from "axios";
 import Assets from "../utils/assets";
 import Command, { CommandHandlerType } from "../models/command";
 import IMyInstantResponse from "../interfaces/IMyInstantResponse";
-import logger from '../utils/logger';
+import logger from "../utils/logger";
 const { BOT_PREFIX: prefix } = process.env;
 
 import {
