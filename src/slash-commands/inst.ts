@@ -38,12 +38,11 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 	): Promise<IMyInstantResponse | null> {
 		const query = search.replace(/ /g, '-');
 		try {
-			const response = await axios.get(
+			const response = await axios.get<IMyInstantResponse>(
 				`https://www.myinstants.com/api/v1/instants/${query}`,
 			);
 
-			return response.data as IMyInstantResponse;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			return response.data;
 		}
 		catch (err: any) {
 			logger.error(
