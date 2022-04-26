@@ -100,7 +100,6 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
 		await this.connectToVoiceChannelAndPlay(
 			connection,
-			interaction,
 			instant.sound,
 		);
 

@@ -29,7 +29,6 @@ export default class DileraSlashCommand extends SlashCommand {
 
 		await this.connectToVoiceChannelAndPlay(
 			connection,
-			interaction,
 			Assets.dileraBuzina,
 		);
 	}
