@@ -1,5 +1,9 @@
 {
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
   "env": {
     "node": true,
     "es6": true
@@ -8,6 +12,9 @@
     "ecmaVersion": 2019
   },
   "rules": {
+    "@typescript-eslint/no-non-null-assertion": "warn",
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "warn",
+    "@typescript-eslint/ban-ts-comment": "warn",
     "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
     "comma-dangle": ["error", "always-multiline"],
     "comma-spacing": "error",

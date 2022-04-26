@@ -1,5 +1,5 @@
-import { Schema, model, Types } from "mongoose";
-import { ICommand, CommandSchema } from "./command.schema";
+import { Schema, model, Types } from 'mongoose';
+import { ICommand, CommandSchema } from './command.schema';
 
 export interface IServer {
   _id: string;
@@ -8,8 +8,8 @@ export interface IServer {
 }
 
 const ServerSchema = new Schema<IServer>({
-  uid: { type: String, required: true },
-  commands: { type: [CommandSchema], required: true },
+	uid: { type: String, required: true },
+	commands: { type: [CommandSchema], required: true },
 });
 
-export const ServerModel = model<IServer>("servers", ServerSchema);
+export const ServerModel = model<IServer>('servers', ServerSchema);

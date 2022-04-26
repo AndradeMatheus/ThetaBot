@@ -1,21 +1,21 @@
-import { Client, Message } from "discord.js";
+import { Client, Message } from 'discord.js';
 
 export type CommandHandlerType = Client | undefined | string;
 export default class Command {
-  public execute: (
+	public execute: (
     message: Message,
     client: CommandHandlerType
   ) => Promise<void>;
 
-  constructor(
+	constructor(
     public name: string,
     public description: string,
     public help: string,
     public handler: (
       message: Message,
       client: CommandHandlerType
-    ) => Promise<void>
-  ) {
-    this.execute = handler;
-  }
+    ) => Promise<void>,
+	) {
+		this.execute = handler;
+	}
 }
