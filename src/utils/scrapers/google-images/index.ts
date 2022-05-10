@@ -2,11 +2,11 @@ import axios from 'axios';
 import { load } from 'cheerio';
 
 export const getImage = async function (
-  query: string
+  query: string,
 ): Promise<string | undefined> {
   try {
     const { data } = await axios(
-      `https://www.google.com/search?q=${query}&tbm=isch&sclient=img&safe=off`
+      `https://www.google.com/search?q=${query}&tbm=isch&sclient=img&safe=off`,
     );
 
     if (data) {

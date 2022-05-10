@@ -4,7 +4,7 @@ import { ServerModel, IServer } from '../schemas/server.schema';
 import { CommandModel } from '../schemas/command.schema';
 
 export const getServer = async (
-  uid: string
+  uid: string,
 ): Promise<(Document & IServer) | null> => {
   const server = await ServerModel.findOne<Document & IServer>({ uid })
     .populate('commands')
@@ -16,7 +16,7 @@ export const getServer = async (
 export const createServerCommand = async (
   serverUid: string,
   commandAlias: string,
-  commandValue: string
+  commandValue: string,
 ): Promise<string | null> => {
   const existingServer = await getServer(serverUid);
   const commandModel = new CommandModel({
@@ -32,7 +32,7 @@ export const createServerCommand = async (
     newServer.save();
   } else {
     const existingCommand = existingServer.commands.find(
-      (c) => c.alias == commandAlias
+      (c) => c.alias == commandAlias,
     );
 
     if (existingCommand) {
@@ -48,12 +48,12 @@ export const createServerCommand = async (
 
 export const getCommandByAlias = (
   server: IServer,
-  alias: string
+  alias: string,
 ): ICommand | undefined => server?.commands?.find((c) => c.alias == alias);
 
 export const deleteServerCommand = async (
   serverUid: string,
-  commandAlias: string
+  commandAlias: string,
 ): Promise<string | null> => {
   const server = await getServer(serverUid);
 
@@ -76,7 +76,7 @@ export const deleteServerCommand = async (
 export const editServerCommand = async (
   serverUid: string,
   commandAlias: string,
-  commandValue: string
+  commandValue: string,
 ): Promise<string | null> => {
   const server = await getServer(serverUid);
   const deleteCommandError = await deleteServerCommand(serverUid, commandAlias);
@@ -85,7 +85,7 @@ export const editServerCommand = async (
     return deleteCommandError;
   } else {
     server?.commands.push(
-      new CommandModel({ alias: commandAlias, value: commandValue })
+      new CommandModel({ alias: commandAlias, value: commandValue }),
     );
     server?.save();
   }

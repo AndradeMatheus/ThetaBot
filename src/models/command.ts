@@ -4,7 +4,7 @@ export type CommandHandlerType = Client | undefined | string;
 export default class Command {
   public execute: (
     message: Message,
-    client: CommandHandlerType
+    client: CommandHandlerType,
   ) => Promise<void>;
 
   constructor(
@@ -13,8 +13,8 @@ export default class Command {
     public help: string,
     public handler: (
       message: Message,
-      client: CommandHandlerType
-    ) => Promise<void>
+      client: CommandHandlerType,
+    ) => Promise<void>,
   ) {
     this.execute = handler;
   }

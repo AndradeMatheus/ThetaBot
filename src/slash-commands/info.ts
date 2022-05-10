@@ -21,14 +21,14 @@ export default class InfoSlashCommand extends SlashCommand {
       .addSubcommand((list) =>
         list
           .setName('list-servers')
-          .setDescription('list servers using Thetabot')
+          .setDescription('list servers using Thetabot'),
       )
       .toJSON();
   }
 
   async handle(
     interaction: BaseCommandInteraction<CacheType>,
-    commandArg: CommandHandlerType
+    commandArg: CommandHandlerType,
   ): Promise<void> {
     const client = commandArg as Extract<CommandHandlerType, Client>;
     const guilds = {

@@ -16,7 +16,7 @@ const handleHelp = async (msg: Message): Promise<void> => {
     });
 
   const helpCommand = commands.find(
-    (c) => c.name == `${prefix}${helpParameter}`
+    (c) => c.name == `${prefix}${helpParameter}`,
   );
 
   if (helpCommand) {
@@ -76,13 +76,13 @@ const commands: Command[] = [
     `${prefix}leave`,
     'Remove o bot do canal de voz :(',
     '',
-    handleLeave
+    handleLeave,
   ),
   new Command(
     `${prefix}pause`,
     'Pausa a reprodução do aúdio atual',
     '',
-    handlePause
+    handlePause,
   ),
   new Command(`${prefix}resume`, 'Resume o áudio pausado', '', handleResume),
   new Command(`${prefix}stop`, 'Cancela a reprodução do áudio', '', handleStop),

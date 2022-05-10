@@ -17,7 +17,7 @@ export default class GoogleImageScrapperSearchSlashCommand extends SlashCommand 
         search
           .setName('search')
           .setDescription('what you want to search for?')
-          .setRequired(true)
+          .setRequired(true),
       )
       .toJSON();
   }

@@ -31,7 +31,7 @@ export const getInstantAlias = async (command: string, msg: Message) => {
 
 const handleInstant = async (
   msg: Message,
-  commandArg: CommandHandlerType
+  commandArg: CommandHandlerType,
 ): Promise<void> => {
   const command = commandArg as Extract<CommandHandlerType, string>;
   const search =
@@ -47,7 +47,7 @@ const handleInstant = async (
     const FIVE_MINUTES_IN_MILISECONDS = 5 * 60 * 1000;
     setTimeout(
       () => msg?.member?.voice?.channel?.leave(),
-      FIVE_MINUTES_IN_MILISECONDS
+      FIVE_MINUTES_IN_MILISECONDS,
     );
   } else {
     msg.reply('instant não encontrado');
@@ -55,12 +55,12 @@ const handleInstant = async (
 };
 
 const getMyInstants = async (
-  search: string
+  search: string,
 ): Promise<IMyInstantResponse | null> => {
   const query = search.replace(/ /g, '-');
   try {
     const response = await axios.get(
-      `https://www.myinstants.com/api/v1/instants/${query}`
+      `https://www.myinstants.com/api/v1/instants/${query}`,
     );
 
     return response.data as IMyInstantResponse;
@@ -105,7 +105,7 @@ const handleInstantDeleteAlias = async (msg: Message) => {
         errorReply(
           msg,
           `não foi possível editar o alias ${alias}`,
-          deleteAliasError
+          deleteAliasError,
         );
       } else {
         msg.reply(`alias **${alias}** removido`);
@@ -124,18 +124,18 @@ export default [
     `${prefix}inst`,
     'Busca áudio no MyInstants',
     '[link ou nome do audio]',
-    handleInstant
+    handleInstant,
   ),
   new Command(
     `${prefix}inst-list`,
     'Lista os aliases criados nesse servidor',
     '',
-    handleInstantListAlias
+    handleInstantListAlias,
   ),
   new Command(
     `${prefix}inst-delete`,
     'Deleta um alias',
     '[alias]',
-    handleInstantDeleteAlias
+    handleInstantDeleteAlias,
   ),
 ];

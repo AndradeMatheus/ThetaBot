@@ -14,18 +14,18 @@ export default abstract class SlashCommand {
   constructor(
     public name: string,
     public description: string,
-    public help: string = 'N/A'
+    public help: string = 'N/A',
   ) {}
 
   abstract getSlashCommandJson(): RESTPostAPIApplicationCommandsJSONBody;
 
   abstract handle(
     interaction: BaseCommandInteraction,
-    client: CommandHandlerType
+    client: CommandHandlerType,
   ): Promise<void>;
 
   getVoiceChannelConnection = async (
-    interaction: BaseCommandInteraction
+    interaction: BaseCommandInteraction,
   ): Promise<VoiceConnection | null | undefined> => {
     const connection = joinVoiceChannel({
       // @ts-ignore
@@ -40,7 +40,7 @@ export default abstract class SlashCommand {
 
   connectToVoiceChannelAndPlay = async (
     connection: VoiceConnection,
-    audio: string
+    audio: string,
   ): Promise<void> => {
     const player = createAudioPlayer({
       behaviors: { noSubscriber: NoSubscriberBehavior.Pause },

@@ -24,7 +24,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     super(
       'inst',
       'MyInstants commands',
-      '/inst {play | create | edit | delete}'
+      '/inst {play | create | edit | delete}',
     );
   }
 
@@ -40,8 +40,8 @@ export default class MyInstantsSlashCommand extends SlashCommand {
             opt
               .setName('value')
               .setDescription('MyInstant audio name or full url')
-              .setRequired(true)
-          )
+              .setRequired(true),
+          ),
       )
       .addSubcommand((create) =>
         create
@@ -51,20 +51,20 @@ export default class MyInstantsSlashCommand extends SlashCommand {
             name
               .setName('name')
               .setDescription('command name')
-              .setRequired(true)
+              .setRequired(true),
           )
           .addStringOption((value) =>
             value
               .setName('value')
               .setDescription("MyInstant' name/url that will be played")
-              .setRequired(true)
+              .setRequired(true),
           )
           .addStringOption((description) =>
             description
               .setName('description')
               .setDescription('audio description')
-              .setRequired(false)
-          )
+              .setRequired(false),
+          ),
       )
       .addSubcommand((edit) =>
         edit
@@ -74,20 +74,20 @@ export default class MyInstantsSlashCommand extends SlashCommand {
             name
               .setName('name')
               .setDescription('command name')
-              .setRequired(true)
+              .setRequired(true),
           )
           .addStringOption((value) =>
             value
               .setName('value')
               .setDescription("MyInstant' name/url that will be played")
-              .setRequired(true)
+              .setRequired(true),
           )
           .addStringOption((description) =>
             description
               .setName('description')
               .setDescription('audio description')
-              .setRequired(false)
-          )
+              .setRequired(false),
+          ),
       )
       .addSubcommand((del) =>
         del
@@ -97,25 +97,25 @@ export default class MyInstantsSlashCommand extends SlashCommand {
             name
               .setName('name')
               .setDescription('command name')
-              .setRequired(true)
-          )
+              .setRequired(true),
+          ),
       )
       .toJSON();
   }
 
   private async getMyInstants(
-    search: string
+    search: string,
   ): Promise<IMyInstantResponse | null> {
     const query = search.replace(/ /g, '-');
     try {
       const response = await axios.get<IMyInstantResponse>(
-        `https://www.myinstants.com/api/v1/instants/${query}`
+        `https://www.myinstants.com/api/v1/instants/${query}`,
       );
 
       return response.data;
     } catch (err: any) {
       logger.error(
-        `there was an error while searching myinstant '${query}': ${err.message}`
+        `there was an error while searching myinstant '${query}': ${err.message}`,
       );
       return null;
     }
@@ -123,7 +123,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
   handle = async (
     interaction: BaseCommandInteraction,
-    commandArgs: CommandHandlerType
+    commandArgs: CommandHandlerType,
   ): Promise<void> => {
     await interaction.deferReply();
     // @ts-ignore
@@ -132,7 +132,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       string,
       (
         fnInteraction: BaseCommandInteraction,
-        fnCommandArgs: CommandHandlerType
+        fnCommandArgs: CommandHandlerType,
       ) => Promise<void>
     >();
     subcommands.set('play', this.handlePlay);
@@ -161,7 +161,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
   private handleInstantPlay = async (
     interaction: BaseCommandInteraction,
-    instantSearch: string
+    instantSearch: string,
   ) => {
     const instant = await this.getMyInstants(instantSearch);
 
@@ -192,19 +192,19 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     await this.createInstantSlashCommand(
       interaction,
       commandName,
-      commandDescription as string
+      commandDescription as string,
     );
 
     // create command with value on mongodb
     const commandCreationError = await myInstantsRepository.createServerCommand(
       interaction.guildId as string,
       commandName,
-      commandValue
+      commandValue,
     );
 
     if (commandCreationError) {
       logger.info(
-        `the was an error while creating command ${commandName} on server '${interaction.guild?.name}': ${commandCreationError}`
+        `the was an error while creating command ${commandName} on server '${interaction.guild?.name}': ${commandCreationError}`,
       );
       await interaction.editReply('ocorreu um erro ao criar esse comando');
       return;
@@ -212,7 +212,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
     // reply with success
     logger.info(
-      `command '${commandName}' created successfully on server '${interaction.guild?.name}'`
+      `command '${commandName}' created successfully on server '${interaction.guild?.name}'`,
     );
     await interaction.editReply(`comando '${commandName}' criado com sucesso`);
   };
@@ -230,13 +230,13 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     const commandUpdateError = await myInstantsRepository.editServerCommand(
       interaction.guildId as string,
       commandName,
-      commandValue
+      commandValue,
     );
 
     if (commandUpdateError) {
       await interaction.editReply('ocorreu um erro ao editar esse comando');
       logger.info(
-        `there was an error to edit command '${commandName}' on server ${interaction.guild?.name} (${interaction.guild}))`
+        `there was an error to edit command '${commandName}' on server ${interaction.guild?.name} (${interaction.guild}))`,
       );
 
       return;
@@ -245,14 +245,14 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     await this.createInstantSlashCommand(
       interaction,
       commandName,
-      commandDescription
+      commandDescription,
     );
 
     logger.info(
-      `Command '${commandName}' edited on server '${interaction.guild?.name}(${interaction.guildId})'`
+      `Command '${commandName}' edited on server '${interaction.guild?.name}(${interaction.guildId})'`,
     );
     await interaction.editReply(
-      `comando '${commandName}' alterado com sucesso`
+      `comando '${commandName}' alterado com sucesso`,
     );
   };
 
@@ -262,13 +262,13 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
     const commandDeleteError = await myInstantsRepository.deleteServerCommand(
       interaction.guildId as string,
-      name as string
+      name as string,
     );
 
     if (commandDeleteError) {
       interaction.editReply('ocorreu um erro ao remover esse comando');
       logger.info(
-        `There an error while trying to delete command '${name}'from server '${interaction.guild?.name}(${interaction.guildId})'`
+        `There an error while trying to delete command '${name}'from server '${interaction.guild?.name}(${interaction.guildId})'`,
       );
       return;
     }
@@ -276,19 +276,19 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     await this.deleteInstantSlashCommand(interaction, name);
 
     logger.info(
-      `Command '${name}' deleted from server '${interaction.guild?.name}(${interaction.guildId})'`
+      `Command '${name}' deleted from server '${interaction.guild?.name}(${interaction.guildId})'`,
     );
     await interaction.editReply(`comando '${name}' removido com sucesso`);
   };
 
   private getCommandData = (
-    interaction: BaseCommandInteraction
+    interaction: BaseCommandInteraction,
   ): CommandDataType => {
     const nameOption = interaction.options.get('name', true);
     const valueOption = interaction.options.get('value', true);
     const commandDescriptionOption = interaction.options.get(
       'description',
-      false
+      false,
     );
     const commandValue = this.extractSearch(valueOption?.value as string);
     const commandName = nameOption?.value as string;
@@ -304,20 +304,20 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   handleCustomCommand = async (interaction: BaseCommandInteraction) => {
     // get command from mongodb
     const server = await myInstantsRepository.getServer(
-      interaction.guildId as string
+      interaction.guildId as string,
     );
 
     if (!server) {
       await interaction.reply('ocorreu um erro ao buscar esse comando');
       logger.info(
-        `command '${interaction.commandName}' not found on server '${interaction.guild?.name} (${interaction.guildId})'`
+        `command '${interaction.commandName}' not found on server '${interaction.guild?.name} (${interaction.guildId})'`,
       );
       return;
     }
 
     const dbCommand = myInstantsRepository.getCommandByAlias(
       server,
-      interaction.commandName
+      interaction.commandName,
     );
 
     if (dbCommand) {
@@ -330,7 +330,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   private createInstantSlashCommand = async (
     interaction: BaseCommandInteraction,
     commandName: string,
-    commandDescription: string | undefined
+    commandDescription: string | undefined,
   ) => {
     const newSlashcommand = new SlashCommandBuilder().setName(commandName);
 
@@ -342,31 +342,31 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     await rest.put(
       Routes.applicationGuildCommands(
         BOT_CLIENTID!,
-        interaction.guildId as string
+        interaction.guildId as string,
       ),
       {
         body: [newSlashcommand.toJSON()],
-      }
+      },
     );
   };
 
   private deleteInstantSlashCommand = async (
     interaction: BaseCommandInteraction,
-    commandName: string
+    commandName: string,
   ) => {
     const rest = new REST({ version: '9' }).setToken(BOT_TOKEN!);
     const guildCommands: ISlashCommand[] = (await rest.get(
       Routes.applicationGuildCommands(
         BOT_CLIENTID!,
-        interaction.guildId as string
-      )
+        interaction.guildId as string,
+      ),
     )) as ISlashCommand[];
     const command = guildCommands.find((c) => c.name === commandName);
 
     if (!command) {
       await interaction.editReply('não foi possível remover esse comando');
       logger.info(
-        `SlashCommand '${commandName}' not found on server ${interaction.guild?.name}(${interaction.guildId})`
+        `SlashCommand '${commandName}' not found on server ${interaction.guild?.name}(${interaction.guildId})`,
       );
       return;
     }
@@ -374,8 +374,8 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     await rest.delete(
       `${Routes.applicationGuildCommands(
         BOT_CLIENTID!,
-        interaction.guildId as string
-      )}/${command.id}`
+        interaction.guildId as string,
+      )}/${command.id}`,
     );
   };
 
