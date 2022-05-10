@@ -31,9 +31,7 @@ export const createServerCommand = async (
     });
     newServer.save();
   } else {
-    const existingCommand = existingServer.commands.find(
-      (c) => c.alias == commandAlias,
-    );
+    const existingCommand = getCommandByAlias(existingServer, commandAlias);
 
     if (existingCommand) {
       return `the alias '${commandAlias}' already exists on server ${serverUid}`;
@@ -46,10 +44,11 @@ export const createServerCommand = async (
   return null;
 };
 
-export const getCommandByAlias = (
+export function getCommandByAlias(
   server: IServer,
-  alias: string,
-): ICommand | undefined => server?.commands?.find((c) => c.alias == alias);
+  alias: string): ICommand | undefined {
+  return server?.commands?.find((c) => c.alias == alias);
+}
 
 export const deleteServerCommand = async (
   serverUid: string,
