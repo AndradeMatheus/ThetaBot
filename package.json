@@ -31,7 +31,7 @@
     "start": "ts-node --transpile-only ./src/index.ts",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect=0.0.0.0:7001 --transpile-only --ignore-watch node_modules src/index.ts --respawn",
     "lint:fix": "eslint --fix ./src/**",
-    "pretty": "npx prettier --write .",
+    "pretty": "prettier --write .",
     "tsc": "tsc"
   },
   "repository": {
