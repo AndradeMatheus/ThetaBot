@@ -4,93 +4,91 @@ import { ServerModel, IServer } from '../schemas/server.schema';
 import { CommandModel } from '../schemas/command.schema';
 
 export const getServer = async (
-	uid: string,
+  uid: string
 ): Promise<(Document & IServer) | null> => {
-	const server = await ServerModel.findOne<Document & IServer>({ uid })
-		.populate('commands')
-		.exec();
+  const server = await ServerModel.findOne<Document & IServer>({ uid })
+    .populate('commands')
+    .exec();
 
-	return server;
+  return server;
 };
 
 export const createServerCommand = async (
-	serverUid: string,
-	commandAlias: string,
-	commandValue: string,
+  serverUid: string,
+  commandAlias: string,
+  commandValue: string
 ): Promise<string | null> => {
-	const existingServer = await getServer(serverUid);
-	const commandModel = new CommandModel({
-		alias: commandAlias,
-		value: commandValue,
-	});
+  const existingServer = await getServer(serverUid);
+  const commandModel = new CommandModel({
+    alias: commandAlias,
+    value: commandValue,
+  });
 
-	if (!existingServer) {
-		const newServer = new ServerModel({
-			uid: serverUid,
-			commands: [commandModel],
-		});
-		newServer.save();
-	}
-	else {
-		const existingCommand = existingServer.commands.find(
-			(c) => c.alias == commandAlias,
-		);
+  if (!existingServer) {
+    const newServer = new ServerModel({
+      uid: serverUid,
+      commands: [commandModel],
+    });
+    newServer.save();
+  } else {
+    const existingCommand = existingServer.commands.find(
+      (c) => c.alias == commandAlias
+    );
 
-		if (existingCommand) {
-			return `the alias '${commandAlias}' already exists on server ${serverUid}`;
-		}
+    if (existingCommand) {
+      return `the alias '${commandAlias}' already exists on server ${serverUid}`;
+    }
 
-		existingServer.commands.push(commandModel);
-		existingServer.save();
-	}
+    existingServer.commands.push(commandModel);
+    existingServer.save();
+  }
 
-	return null;
+  return null;
 };
 
 export const getCommandByAlias = (
-	server: IServer,
-	alias: string,
+  server: IServer,
+  alias: string
 ): ICommand | undefined => server?.commands?.find((c) => c.alias == alias);
 
 export const deleteServerCommand = async (
-	serverUid: string,
-	commandAlias: string,
+  serverUid: string,
+  commandAlias: string
 ): Promise<string | null> => {
-	const server = await getServer(serverUid);
+  const server = await getServer(serverUid);
 
-	if (!server) {
-		return `server '${serverUid}' not found`;
-	}
+  if (!server) {
+    return `server '${serverUid}' not found`;
+  }
 
-	const command = getCommandByAlias(server, commandAlias);
+  const command = getCommandByAlias(server, commandAlias);
 
-	if (!command) {
-		return `command '${commandAlias}' not found on server ${serverUid}`;
-	}
+  if (!command) {
+    return `command '${commandAlias}' not found on server ${serverUid}`;
+  }
 
-	server.commands.pull(command._id);
-	server.save();
+  server.commands.pull(command._id);
+  server.save();
 
-	return null;
+  return null;
 };
 
 export const editServerCommand = async (
-	serverUid: string,
-	commandAlias: string,
-	commandValue: string,
+  serverUid: string,
+  commandAlias: string,
+  commandValue: string
 ): Promise<string | null> => {
-	const server = await getServer(serverUid);
-	const deleteCommandError = await deleteServerCommand(serverUid, commandAlias);
+  const server = await getServer(serverUid);
+  const deleteCommandError = await deleteServerCommand(serverUid, commandAlias);
 
-	if (deleteCommandError) {
-		return deleteCommandError;
-	}
-	else {
-		server?.commands.push(
-			new CommandModel({ alias: commandAlias, value: commandValue }),
-		);
-		server?.save();
-	}
+  if (deleteCommandError) {
+    return deleteCommandError;
+  } else {
+    server?.commands.push(
+      new CommandModel({ alias: commandAlias, value: commandValue })
+    );
+    server?.save();
+  }
 
-	return null;
+  return null;
 };

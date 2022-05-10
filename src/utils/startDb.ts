@@ -6,9 +6,9 @@ async function run() {
   try {
     await mongoose.connect(mongoUri!);
 
-    logger.info('connected successfully to mongodb server');
+    logger.info('Connected successfully to mongodb server');
   } catch (err) {
-    logger.info('cant connect to mongodb', err);
+    logger.info('Cant connect to mongodb', err);
     await mongoose.disconnect();
   }
 }

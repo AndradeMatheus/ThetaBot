@@ -8,9 +8,7 @@ const { BOT_PREFIX: prefix } = process.env;
 
 import {
   getServer,
-  createServerCommand,
   deleteServerCommand,
-  editServerCommand,
 } from '../repositories/myinstants-repository';
 
 export const getInstantAlias = async (command: string, msg: Message) => {
@@ -73,31 +71,6 @@ const getMyInstants = async (
   }
 };
 
-const handleInstantCreateAlias = async (msg: Message) => {
-  try {
-    const { alias, sound } = parseInstantCommand(msg, 'inst-create');
-    const commandValid = await isCommandValid(alias, sound);
-
-    if (commandValid) {
-      const createServerCommandError = await createServerCommand(
-        msg.guild?.id!,
-        alias,
-        sound
-      );
-
-      if (createServerCommandError) {
-        errorReply(msg, '', createServerCommandError);
-      } else {
-        msg.reply(
-          `seu alias **${alias}** do som **${sound}** foi criado com sucesso!`
-        );
-      }
-    }
-  } catch (err) {
-    msg.reply('não foi possível criar o alias, verifique o seu comando.');
-  }
-};
-
 const handleInstantListAlias = async (msg: Message) => {
   const server = await getServer(msg.guild?.id!);
 
@@ -141,55 +114,6 @@ const handleInstantDeleteAlias = async (msg: Message) => {
   }
 };
 
-const handleInstantEditAlias = async (msg: Message) => {
-  const { alias, sound } = parseInstantCommand(msg, 'inst-edit');
-  const commandValid = await isCommandValid(alias, sound);
-
-  if (commandValid) {
-    const commandEditError = await editServerCommand(
-      msg.guild?.id!,
-      alias,
-      sound
-    );
-
-    if (commandEditError) {
-      errorReply(
-        msg,
-        `não foi possível editar o alias ${alias}`,
-        commandEditError
-      );
-    } else {
-      msg.reply(`alias **${alias}** alterado para o som **${sound}**`);
-    }
-  }
-};
-
-const isCommandValid = async (
-  alias: string,
-  sound: string
-): Promise<boolean> => {
-  const instant = await getMyInstants(sound);
-  const commandValid = !!alias && !!sound && !!instant?.sound;
-
-  return commandValid;
-};
-
-const parseInstantCommand = (msg: Message, commandName: string) => {
-  const command = msg.content.replace(`${prefix}${commandName} `, '');
-  const alias = command.split(' ')[0];
-  const arrSound = command.split(' ')[1];
-  const sound = arrSound.includes('myinstants.com')
-    ? arrSound
-        .replace('https://', '')
-        .replace('http://', '')
-        .replace('www.', '')
-        .replace('myinstants.com/instant/', '')
-        .replace('/', '')
-    : arrSound.replace('/', '');
-
-  return { command, alias, sound };
-};
-
 const errorReply = (msg: Message, reply: string, logMessage: string) => {
   msg.reply(reply);
   logger.info(logMessage);
@@ -203,22 +127,10 @@ export default [
     handleInstant
   ),
   new Command(
-    `${prefix}inst-create`,
-    'Define um alias pra uma url do MyInstants',
-    '[alias] [link ou nome do audio]',
-    handleInstantCreateAlias
-  ),
-  new Command(
     `${prefix}inst-list`,
     'Lista os aliases criados nesse servidor',
     '',
     handleInstantListAlias
-  ),
-  new Command(
-    `${prefix}inst-edit`,
-    'Edita um alias',
-    '[alias] [novo link ou nome do audio]',
-    handleInstantEditAlias
   ),
   new Command(
     `${prefix}inst-delete`,
