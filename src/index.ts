@@ -27,7 +27,7 @@ client.on('interactionCreate', async (interaction) => {
   if (command) {
     await command.handle(interaction, client);
   } else {
-    new MyInstantsSlashCommand().handleCustomInstant(interaction);
+    new MyInstantsSlashCommand().handleCustomCommand(interaction);
   }
 });
 

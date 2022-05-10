@@ -301,7 +301,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 		};
 	};
 
-	handleCustomInstant = async (interaction: BaseCommandInteraction) => {
+	handleCustomCommand = async (interaction: BaseCommandInteraction) => {
 		// get command from mongodb
 		const server = await myInstantsRepository.getServer(
       interaction.guildId as string,
