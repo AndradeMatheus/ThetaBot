@@ -1,5 +1,5 @@
-import { ICommand, CommandModel } from './../schemas/command.schema';
 import { Document } from 'mongoose';
+import { ICommand, CommandModel } from './../schemas/command.schema';
 import { ServerModel, IServer } from '../schemas/server.schema';
 
 export const getServer = async (
