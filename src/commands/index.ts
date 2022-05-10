@@ -1,7 +1,6 @@
 import { Message, MessageEmbed } from 'discord.js';
 import Assets from '../utils/assets';
 import Command from '../models/command';
-import MyInstantsCommands from './myinstants.commands';
 const { BOT_PREFIX: prefix } = process.env;
 
 const handleHelp = async (msg: Message): Promise<void> => {
@@ -87,8 +86,6 @@ const commands: Command[] = [
   new Command(`${prefix}resume`, 'Resume o áudio pausado', '', handleResume),
   new Command(`${prefix}stop`, 'Cancela a reprodução do áudio', '', handleStop),
   new Command(`${prefix}help`, 'Help!', '[comando]', handleHelp),
-
-  ...MyInstantsCommands,
 ];
 
 export default commands;
