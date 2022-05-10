@@ -1,7 +1,6 @@
-import { ICommand } from './../schemas/command.schema';
+import { ICommand, CommandModel } from './../schemas/command.schema';
 import { Document } from 'mongoose';
 import { ServerModel, IServer } from '../schemas/server.schema';
-import { CommandModel } from '../schemas/command.schema';
 
 export const getServer = async (
   uid: string,
