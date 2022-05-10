@@ -7,8 +7,8 @@ export interface ICommand {
 }
 
 export const CommandSchema = new Schema<ICommand>({
-	alias: { type: String, required: true },
-	value: { type: String, required: true },
+  alias: { type: String, required: true },
+  value: { type: String, required: true },
 });
 
 export const CommandModel = model<ICommand>('commands', CommandSchema);

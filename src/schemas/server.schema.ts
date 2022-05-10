@@ -8,8 +8,8 @@ export interface IServer {
 }
 
 const ServerSchema = new Schema<IServer>({
-	uid: { type: String, required: true },
-	commands: { type: [CommandSchema], required: true },
+  uid: { type: String, required: true },
+  commands: { type: [CommandSchema], required: true },
 });
 
 export const ServerModel = model<IServer>('servers', ServerSchema);

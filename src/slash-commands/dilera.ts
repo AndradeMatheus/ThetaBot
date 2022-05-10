@@ -5,31 +5,28 @@ import SlashCommand from 'models/slash-command';
 import Assets from '../utils/assets';
 
 export default class DileraSlashCommand extends SlashCommand {
-	constructor() {
-		super('dilera', 'uh uh uh');
-	}
+  constructor() {
+    super('dilera', 'uh uh uh');
+  }
 
-	getSlashCommandJson(): RESTPostAPIApplicationCommandsJSONBody {
-		return new SlashCommandBuilder()
-			.setName(this.name)
-			.setDescription(this.description)
-			.toJSON();
-	}
+  getSlashCommandJson(): RESTPostAPIApplicationCommandsJSONBody {
+    return new SlashCommandBuilder()
+      .setName(this.name)
+      .setDescription(this.description)
+      .toJSON();
+  }
 
-	async handle(interaction: BaseCommandInteraction<CacheType>): Promise<void> {
-		const connection = await this.getVoiceChannelConnection(interaction);
+  async handle(interaction: BaseCommandInteraction<CacheType>): Promise<void> {
+    const connection = await this.getVoiceChannelConnection(interaction);
 
-		if (!connection) {
-			interaction.reply({
-				ephemeral: true,
-				data: { content: 'can\'t connect to voice channel' },
-			});
-			return;
-		}
+    if (!connection) {
+      interaction.reply({
+        ephemeral: true,
+        data: { content: "can't connect to voice channel" },
+      });
+      return;
+    }
 
-		await this.connectToVoiceChannelAndPlay(
-			connection,
-			Assets.dileraBuzina,
-		);
-	}
+    await this.connectToVoiceChannelAndPlay(connection, Assets.dileraBuzina);
+  }
 }

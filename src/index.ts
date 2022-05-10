@@ -3,9 +3,10 @@ import { Client } from 'discord.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// import "./utils/startDb.ts";
+import "./utils/startDb.ts";
 import logger from './utils/logger';
 import SlashCommandsService from 'services/slash-commands.service';
+import MyInstantsSlashCommand from 'slash-commands/inst';
 const { BOT_TOKEN: token } = process.env;
 
 const slashCommandService = new SlashCommandsService();
@@ -25,6 +26,9 @@ client.on('interactionCreate', async (interaction) => {
 
 	if (command) {
 		await command.handle(interaction, client);
+	}
+	else {
+		new MyInstantsSlashCommand().handleCustomInstant(interaction);
 	}
 });
 
