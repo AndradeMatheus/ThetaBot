@@ -2,15 +2,14 @@ import 'reflect-metadata';
 import { container } from 'tsyringe';
 import { Client } from 'discord.js';
 import dotenv from 'dotenv';
+dotenv.config();
 import logger from './utils/logger';
 import { Types } from './utils/loadContainer';
 import MyInstantsSlashCommand from 'slash-commands/inst';
-import IMyInstantsRepository from 'interfaces/repositories/my-instants';
-import ISlashCommandsService from 'interfaces/services/slash-commands';
+import ISlashCommandsService from './interfaces/services/slash-commands';
 import './utils/startDb.ts';
 import './utils/loadContainer';
 
-dotenv.config();
 const { BOT_TOKEN: token } = process.env;
 
 const slashCommandService = container.resolve<ISlashCommandsService>(Types.ISlashCommandsService);
@@ -31,10 +30,10 @@ client.on('interactionCreate', async (interaction) => {
   if (command) {
     await command.handle(interaction, client);
   } else {
-    const myInstantsRepository = container.resolve<IMyInstantsRepository>(
-      Types.IMyInstantsRepository,
+    const myInstantsSlashCommand = container.resolve<MyInstantsSlashCommand>(
+      Types.MyInstantsSlashCommand,
     );
-    new MyInstantsSlashCommand(myInstantsRepository).handleCustomCommand(
+    myInstantsSlashCommand.handleCustomCommand(
       interaction,
     );
   }

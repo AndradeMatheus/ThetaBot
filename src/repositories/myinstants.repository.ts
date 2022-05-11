@@ -1,8 +1,10 @@
+import { injectable } from 'tsyringe';
 import IMyInstantsRepository from 'interfaces/repositories/my-instants';
 import { Document } from 'mongoose';
 import { ICommand, CommandModel } from '../schemas/command.schema';
 import { ServerModel, IServer } from '../schemas/server.schema';
 
+@injectable()
 export default class MyInstantsRepository implements IMyInstantsRepository {
   getServer = async (
     uid: string,

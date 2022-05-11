@@ -1,4 +1,4 @@
-import { inject } from 'tsyringe';
+import { container } from 'tsyringe';
 import { BaseCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import axios from 'axios';
@@ -14,18 +14,18 @@ import logger from '../utils/logger';
 const { BOT_TOKEN, BOT_CLIENTID } = process.env;
 
 import ISlashCommand from 'interfaces/ISlashCommand';
-import IMyInstantsRepository from 'interfaces/repositories/my-instants';
+import IMyInstantsRepository from '../interfaces/repositories/my-instants';
 
 type CommandDataType = {
   commandName: string;
   commandValue: string;
   commandDescription: string | undefined;
 };
+
 export default class MyInstantsSlashCommand extends SlashCommand {
-  constructor(
-    @inject(Types.IMyInstantsRepository)
-    private myInstantsRepository: IMyInstantsRepository,
-  ) {
+  private myInstantsRepository = container.resolve<IMyInstantsRepository>(Types.IMyInstantsRepository);
+
+  constructor() {
     super(
       'inst',
       'MyInstants commands',
