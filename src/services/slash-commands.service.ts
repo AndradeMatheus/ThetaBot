@@ -6,9 +6,9 @@ import {
   Routes,
 } from 'discord-api-types/v10';
 import logger from '../utils/logger';
+import ISlashCommandsService from 'interfaces/services/slash-commands';
 const { BOT_TOKEN, BOT_CLIENTID } = process.env;
-
-export default class SlashCommandsService {
+export default class SlashCommandsService implements ISlashCommandsService {
   private commands: Map<string, SlashCommand> = new Map();
 
   async loadCommands(): Promise<void> {

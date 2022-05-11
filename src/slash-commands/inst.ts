@@ -1,3 +1,4 @@
+import { inject } from 'tsyringe';
 import { BaseCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import axios from 'axios';
@@ -6,13 +7,14 @@ import {
   Routes,
 } from 'discord-api-types/v10';
 import { REST } from '@discordjs/rest';
-import IMyInstantResponse from 'interfaces/IMyInstantResponse';
+import { Types } from '../utils/loadContainer';
+import IMyInstantResponse from 'interfaces/responses/IMyInstantResponse';
 import SlashCommand, { CommandHandlerType } from 'models/slash-command';
 import logger from '../utils/logger';
 const { BOT_TOKEN, BOT_CLIENTID } = process.env;
 
-import * as myInstantsRepository from '../repositories/myinstants-repository';
 import ISlashCommand from 'interfaces/ISlashCommand';
+import IMyInstantsRepository from 'interfaces/repositories/my-instants';
 
 type CommandDataType = {
   commandName: string;
@@ -20,7 +22,10 @@ type CommandDataType = {
   commandDescription: string | undefined;
 };
 export default class MyInstantsSlashCommand extends SlashCommand {
-  constructor() {
+  constructor(
+    @inject(Types.IMyInstantsRepository)
+    private myInstantsRepository: IMyInstantsRepository,
+  ) {
     super(
       'inst',
       'MyInstants commands',
@@ -196,11 +201,12 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     );
 
     // create command with value on mongodb
-    const commandCreationError = await myInstantsRepository.createServerCommand(
-      interaction.guildId as string,
-      commandName,
-      commandValue,
-    );
+    const commandCreationError =
+      await this.myInstantsRepository.createServerCommand(
+        interaction.guildId as string,
+        commandName,
+        commandValue,
+      );
 
     if (commandCreationError) {
       logger.info(
@@ -227,11 +233,12 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    const commandUpdateError = await myInstantsRepository.editServerCommand(
-      interaction.guildId as string,
-      commandName,
-      commandValue,
-    );
+    const commandUpdateError =
+      await this.myInstantsRepository.editServerCommand(
+        interaction.guildId as string,
+        commandName,
+        commandValue,
+      );
 
     if (commandUpdateError) {
       await interaction.editReply('ocorreu um erro ao editar esse comando');
@@ -260,10 +267,11 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     const nameOption = interaction.options.get('name', true);
     const name = nameOption?.value as string;
 
-    const commandDeleteError = await myInstantsRepository.deleteServerCommand(
-      interaction.guildId as string,
-      name as string,
-    );
+    const commandDeleteError =
+      await this.myInstantsRepository.deleteServerCommand(
+        interaction.guildId as string,
+        name as string,
+      );
 
     if (commandDeleteError) {
       interaction.editReply('ocorreu um erro ao remover esse comando');
@@ -303,7 +311,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
   handleCustomCommand = async (interaction: BaseCommandInteraction) => {
     // get command from mongodb
-    const server = await myInstantsRepository.getServer(
+    const server = await this.myInstantsRepository.getServer(
       interaction.guildId as string,
     );
 
@@ -315,7 +323,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    const dbCommand = myInstantsRepository.getCommandByAlias(
+    const dbCommand = this.myInstantsRepository.getCommandByAlias(
       server,
       interaction.commandName,
     );
@@ -382,11 +390,11 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   private extractSearch = (input: string): string => {
     const search = input.includes('myinstants.com')
       ? input
-          .replace('https://', '')
-          .replace('http://', '')
-          .replace('www.', '')
-          .replace('myinstants.com/instant/', '')
-          .replace('/', '')
+        .replace('https://', '')
+        .replace('http://', '')
+        .replace('www.', '')
+        .replace('myinstants.com/instant/', '')
+        .replace('/', '')
       : input.replace('/', '');
 
     return search;
