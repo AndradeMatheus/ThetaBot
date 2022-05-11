@@ -12,7 +12,9 @@ import './utils/loadContainer';
 
 const { BOT_TOKEN: token } = process.env;
 
-const slashCommandService = container.resolve<ISlashCommandsService>(Types.ISlashCommandsService);
+const slashCommandService = container.resolve<ISlashCommandsService>(
+  Types.ISlashCommandsService,
+);
 slashCommandService.loadCommands();
 
 const client = new Client({
@@ -33,9 +35,7 @@ client.on('interactionCreate', async (interaction) => {
     const myInstantsSlashCommand = container.resolve<MyInstantsSlashCommand>(
       Types.MyInstantsSlashCommand,
     );
-    myInstantsSlashCommand.handleCustomCommand(
-      interaction,
-    );
+    myInstantsSlashCommand.handleCustomCommand(interaction);
   }
 });
 

@@ -1,5 +1,5 @@
-import { Schema, model, Types } from 'mongoose';
-import { ICommand, CommandSchema } from './command.schema';
+import { Schema, Types, model } from 'mongoose';
+import { CommandSchema, ICommand } from './command.schema';
 
 export interface IServer {
   _id: string;

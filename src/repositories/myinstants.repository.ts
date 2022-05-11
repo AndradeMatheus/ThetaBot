@@ -1,14 +1,12 @@
 import { injectable } from 'tsyringe';
 import IMyInstantsRepository from 'interfaces/repositories/my-instants';
 import { Document } from 'mongoose';
-import { ICommand, CommandModel } from '../schemas/command.schema';
-import { ServerModel, IServer } from '../schemas/server.schema';
+import { CommandModel, ICommand } from '../schemas/command.schema';
+import { IServer, ServerModel } from '../schemas/server.schema';
 
 @injectable()
 export default class MyInstantsRepository implements IMyInstantsRepository {
-  getServer = async (
-    uid: string,
-  ): Promise<(Document & IServer) | null> => {
+  getServer = async (uid: string): Promise<(Document & IServer) | null> => {
     const server = await ServerModel.findOne<Document & IServer>({ uid })
       .populate('commands')
       .exec();
@@ -34,7 +32,10 @@ export default class MyInstantsRepository implements IMyInstantsRepository {
       });
       newServer.save();
     } else {
-      const existingCommand = this.getCommandByAlias(existingServer, commandAlias);
+      const existingCommand = this.getCommandByAlias(
+        existingServer,
+        commandAlias,
+      );
 
       if (existingCommand) {
         return `the alias '${commandAlias}' already exists on server ${serverUid}`;
@@ -47,12 +48,9 @@ export default class MyInstantsRepository implements IMyInstantsRepository {
     return null;
   };
 
-  getCommandByAlias(
-    server: IServer,
-    alias: string,
-  ): ICommand | undefined {
+  getCommandByAlias(server: IServer, alias: string): ICommand | undefined {
     return server?.commands?.find((c) => c.alias == alias);
-  };
+  }
 
   deleteServerCommand = async (
     serverUid: string,
@@ -82,7 +80,10 @@ export default class MyInstantsRepository implements IMyInstantsRepository {
     commandValue: string,
   ): Promise<string | null> => {
     const server = await this.getServer(serverUid);
-    const deleteCommandError = await this.deleteServerCommand(serverUid, commandAlias);
+    const deleteCommandError = await this.deleteServerCommand(
+      serverUid,
+      commandAlias,
+    );
 
     if (deleteCommandError) {
       return deleteCommandError;

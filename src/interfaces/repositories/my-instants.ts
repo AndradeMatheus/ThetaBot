@@ -23,4 +23,4 @@ export default interface IMyInstantsRepository {
     commandAlias: string,
     commandValue: string,
   ): Promise<string | null>;
-}
+};

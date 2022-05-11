@@ -23,7 +23,9 @@ type CommandDataType = {
 };
 
 export default class MyInstantsSlashCommand extends SlashCommand {
-  private myInstantsRepository = container.resolve<IMyInstantsRepository>(Types.IMyInstantsRepository);
+  private myInstantsRepository = container.resolve<IMyInstantsRepository>(
+    Types.IMyInstantsRepository,
+  );
 
   constructor() {
     super(

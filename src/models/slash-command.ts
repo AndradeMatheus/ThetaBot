@@ -1,11 +1,11 @@
-import { Client, BaseCommandInteraction } from 'discord.js';
+import { BaseCommandInteraction, Client } from 'discord.js';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/rest/v10/interactions';
 import {
+  NoSubscriberBehavior,
+  VoiceConnection,
   createAudioPlayer,
   createAudioResource,
   joinVoiceChannel,
-  NoSubscriberBehavior,
-  VoiceConnection,
 } from '@discordjs/voice';
 
 export type CommandHandlerType = Client | undefined | string;
