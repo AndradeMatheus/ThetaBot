@@ -1,7 +1,14 @@
-config.js
-/node_modules
-storage/instants-aliases.json
-.env
+# node files
 package-lock.json
-.tool-versions
+
+# folders
+/node_modules
 /dist
+
+# project files
+config.js
+storage/instants-aliases.json
+
+# env files
+.env
+.tool-versions
