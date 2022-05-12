@@ -1,7 +1,7 @@
-import { container } from 'tsyringe';
 import MyInstantsRepository from '../repositories/myinstants.repository';
 import SlashCommandsService from 'services/slash-commands.service';
 import MyInstantsSlashCommand from 'slash-commands/inst';
+import { container } from 'tsyringe';
 
 export const Types = {
   IMyInstantsRepository: Symbol(),

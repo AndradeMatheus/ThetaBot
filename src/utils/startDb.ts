@@ -1,5 +1,6 @@
-import mongoose from 'mongoose';
 import logger from './logger';
+import mongoose from 'mongoose';
+
 const { MONGO_URI: mongoUri } = process.env;
 
 async function run() {

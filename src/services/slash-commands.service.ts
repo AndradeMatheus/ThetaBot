@@ -1,12 +1,13 @@
-import SlashCommand from 'models/slash-command';
-import { readdir } from 'fs/promises';
+import logger from '../utils/logger';
 import { REST } from '@discordjs/rest';
 import {
   RESTPostAPIApplicationCommandsJSONBody,
   Routes,
 } from 'discord-api-types/v10';
-import logger from '../utils/logger';
+import { readdir } from 'fs/promises';
 import ISlashCommandsService from 'interfaces/services/slash-commands';
+import SlashCommand from 'models/slash-command';
+
 const { BOT_TOKEN, BOT_CLIENTID } = process.env;
 export default class SlashCommandsService implements ISlashCommandsService {
   private commands: Map<string, SlashCommand> = new Map();

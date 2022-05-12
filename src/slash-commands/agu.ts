@@ -1,8 +1,8 @@
+import Assets from '../utils/assets';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { BaseCommandInteraction, MessageEmbed } from 'discord.js';
 import SlashCommand from 'models/slash-command';
-import Assets from '../utils/assets';
 
 export default class AguSlashCommand extends SlashCommand {
   constructor() {

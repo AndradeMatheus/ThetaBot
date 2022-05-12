@@ -1,3 +1,4 @@
+import Assets from '../utils/assets';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
@@ -7,7 +8,6 @@ import {
   MessageEmbed,
 } from 'discord.js';
 import SlashCommand, { CommandHandlerType } from 'models/slash-command';
-import Assets from '../utils/assets';
 
 export default class InfoSlashCommand extends SlashCommand {
   constructor() {
