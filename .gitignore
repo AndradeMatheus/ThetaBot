@@ -6,8 +6,6 @@ package-lock.json
 /dist
 
 # project files
-config.js
-storage/instants-aliases.json
 
 # env files
 .env
