@@ -1,3 +1,4 @@
+import { BaseCommandInteraction, Client } from 'discord.js';
 import {
   NoSubscriberBehavior,
   VoiceConnection,
@@ -6,7 +7,6 @@ import {
   joinVoiceChannel,
 } from '@discordjs/voice';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/rest/v10/interactions';
-import { BaseCommandInteraction, Client } from 'discord.js';
 
 export type CommandHandlerType = Client | undefined | string;
 
@@ -15,7 +15,9 @@ export default abstract class SlashCommand {
     public name: string,
     public description: string,
     public help: string = 'N/A',
-  ) {}
+  ) {
+    //
+  }
 
   abstract getSlashCommandJson(): RESTPostAPIApplicationCommandsJSONBody;
 

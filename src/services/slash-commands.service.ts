@@ -1,12 +1,12 @@
-import logger from '../utils/logger';
-import { REST } from '@discordjs/rest';
 import {
   RESTPostAPIApplicationCommandsJSONBody,
   Routes,
 } from 'discord-api-types/v10';
-import { readdir } from 'fs/promises';
 import ISlashCommandsService from 'interfaces/services/slash-commands';
+import { REST } from '@discordjs/rest';
 import SlashCommand from 'models/slash-command';
+import logger from '../utils/logger';
+import { readdir } from 'fs/promises';
 
 const { BOT_TOKEN, BOT_CLIENTID } = process.env;
 export default class SlashCommandsService implements ISlashCommandsService {

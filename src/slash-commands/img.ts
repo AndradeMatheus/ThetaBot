@@ -1,7 +1,7 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { BaseCommandInteraction, CacheType, MessageEmbed } from 'discord.js';
-import SlashCommand, { CommandHandlerType } from 'models/slash-command';
+import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import SlashCommand from 'models/slash-command';
+import { SlashCommandBuilder } from '@discordjs/builders';
 import { getImage } from 'utils/scrapers/google-images';
 
 export default class GoogleImageScrapperSearchSlashCommand extends SlashCommand {

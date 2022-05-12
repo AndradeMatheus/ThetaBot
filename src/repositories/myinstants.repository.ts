@@ -1,8 +1,8 @@
-import { injectable } from 'tsyringe';
-import IMyInstantsRepository from 'interfaces/repositories/my-instants';
-import { Document } from 'mongoose';
 import { CommandModel, ICommand } from '../schemas/command.schema';
 import { IServer, ServerModel } from '../schemas/server.schema';
+import { Document } from 'mongoose';
+import IMyInstantsRepository from 'interfaces/repositories/my-instants';
+import { injectable } from 'tsyringe';
 
 @injectable()
 export default class MyInstantsRepository implements IMyInstantsRepository {

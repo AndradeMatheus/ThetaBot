@@ -1,7 +1,7 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/rest/v10/interactions';
 import { BaseCommandInteraction } from 'discord.js';
+import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/rest/v10/interactions';
 import SlashCommand from 'models/slash-command';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
 export default class PingSlashCommand extends SlashCommand {
   constructor() {

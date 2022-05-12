@@ -1,15 +1,15 @@
-import ISlashCommandsService from './interfaces/services/slash-commands';
-import { Types } from './utils/loadContainer';
+import 'reflect-metadata';
 import './utils/loadContainer';
-import logger from './utils/logger';
 import './utils/startDb.ts';
 import { Client } from 'discord.js';
-import dotenv from 'dotenv';
-import 'reflect-metadata';
+import ISlashCommandsService from './interfaces/services/slash-commands';
 import MyInstantsSlashCommand from 'slash-commands/inst';
+import { Types } from './utils/loadContainer';
 import { container } from 'tsyringe';
-
+import dotenv from 'dotenv';
 dotenv.config();
+import logger from './utils/logger';
+
 
 const { BOT_TOKEN: token } = process.env;
 

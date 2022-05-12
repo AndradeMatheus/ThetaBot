@@ -1,18 +1,18 @@
-import IMyInstantsRepository from '../interfaces/repositories/my-instants';
-import { Types } from '../utils/loadContainer';
-import logger from '../utils/logger';
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { REST } from '@discordjs/rest';
-import axios from 'axios';
 import {
   RESTPostAPIApplicationCommandsJSONBody,
   Routes,
 } from 'discord-api-types/v10';
-import { BaseCommandInteraction } from 'discord.js';
-import ISlashCommand from 'interfaces/ISlashCommand';
-import IMyInstantResponse from 'interfaces/responses/IMyInstantResponse';
 import SlashCommand, { CommandHandlerType } from 'models/slash-command';
+import { BaseCommandInteraction } from 'discord.js';
+import IMyInstantResponse from 'interfaces/responses/IMyInstantResponse';
+import IMyInstantsRepository from '../interfaces/repositories/my-instants';
+import ISlashCommand from 'interfaces/ISlashCommand';
+import { REST } from '@discordjs/rest';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { Types } from '../utils/loadContainer';
+import axios from 'axios';
 import { container } from 'tsyringe';
+import logger from '../utils/logger';
 
 const { BOT_TOKEN, BOT_CLIENTID } = process.env;
 
@@ -392,11 +392,11 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   private extractSearch = (input: string): string => {
     const search = input.includes('myinstants.com')
       ? input
-          .replace('https://', '')
-          .replace('http://', '')
-          .replace('www.', '')
-          .replace('myinstants.com/instant/', '')
-          .replace('/', '')
+        .replace('https://', '')
+        .replace('http://', '')
+        .replace('www.', '')
+        .replace('myinstants.com/instant/', '')
+        .replace('/', '')
       : input.replace('/', '');
 
     return search;

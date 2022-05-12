@@ -1,6 +1,6 @@
 import MyInstantsRepository from '../repositories/myinstants.repository';
-import SlashCommandsService from 'services/slash-commands.service';
 import MyInstantsSlashCommand from 'slash-commands/inst';
+import SlashCommandsService from 'services/slash-commands.service';
 import { container } from 'tsyringe';
 
 export const Types = {

@@ -1,6 +1,6 @@
+import { Document } from 'mongoose';
 import { ICommand } from '../../schemas/command.schema';
 import { IServer } from '../../schemas/server.schema';
-import { Document } from 'mongoose';
 
 export default interface IMyInstantsRepository {
   getServer(uid: string): Promise<(Document & IServer) | null>;
