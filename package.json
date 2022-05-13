@@ -30,7 +30,7 @@
     "ytdl-core": "^4.11.0"
   },
   "scripts": {
-    "start": "ts-node --transpile-only ./src/index.ts",
+    "start": "ts-node -r tsconfig-paths/register --transpile-only ./src/index.ts",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect=0.0.0.0:7001 --transpile-only --ignore-watch node_modules src/index.ts --respawn",
     "lint:fix": "eslint --fix ./src/**",
     "pretty": "prettier --write .",
