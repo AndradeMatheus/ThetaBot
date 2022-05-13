@@ -1,15 +1,16 @@
-import 'reflect-metadata';
-import './utils/loadContainer';
-import './utils/startDb.ts';
-import { Client } from 'discord.js';
-import ISlashCommandsService from './interfaces/services/slash-commands';
-import MyInstantsSlashCommand from 'slash-commands/inst';
-import { Types } from './utils/loadContainer';
-import { container } from 'tsyringe';
 import dotenv from 'dotenv';
 dotenv.config();
-import logger from './utils/logger';
 
+// eslint-disable-next-line sort-imports
+import 'reflect-metadata';
+import './utils/startDb.ts';
+import loadDIContainer, { Types } from './utils/loadContainer';
+import { Client } from 'discord.js';
+import ISlashCommandsService from './interfaces/services/slash-commands';
+import MyInstantsSlashCommand from './slash-commands/inst';
+import { container } from 'tsyringe';
+import logger from './utils/logger';
+loadDIContainer();
 
 const { BOT_TOKEN: token } = process.env;
 

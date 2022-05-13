@@ -9,11 +9,13 @@ export const Types = {
   MyInstantsSlashCommand: Symbol(),
 };
 
-// repositories
-container.register(Types.IMyInstantsRepository, MyInstantsRepository);
+export default function loadDIContainer() {
+  // repositories
+  container.register(Types.IMyInstantsRepository, MyInstantsRepository);
 
-// services
-container.register(Types.ISlashCommandsService, SlashCommandsService);
+  // services
+  container.register(Types.ISlashCommandsService, SlashCommandsService);
 
-// commands
-container.register(Types.MyInstantsSlashCommand, MyInstantsSlashCommand);
+  // commands
+  container.register(Types.MyInstantsSlashCommand, MyInstantsSlashCommand);
+}
