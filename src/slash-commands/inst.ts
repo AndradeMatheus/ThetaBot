@@ -1,9 +1,10 @@
+import { BaseCommandInteraction, MessageEmbed } from 'discord.js';
 import {
   RESTPostAPIApplicationCommandsJSONBody,
   Routes,
 } from 'discord-api-types/v10';
 import SlashCommand, { CommandHandlerType } from 'models/slash-command';
-import { BaseCommandInteraction } from 'discord.js';
+import Assets from '../utils/assets';
 import IMyInstantResponse from 'interfaces/responses/IMyInstantResponse';
 import IMyInstantsRepository from '../interfaces/repositories/my-instants';
 import ISlashCommand from 'interfaces/ISlashCommand';
@@ -107,6 +108,11 @@ export default class MyInstantsSlashCommand extends SlashCommand {
               .setRequired(true),
           ),
       )
+      .addSubcommand((list) =>
+        list
+          .setName('list')
+          .setDescription('list MyInstant custom commands'),
+      )
       .toJSON();
   }
 
@@ -146,6 +152,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     subcommands.set('create', this.handleCreate);
     subcommands.set('edit', this.handleEdit);
     subcommands.set('delete', this.handleDelete);
+    subcommands.set('list', this.handleList);
 
     if (!subcommands.has(subCommandName)) {
       await interaction.editReply(`invalid command '${subCommandName}'`);
@@ -289,6 +296,33 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       `Command '${name}' deleted from server '${interaction.guild?.name}(${interaction.guildId})'`,
     );
     await interaction.editReply(`comando '${name}' removido com sucesso`);
+  };
+
+  handleList = async (interaction: BaseCommandInteraction) => {
+    const server = await this.myInstantsRepository.getServer(interaction.guildId as string);
+
+    if (!server) {
+      logger.info(`server '${interaction.guild?.name}' not found`);
+      interaction.editReply('não foi possível listar os comandos');
+      return;
+    }
+
+    const commands = server.commands.map(c => ({
+      name:`/${c.alias}`,
+      value: c.value,
+    }));
+
+    const embed = new MessageEmbed()
+      .setTitle('Lista de comandos customizados')
+      .setColor('BLUE')
+      .addFields(commands)
+      .setThumbnail(Assets.macacoSpin);
+
+    interaction.editReply({
+      embeds: [
+        embed,
+      ],
+    });
   };
 
   private getCommandData = (
