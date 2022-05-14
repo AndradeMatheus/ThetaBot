@@ -301,7 +301,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   handleList = async (interaction: BaseCommandInteraction) => {
     const server = await this.myInstantsRepository.getServer(interaction.guildId as string);
 
-    if (!server) {
+    if (!server?.commands?.length) {
       logger.info(`server '${interaction.guild?.name}' not found`);
       interaction.editReply('não foi possível listar os comandos');
       return;
