@@ -1,7 +1,7 @@
 import {
-  BaseCommandInteraction,
   CacheType,
   Client,
+  CommandInteraction,
   MessageEmbed,
 } from 'discord.js';
 import SlashCommand, { CommandHandlerType } from 'models/slash-command';
@@ -27,7 +27,7 @@ export default class InfoSlashCommand extends SlashCommand {
   }
 
   async handle(
-    interaction: BaseCommandInteraction<CacheType>,
+    interaction: CommandInteraction<CacheType>,
     commandArg: CommandHandlerType,
   ): Promise<void> {
     const client = commandArg as Extract<CommandHandlerType, Client>;

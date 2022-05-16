@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, CacheType } from 'discord.js';
+import { CacheType, CommandInteraction } from 'discord.js';
 import Assets from '../utils/assets';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import SlashCommand from 'models/slash-command';
@@ -16,7 +16,7 @@ export default class DileraSlashCommand extends SlashCommand {
       .toJSON();
   }
 
-  async handle(interaction: BaseCommandInteraction<CacheType>): Promise<void> {
+  async handle(interaction: CommandInteraction<CacheType>): Promise<void> {
     const connection = await this.getVoiceChannelConnection(interaction);
 
     if (!connection) {

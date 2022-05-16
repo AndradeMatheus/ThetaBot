@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, MessageEmbed } from 'discord.js';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
 import Assets from '../utils/assets';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import SlashCommand from 'models/slash-command';
@@ -16,7 +16,7 @@ export default class AguSlashCommand extends SlashCommand {
       .toJSON();
   }
 
-  async handle(interaction: BaseCommandInteraction): Promise<void> {
+  async handle(interaction: CommandInteraction): Promise<void> {
     await interaction.reply({
       embeds: [
         new MessageEmbed({

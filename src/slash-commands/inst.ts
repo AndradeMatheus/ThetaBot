@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, MessageEmbed } from 'discord.js';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
 import {
   RESTPostAPIApplicationCommandsJSONBody,
   Routes,
@@ -135,16 +135,15 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   }
 
   handle = async (
-    interaction: BaseCommandInteraction,
+    interaction: CommandInteraction,
     commandArgs: CommandHandlerType,
   ): Promise<void> => {
     await interaction.deferReply();
-    // @ts-ignore
-    const subCommandName = interaction.options.getSubcommand() as string;
+    const subCommandName = interaction.options.getSubcommand();
     const subcommands = new Map<
       string,
       (
-        fnInteraction: BaseCommandInteraction,
+        fnInteraction: CommandInteraction,
         fnCommandArgs: CommandHandlerType,
       ) => Promise<void>
     >();
@@ -165,7 +164,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     await action(interaction, commandArgs);
   };
 
-  handlePlay = async (interaction: BaseCommandInteraction) => {
+  handlePlay = async (interaction: CommandInteraction) => {
     const option = interaction.options.get('value');
     const instantSearch = this.extractSearch(option?.value as string);
 
@@ -174,7 +173,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   };
 
   private handleInstantPlay = async (
-    interaction: BaseCommandInteraction,
+    interaction: CommandInteraction,
     instantSearch: string,
   ) => {
     const instant = await this.getMyInstants(instantSearch);
@@ -197,7 +196,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     setTimeout(() => connection.disconnect(), FIVE_MINUTES_IN_MILISECONDS);
   };
 
-  handleCreate = async (interaction: BaseCommandInteraction) => {
+  handleCreate = async (interaction: CommandInteraction) => {
     // extract command name, value and description
     const { commandName, commandDescription, commandValue } =
       this.getCommandData(interaction);
@@ -232,7 +231,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     await interaction.editReply(`comando '${commandName}' criado com sucesso`);
   };
 
-  handleEdit = async (interaction: BaseCommandInteraction) => {
+  handleEdit = async (interaction: CommandInteraction) => {
     const { commandName, commandValue, commandDescription } =
       this.getCommandData(interaction);
     const instant = await this.getMyInstants(commandValue);
@@ -272,7 +271,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     );
   };
 
-  handleDelete = async (interaction: BaseCommandInteraction) => {
+  handleDelete = async (interaction: CommandInteraction) => {
     const nameOption = interaction.options.get('name', true);
     const name = nameOption?.value as string;
 
@@ -298,7 +297,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     await interaction.editReply(`comando '${name}' removido com sucesso`);
   };
 
-  handleList = async (interaction: BaseCommandInteraction) => {
+  handleList = async (interaction: CommandInteraction) => {
     const server = await this.myInstantsRepository.getServer(interaction.guildId as string);
 
     if (!server?.commands?.length) {
@@ -326,7 +325,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   };
 
   private getCommandData = (
-    interaction: BaseCommandInteraction,
+    interaction: CommandInteraction,
   ): CommandDataType => {
     const nameOption = interaction.options.get('name', true);
     const valueOption = interaction.options.get('value', true);
@@ -345,7 +344,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     };
   };
 
-  handleCustomCommand = async (interaction: BaseCommandInteraction) => {
+  handleCustomCommand = async (interaction: CommandInteraction) => {
     // get command from mongodb
     const server = await this.myInstantsRepository.getServer(
       interaction.guildId as string,
@@ -372,7 +371,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   };
 
   private createInstantSlashCommand = async (
-    interaction: BaseCommandInteraction,
+    interaction: CommandInteraction,
     commandName: string,
     commandDescription: string | undefined,
   ) => {
@@ -395,7 +394,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   };
 
   private deleteInstantSlashCommand = async (
-    interaction: BaseCommandInteraction,
+    interaction: CommandInteraction,
     commandName: string,
   ) => {
     const rest = new REST({ version: '9' }).setToken(BOT_TOKEN!);

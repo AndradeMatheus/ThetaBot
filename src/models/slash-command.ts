@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, Client } from 'discord.js';
+import { Client, CommandInteraction } from 'discord.js';
 import {
   NoSubscriberBehavior,
   VoiceConnection,
@@ -22,12 +22,12 @@ export default abstract class SlashCommand {
   abstract getSlashCommandJson(): RESTPostAPIApplicationCommandsJSONBody;
 
   abstract handle(
-    interaction: BaseCommandInteraction,
+    interaction: CommandInteraction,
     client: CommandHandlerType,
   ): Promise<void>;
 
   getVoiceChannelConnection = async (
-    interaction: BaseCommandInteraction,
+    interaction: CommandInteraction,
   ): Promise<VoiceConnection | null | undefined> => {
     const connection = joinVoiceChannel({
       // @ts-ignore

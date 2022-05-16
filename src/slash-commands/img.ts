@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, CacheType, MessageEmbed } from 'discord.js';
+import { CacheType, CommandInteraction, MessageEmbed } from 'discord.js';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import SlashCommand from 'models/slash-command';
 import { SlashCommandBuilder } from '@discordjs/builders';
@@ -22,7 +22,7 @@ export default class GoogleImageScrapperSearchSlashCommand extends SlashCommand 
       .toJSON();
   }
 
-  async handle(interaction: BaseCommandInteraction<CacheType>): Promise<void> {
+  async handle(interaction: CommandInteraction<CacheType>): Promise<void> {
     const search = interaction.options.get('search', true);
 
     if (!search?.value) return;
