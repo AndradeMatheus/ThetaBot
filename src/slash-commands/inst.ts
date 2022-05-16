@@ -160,7 +160,12 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
     const action = subcommands.get(subCommandName);
 
-    // @ts-ignore
+    if (!action) {
+      await interaction.editReply('comando não encontrado');
+      logger.alert(`subcommand /${this.name} ${subCommandName} not found`);
+      return;
+    }
+
     await action(interaction, commandArgs);
   };
 
