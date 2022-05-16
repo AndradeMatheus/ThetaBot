@@ -153,11 +153,6 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     subcommands.set('delete', this.handleDelete);
     subcommands.set('list', this.handleList);
 
-    if (!subcommands.has(subCommandName)) {
-      await interaction.editReply(`invalid command '${subCommandName}'`);
-      return;
-    }
-
     const action = subcommands.get(subCommandName);
 
     if (!action) {
