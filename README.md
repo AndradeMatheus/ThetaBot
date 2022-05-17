@@ -40,7 +40,7 @@ Confira abaixo os comandos disponíveis atualmente no bot:
 |---------|-------------|----------------------|------------|
 | /agu    |             | Exibe retrato verossímil de Lucão e Ninext |
 | /dilera |             | Uh uh uuuuuuhh       |            |
-| /img    |             | Busca imagem no google images | ``query``: texto para buscar a imagem |
+| /img    |             | Busca imagem no google images | ``search``: texto para buscar a imagem |
 | /info   | list-servers | Mostra a lista dos servidores em que o bot está instalado |
 | /inst   | play        | Busca e reproduz o MyInstant no canal de voz em que o usuário estiver conectado | ``*name``: texto/url do MyInstant |
 | /inst   | create      | Cria um comando de barra para um MyInstant. Ex: /macaco | ``*name``: nome do comando (ex: macaco); ``*value``: texto/url do MyInstant; ``description``: descrição do comando |
