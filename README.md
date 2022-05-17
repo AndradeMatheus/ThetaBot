@@ -26,29 +26,31 @@ Algumas variáveis de ambiente estão baseadas no node.env, elas serão definida
 
 ```bash
 BOT_TOKEN="TOKEN" #Token fornecida pelo painel de admnistrador do Discord
-BOT_PREFIX="." #Prefixo para utilizar os comandos do bot, à vontade do usuário
 MONGO_URI="" #Uri para conexão com mongodb
 ```
 
 Caso o deploy seja feito no Heroku, há um guia para utilizar as [config vars](https://devcenter.heroku.com/articles/config-vars).
 
-## Uso
+## Comandos
 
-A aplicação está em desenvolvimento.
+Confira abaixo os comandos disponíveis atualmente no bot:
 
-Atualmente as funcionalidades principais são o uso, reprodução e manipulação dos botões/sons do [MyInstants](https://www.myinstants.com/index/br/), com os comandos abaixo:
+| Comando | Sub-comando | Descrição do comando | Parâmetros |
+|---------|-------------|----------------------|------------|
+| /agu    |             | Exibe retrato verossímil de Lucão e Ninext |
+| /dilera |             | Uh uh uuuuuuhh       |            |
+| /img    |             | Busca imagem no google images | ``query``: texto para buscar a imagem |
+| /info   | list-servers | Mostra a lista dos servidores em que o bot está instalado |
+| /inst   | play        | Busca e reproduz o MyInstant no canal de voz em que o usuário estiver conectado | ``*name``: texto/url do MyInstant |
+| /inst   | create      | Cria um comando de barra para um MyInstant. Ex: /macaco | ``*name``: nome do comando (ex: macaco); ``*value``: texto/url do MyInstant; ``description``: descrição do comando |
+| /inst   | edit        | Edita um comando de barra criado anteriormente | ``*name``: nome do comando; ``*value``: texto/url do MyInstant; ``description``: descrição do comando |
+| /inst   | delete      | Remove um comando de barra criado anteriormente | ``*name``: nome do comando |
+| /inst   | list        | Lista os comandos de barra criados ||
+| /ping   |             | PONG                               |
 
-- .inst nome do som - Utiliza a api aberta do MyInstants para pesquisar e reproduzir um som a partir do bot no canal de voz em que o usuário está.
+> Os parâmetros marcados com * são obrigatórios
 
-- inst-create alias url-do-som - Define um alias para algum som do MyInstants, podendo chamar o som apenas com o comando .nome-do-alias
-
-- inst-list - Lista todos os aliases criados no servidor e quais sons irá reproduzir
-
-- inst-edit - Edita um som atribuído a um alias
-
-- inst-delete - Deleta um alias criado
-
-Escreva .help no chat para as demais funcionalidades.
+> A aplicação está em desenvolvimento.
 
 ## Licenças
 
