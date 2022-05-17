@@ -1,5 +1,6 @@
 import { Client, CommandInteraction } from 'discord.js';
 import {
+  DiscordGatewayAdapterCreator,
   NoSubscriberBehavior,
   VoiceConnection,
   createAudioPlayer,
@@ -30,10 +31,8 @@ export default abstract class SlashCommand {
     interaction: CommandInteraction,
   ): Promise<VoiceConnection | null | undefined> => {
     const connection = joinVoiceChannel({
-      // @ts-ignore
-      adapterCreator: interaction.guild?.voiceAdapterCreator,
-      // @ts-ignore
-      channelId: interaction.member?.voice?.channelId!,
+      adapterCreator: interaction.guild?.voiceAdapterCreator as DiscordGatewayAdapterCreator,
+      channelId: (interaction.member as any)?.voice?.channelId!,
       guildId: interaction.guildId!,
     });
 
