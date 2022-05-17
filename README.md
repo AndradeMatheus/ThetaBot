@@ -25,7 +25,8 @@ Recomenda-se usar o Heroku para hostear a aplicação, todas as configurações 
 Algumas variáveis de ambiente estão baseadas no node.env, elas serão definidas no host da sua aplicação, como abaixo:
 
 ```bash
-BOT_TOKEN="TOKEN" #Token fornecida pelo painel de admnistrador do Discord
+BOT_TOKEN="TOKEN" #(fornecido pelo painel de admnistrador do Discord)
+BOT_CLIENTID="ClientId" #(fornecido pelo painel de admnistrador do Discord)
 MONGO_URI="" #Uri para conexão com mongodb
 ```
 
