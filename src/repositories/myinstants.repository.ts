@@ -32,7 +32,7 @@ export default class MyInstantsRepository implements IMyInstantsRepository {
       });
       newServer.save();
     } else {
-      const existingCommand = this.getCommandByAlias(
+      const existingCommand = await this.getCommandByAlias(
         existingServer,
         commandAlias,
       );
@@ -72,7 +72,7 @@ export default class MyInstantsRepository implements IMyInstantsRepository {
       return `server '${serverUid}' not found`;
     }
 
-    const command = this.getCommandByAlias(server, commandAlias);
+    const command = await this.getCommandByAlias(server, commandAlias);
 
     if (!command) {
       return `command '${commandAlias}' not found on server ${serverUid}`;
