@@ -1,12 +1,11 @@
 import {
   CacheType,
-  Client,
   CommandInteraction,
   MessageEmbed,
 } from 'discord.js';
-import SlashCommand, { CommandHandlerType } from 'models/slash-command';
 import Assets from '../utils/assets';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import SlashCommand from 'models/slash-command';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
 export default class InfoSlashCommand extends SlashCommand {
@@ -28,12 +27,10 @@ export default class InfoSlashCommand extends SlashCommand {
 
   async handle(
     interaction: CommandInteraction<CacheType>,
-    commandArg: CommandHandlerType,
   ): Promise<void> {
-    const client = commandArg as Extract<CommandHandlerType, Client>;
     const guilds = {
-      list: '- ' + client?.guilds.cache.map((g) => g.name).join('\n- '),
-      count: client?.guilds.cache.size,
+      list: '- ' + interaction.client?.guilds.cache.map((g) => g.name).join('\n- '),
+      count: interaction.client?.guilds.cache.size,
     };
 
     const serverlist = new MessageEmbed()

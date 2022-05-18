@@ -3,12 +3,12 @@ import {
   RESTPostAPIApplicationCommandsJSONBody,
   Routes,
 } from 'discord-api-types/v10';
-import SlashCommand, { CommandHandlerType } from 'models/slash-command';
 import Assets from '../utils/assets';
 import IMyInstantResponse from 'interfaces/responses/IMyInstantResponse';
 import IMyInstantsRepository from '../interfaces/repositories/my-instants';
 import ISlashCommand from 'interfaces/ISlashCommand';
 import { REST } from '@discordjs/rest';
+import SlashCommand from 'models/slash-command';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { Types } from '../utils/loadContainer';
 import axios from 'axios';
@@ -136,15 +136,13 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
   handle = async (
     interaction: CommandInteraction,
-    commandArgs: CommandHandlerType,
   ): Promise<void> => {
     await interaction.deferReply();
     const subCommandName = interaction.options.getSubcommand();
     const subcommands = new Map<
       string,
       (
-        fnInteraction: CommandInteraction,
-        fnCommandArgs: CommandHandlerType,
+        fnInteraction: CommandInteraction
       ) => Promise<void>
     >();
     subcommands.set('play', this.handlePlay);
@@ -161,7 +159,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    await action(interaction, commandArgs);
+    await action(interaction);
   };
 
   handlePlay = async (interaction: CommandInteraction) => {

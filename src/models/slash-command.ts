@@ -9,8 +9,6 @@ import {
 } from '@discordjs/voice';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/rest/v10/interactions';
 
-export type CommandHandlerType = Client | undefined | string;
-
 export default abstract class SlashCommand {
   constructor(
     public name: string,
@@ -24,7 +22,6 @@ export default abstract class SlashCommand {
 
   abstract handle(
     interaction: CommandInteraction,
-    client: CommandHandlerType,
   ): Promise<void>;
 
   getVoiceChannelConnection = async (

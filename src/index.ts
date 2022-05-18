@@ -32,7 +32,7 @@ client.on('interactionCreate', async (interaction) => {
   const command = slashCommandService.getCommand(interaction.commandName);
 
   if (command) {
-    await command.handle(interaction, client);
+    await command.handle(interaction);
   } else {
     const myInstantsSlashCommand = container.resolve<MyInstantsSlashCommand>(
       Types.MyInstantsSlashCommand,
