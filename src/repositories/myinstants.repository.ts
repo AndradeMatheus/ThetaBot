@@ -48,8 +48,18 @@ export default class MyInstantsRepository implements IMyInstantsRepository {
     return null;
   };
 
-  getCommandByAlias(server: IServer, alias: string): ICommand | undefined {
-    return server?.commands?.find((c) => c.alias == alias);
+  async getCommandByAlias(server: IServer | string | null, alias: string): Promise<ICommand | undefined> {
+    let existingServer: IServer | null = null;
+
+    if (!server) return;
+
+    if (typeof server === 'string') {
+      existingServer = await this.getServer(server as string);
+    } else {
+      existingServer = server as IServer;
+    }
+
+    return existingServer?.commands?.find((c) => c.alias == alias);
   }
 
   deleteServerCommand = async (

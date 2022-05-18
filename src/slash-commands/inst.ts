@@ -345,12 +345,12 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   };
 
   handleCustomCommand = async (interaction: CommandInteraction) => {
-    // get command from mongodb
-    const server = await this.myInstantsRepository.getServer(
+    const dbCommand = await this.myInstantsRepository.getCommandByAlias(
       interaction.guildId as string,
+      interaction.commandName,
     );
 
-    if (!server) {
+    if (!dbCommand) {
       await interaction.reply('ocorreu um erro ao buscar esse comando');
       logger.info(
         `command '${interaction.commandName}' not found on server '${interaction.guild?.name} (${interaction.guildId})'`,
@@ -358,16 +358,8 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    const dbCommand = this.myInstantsRepository.getCommandByAlias(
-      server,
-      interaction.commandName,
-    );
-
-    if (dbCommand) {
-      // play sound
-      await this.handleInstantPlay(interaction, dbCommand.value);
-      await interaction.reply('done');
-    }
+    await this.handleInstantPlay(interaction, dbCommand.value);
+    await interaction.reply('done');
   };
 
   private createInstantSlashCommand = async (

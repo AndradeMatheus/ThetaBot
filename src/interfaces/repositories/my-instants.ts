@@ -11,7 +11,7 @@ export default interface IMyInstantsRepository {
     commandValue: string,
   ): Promise<string | null>;
 
-  getCommandByAlias(server: IServer, alias: string): ICommand | undefined;
+  getCommandByAlias(server: IServer | string | null, alias: string): Promise<ICommand | undefined>;
 
   deleteServerCommand(
     serverUid: string,
