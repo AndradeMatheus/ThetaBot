@@ -1,3 +1,4 @@
+import IEnvironment from 'interfaces/environment';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import {
   RESTPostAPIApplicationCommandsJSONBody,
@@ -15,8 +16,6 @@ import axios from 'axios';
 import { container } from 'tsyringe';
 import logger from '../utils/logger';
 
-const { BOT_TOKEN, BOT_CLIENTID } = process.env;
-
 type CommandDataType = {
   commandName: string;
   commandValue: string;
@@ -27,6 +26,8 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   private myInstantsRepository = container.resolve<IMyInstantsRepository>(
     Types.IMyInstantsRepository,
   );
+
+  private environment: IEnvironment = container.resolve<IEnvironment>(Types.IEnvironment);
 
   constructor() {
     super(
@@ -358,10 +359,10 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       .setName(commandName)
       .setDescription(commandDescription as string);
 
-    const rest = new REST({ version: '10' }).setToken(BOT_TOKEN!);
+    const rest = new REST({ version: '10' }).setToken(this.environment.Token);
     await rest.put(
       Routes.applicationGuildCommands(
-        BOT_CLIENTID!,
+        this.environment.ClientId,
         interaction.guildId as string,
       ),
       {
@@ -374,10 +375,10 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     interaction: CommandInteraction,
     commandName: string,
   ) => {
-    const rest = new REST({ version: '9' }).setToken(BOT_TOKEN!);
+    const rest = new REST({ version: '9' }).setToken(this.environment.Token);
     const guildCommands: ISlashCommand[] = (await rest.get(
       Routes.applicationGuildCommands(
-        BOT_CLIENTID!,
+        this.environment.ClientId,
         interaction.guildId as string,
       ),
     )) as ISlashCommand[];
@@ -393,7 +394,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
 
     await rest.delete(
       `${Routes.applicationGuildCommands(
-        BOT_CLIENTID!,
+        this.environment.ClientId,
         interaction.guildId as string,
       )}/${command.id}`,
     );

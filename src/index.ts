@@ -2,8 +2,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // eslint-disable-next-line sort-imports
+import IEnvironment from 'interfaces/environment';
 import 'reflect-metadata';
-import './utils/startDb.ts';
+import initDatabase from './utils/database';
 import loadDIContainer, { Types } from './utils/loadContainer';
 import { Client } from 'discord.js';
 import ISlashCommandsService from './interfaces/services/slash-commands';
@@ -12,7 +13,11 @@ import { container } from 'tsyringe';
 import logger from './utils/logger';
 loadDIContainer();
 
-const { BOT_TOKEN: token } = process.env;
+const environment = container.resolve<IEnvironment>(
+  Types.IEnvironment,
+);
+
+initDatabase(environment);
 
 const slashCommandService = container.resolve<ISlashCommandsService>(
   Types.ISlashCommandsService,
@@ -24,7 +29,7 @@ const client = new Client({
   restTimeOffset: 25,
 });
 
-client.login(token);
+client.login(environment.Token);
 
 client.on('interactionCreate', async (interaction) => {
   if (!interaction.isCommand()) return;

@@ -2,14 +2,17 @@ import {
   RESTPostAPIApplicationCommandsJSONBody,
   Routes,
 } from 'discord-api-types/v10';
-import ISlashCommandsService from 'interfaces/services/slash-commands';
 import { REST } from '@discordjs/rest';
+import { container } from 'tsyringe';
+import IEnvironment from 'interfaces/environment';
+import ISlashCommandsService from 'interfaces/services/slash-commands';
 import SlashCommand from 'models/slash-command';
 import logger from '../utils/logger';
 import { readdir } from 'fs/promises';
+import { Types } from 'utils/loadContainer';
 
-const { BOT_TOKEN, BOT_CLIENTID } = process.env;
 export default class SlashCommandsService implements ISlashCommandsService {
+  private environment: IEnvironment = container.resolve<IEnvironment>(Types.IEnvironment);
   private commands: Map<string, SlashCommand> = new Map();
 
   async loadCommands(): Promise<void> {
@@ -27,13 +30,13 @@ export default class SlashCommandsService implements ISlashCommandsService {
   }
 
   private async registerCommands() {
-    const rest = new REST({ version: '10' }).setToken(BOT_TOKEN!);
+    const rest = new REST({ version: '10' }).setToken(this.environment.Token);
     const slashCommands: RESTPostAPIApplicationCommandsJSONBody[] = [];
     this.commands.forEach((command) => {
       slashCommands.push(command.getSlashCommandJson());
     });
 
-    await rest.put(Routes.applicationCommands(BOT_CLIENTID!), {
+    await rest.put(Routes.applicationCommands(this.environment.ClientId), {
       body: slashCommands,
     });
   }

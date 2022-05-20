@@ -1,11 +1,10 @@
 import logger from './logger';
 import mongoose from 'mongoose';
+import IEnvironment from 'interfaces/environment';
 
-const { MONGO_URI: mongoUri } = process.env;
-
-async function run() {
+export default async function initDatabase(environment: IEnvironment) {
   try {
-    await mongoose.connect(mongoUri!);
+    await mongoose.connect(environment.MongoUri);
 
     logger.info('Connected successfully to mongodb server');
   } catch (err) {
@@ -13,5 +12,3 @@ async function run() {
     await mongoose.disconnect();
   }
 }
-
-run().catch(console.dir);
