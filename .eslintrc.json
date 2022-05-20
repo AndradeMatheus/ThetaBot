@@ -63,7 +63,6 @@
     "space-infix-ops": "error",
     "space-unary-ops": "error",
     "spaced-comment": "error",
-    "sort-imports": "error",
     "yoda": "error"
   }
 }
