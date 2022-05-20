@@ -20,7 +20,7 @@ const { BOT_TOKEN, BOT_CLIENTID } = process.env;
 type CommandDataType = {
   commandName: string;
   commandValue: string;
-  commandDescription: string | undefined;
+  commandDescription: string;
 };
 
 export default class MyInstantsSlashCommand extends SlashCommand {
@@ -70,7 +70,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
             description
               .setName('description')
               .setDescription('audio description')
-              .setRequired(false),
+              .setRequired(true),
           ),
       )
       .addSubcommand((edit) =>
@@ -93,7 +93,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
             description
               .setName('description')
               .setDescription('audio description')
-              .setRequired(false),
+              .setRequired(true),
           ),
       )
       .addSubcommand((del) =>
@@ -194,18 +194,9 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   };
 
   handleCreate = async (interaction: CommandInteraction) => {
-    // extract command name, value and description
     const { commandName, commandDescription, commandValue } =
       this.getCommandData(interaction);
 
-    // create slash command
-    await this.createInstantSlashCommand(
-      interaction,
-      commandName,
-      commandDescription as string,
-    );
-
-    // create command with value on mongodb
     const commandCreationError =
       await this.myInstantsRepository.createServerCommand(
         interaction.guildId as string,
@@ -221,7 +212,12 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    // reply with success
+    await this.createInstantSlashCommand(
+      interaction,
+      commandName,
+      commandDescription,
+    );
+
     logger.info(
       `command '${commandName}' created successfully on server '${interaction.guild?.name}'`,
     );
@@ -324,15 +320,9 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   private getCommandData = (
     interaction: CommandInteraction,
   ): CommandDataType => {
-    const nameOption = interaction.options.get('name', true);
-    const valueOption = interaction.options.get('value', true);
-    const commandDescriptionOption = interaction.options.get(
-      'description',
-      false,
-    );
-    const commandValue = this.extractSearch(valueOption?.value as string);
-    const commandName = nameOption?.value as string;
-    const commandDescription = commandDescriptionOption?.value as string;
+    const commandValue = interaction.options.getString('name', true);
+    const commandName = interaction.options.getString('value', true);
+    const commandDescription = interaction.options.getString('description', true);
 
     return {
       commandName,
@@ -362,13 +352,11 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   private createInstantSlashCommand = async (
     interaction: CommandInteraction,
     commandName: string,
-    commandDescription: string | undefined,
+    commandDescription: string,
   ) => {
-    const newSlashcommand = new SlashCommandBuilder().setName(commandName);
-
-    if (commandDescription) {
-      newSlashcommand.setDescription(commandDescription as string);
-    }
+    const newSlashcommand = new SlashCommandBuilder()
+      .setName(commandName)
+      .setDescription(commandDescription as string);
 
     const rest = new REST({ version: '10' }).setToken(BOT_TOKEN!);
     await rest.put(

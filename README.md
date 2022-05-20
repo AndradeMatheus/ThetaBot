@@ -43,8 +43,8 @@ Confira abaixo os comandos disponíveis atualmente no bot:
 | /img    |             | Busca imagem no google images | ``search``: texto para buscar a imagem |
 | /info   | list-servers | Mostra a lista dos servidores em que o bot está instalado |
 | /inst   | play        | Busca e reproduz o MyInstant no canal de voz em que o usuário estiver conectado | ``*name``: texto/url do MyInstant |
-| /inst   | create      | Cria um comando de barra para um MyInstant. Ex: /macaco | ``*name``: nome do comando (ex: macaco); ``*value``: texto/url do MyInstant; ``description``: descrição do comando |
-| /inst   | edit        | Edita um comando de barra criado anteriormente | ``*name``: nome do comando; ``*value``: texto/url do MyInstant; ``description``: descrição do comando |
+| /inst   | create      | Cria um comando de barra para um MyInstant. Ex: /macaco | ``*name``: nome do comando (ex: macaco); ``*value``: texto/url do MyInstant; ``*description``: descrição do comando |
+| /inst   | edit        | Edita um comando de barra criado anteriormente | ``*name``: nome do comando; ``*value``: texto/url do MyInstant; ``*description``: descrição do comando |
 | /inst   | delete      | Remove um comando de barra criado anteriormente | ``*name``: nome do comando |
 | /inst   | list        | Lista os comandos de barra criados ||
 | /ping   |             | PONG                               |
