@@ -12,7 +12,7 @@ export const Tokens = {
 };
 
 export default function loadDIContainer() {
-  validateRequiredEnvironment();
+  validateRequiredEnvironmentVariables();
 
   container.register<IEnvironment>(Tokens.IEnvironment, {
     useValue: {
@@ -32,7 +32,7 @@ export default function loadDIContainer() {
   container.register(Tokens.MyInstantsSlashCommand, MyInstantsSlashCommand);
 }
 
-function validateRequiredEnvironment() {
+function validateRequiredEnvironmentVariables() {
   const requiredEnvVariables = [
     'BOT_TOKEN',
     'BOT_CLIENTID',
