@@ -4,7 +4,7 @@ import MyInstantsSlashCommand from '../slash-commands/inst';
 import SlashCommandsService from '../services/slash-commands.service';
 import IEnvironment from 'interfaces/environment';
 
-export const Types = {
+export const Tokens = {
   IEnvironment: Symbol(),
   IMyInstantsRepository: Symbol(),
   ISlashCommandsService: Symbol(),
@@ -14,7 +14,7 @@ export const Types = {
 export default function loadDIContainer() {
   validateRequiredEnvironment();
 
-  container.register<IEnvironment>(Types.IEnvironment, {
+  container.register<IEnvironment>(Tokens.IEnvironment, {
     useValue: {
       Token: process.env.BOT_TOKEN,
       ClientId: process.env.BOT_CLIENTID,
@@ -23,13 +23,13 @@ export default function loadDIContainer() {
   });
 
   // repositories
-  container.register(Types.IMyInstantsRepository, MyInstantsRepository);
+  container.register(Tokens.IMyInstantsRepository, MyInstantsRepository);
 
   // services
-  container.register(Types.ISlashCommandsService, SlashCommandsService);
+  container.register(Tokens.ISlashCommandsService, SlashCommandsService);
 
   // commands
-  container.register(Types.MyInstantsSlashCommand, MyInstantsSlashCommand);
+  container.register(Tokens.MyInstantsSlashCommand, MyInstantsSlashCommand);
 }
 
 function validateRequiredEnvironment() {

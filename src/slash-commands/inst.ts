@@ -11,7 +11,7 @@ import ISlashCommand from 'interfaces/ISlashCommand';
 import { REST } from '@discordjs/rest';
 import SlashCommand from 'models/slash-command';
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { Types } from '../utils/loadContainer';
+import { Tokens } from '../utils/loadContainer';
 import axios from 'axios';
 import { container } from 'tsyringe';
 import logger from '../utils/logger';
@@ -24,10 +24,10 @@ type CommandDataType = {
 
 export default class MyInstantsSlashCommand extends SlashCommand {
   private myInstantsRepository = container.resolve<IMyInstantsRepository>(
-    Types.IMyInstantsRepository,
+    Tokens.IMyInstantsRepository,
   );
 
-  private environment: IEnvironment = container.resolve<IEnvironment>(Types.IEnvironment);
+  private environment: IEnvironment = container.resolve<IEnvironment>(Tokens.IEnvironment);
 
   constructor() {
     super(

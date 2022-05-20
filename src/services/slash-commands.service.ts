@@ -9,10 +9,10 @@ import ISlashCommandsService from 'interfaces/services/slash-commands';
 import SlashCommand from 'models/slash-command';
 import logger from '../utils/logger';
 import { readdir } from 'fs/promises';
-import { Types } from 'utils/loadContainer';
+import { Tokens } from 'utils/loadContainer';
 
 export default class SlashCommandsService implements ISlashCommandsService {
-  private environment: IEnvironment = container.resolve<IEnvironment>(Types.IEnvironment);
+  private environment: IEnvironment = container.resolve<IEnvironment>(Tokens.IEnvironment);
   private commands: Map<string, SlashCommand> = new Map();
 
   async loadCommands(): Promise<void> {

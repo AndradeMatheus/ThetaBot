@@ -1,11 +1,10 @@
+import 'reflect-metadata';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// eslint-disable-next-line sort-imports
 import IEnvironment from 'interfaces/environment';
-import 'reflect-metadata';
 import initDatabase from './utils/database';
-import loadDIContainer, { Types } from './utils/loadContainer';
+import loadDIContainer, { Tokens } from './utils/loadContainer';
 import { Client } from 'discord.js';
 import ISlashCommandsService from './interfaces/services/slash-commands';
 import MyInstantsSlashCommand from './slash-commands/inst';
@@ -14,13 +13,13 @@ import logger from './utils/logger';
 loadDIContainer();
 
 const environment = container.resolve<IEnvironment>(
-  Types.IEnvironment,
+  Tokens.IEnvironment,
 );
 
 initDatabase(environment);
 
 const slashCommandService = container.resolve<ISlashCommandsService>(
-  Types.ISlashCommandsService,
+  Tokens.ISlashCommandsService,
 );
 slashCommandService.loadCommands();
 
@@ -40,7 +39,7 @@ client.on('interactionCreate', async (interaction) => {
     await command.handle(interaction);
   } else {
     const myInstantsSlashCommand = container.resolve<MyInstantsSlashCommand>(
-      Types.MyInstantsSlashCommand,
+      Tokens.MyInstantsSlashCommand,
     );
     myInstantsSlashCommand.handleCustomCommand(interaction);
   }
