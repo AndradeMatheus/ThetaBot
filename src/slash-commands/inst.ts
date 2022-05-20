@@ -32,7 +32,6 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     super(
       'inst',
       'MyInstants commands',
-      '/inst {play | create | edit | delete}',
     );
   }
 

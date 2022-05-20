@@ -6,7 +6,7 @@ import { getImage } from 'utils/scrapers/google-images';
 
 export default class GoogleImageScrapperSearchSlashCommand extends SlashCommand {
   constructor() {
-    super('img', 'search an image on Google Images', '/img {search}');
+    super('img', 'search an image on Google Images');
   }
 
   getSlashCommandJson(): RESTPostAPIApplicationCommandsJSONBody {

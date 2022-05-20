@@ -13,7 +13,6 @@ export default abstract class SlashCommand {
   constructor(
     public name: string,
     public description: string,
-    public help: string = 'N/A',
   ) {
     //
   }
