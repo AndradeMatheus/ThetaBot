@@ -321,8 +321,8 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   private getCommandData = (
     interaction: CommandInteraction,
   ): CommandDataType => {
-    const commandValue = interaction.options.getString('name', true);
-    const commandName = interaction.options.getString('value', true);
+    const commandName = interaction.options.getString('name', true);
+    const commandValue = interaction.options.getString('value', true);
     const commandDescription = interaction.options.getString('description', true);
 
     return {
