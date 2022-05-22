@@ -28,5 +28,6 @@ export default class DileraSlashCommand extends SlashCommand {
     }
 
     await this.connectToVoiceChannelAndPlay(connection, Assets.dileraBuzina);
+    await interaction.reply({ content: 'uh uh uhh', ephemeral: true });
   }
 }
