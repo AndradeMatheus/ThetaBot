@@ -9,7 +9,7 @@ import initDatabase from './utils/database';
 import loadDIContainer, { Tokens } from './utils/loadContainer';
 import logger from './utils/logger';
 import ISlashCommandsService from './interfaces/services/slash-commands';
-import MyInstantsSlashCommand from './slash-commands/inst';
+import ICustomCommandsService from './interfaces/services/custom-command';
 loadDIContainer();
 
 const environment = container.resolve<IEnvironment>(
@@ -31,7 +31,7 @@ const client = new Client({
 client.login(environment.Token);
 
 client.once('ready', () => {
-  client?.user?.setActivity('.help', {
+  client?.user?.setActivity({
     type: 'STREAMING',
     url: 'http://twitch.tv/tetistiger',
   });
@@ -47,9 +47,9 @@ client.on('interactionCreate', async (interaction) => {
   if (command) {
     await command.handle(interaction);
   } else {
-    const myInstantsSlashCommand = container.resolve<MyInstantsSlashCommand>(
-      Tokens.MyInstantsSlashCommand,
+    const customCommandService = container.resolve<ICustomCommandsService>(
+      Tokens.ICustomCommandsService,
     );
-    myInstantsSlashCommand.handleCustomCommand(interaction);
+    customCommandService.handle(interaction);
   }
 });

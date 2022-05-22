@@ -2,19 +2,18 @@ import IEnvironment from 'interfaces/environment';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import {
   RESTPostAPIApplicationCommandsJSONBody,
-  Routes,
 } from 'discord-api-types/v10';
 import Assets from '../utils/assets';
 import IMyInstantResponse from 'interfaces/responses/IMyInstantResponse';
-import IMyInstantsRepository from '../interfaces/repositories/my-instants';
-import ISlashCommand from 'interfaces/ISlashCommand';
-import { REST } from '@discordjs/rest';
+import ICommandsRepository from '../interfaces/repositories/commands';
 import SlashCommand from 'models/slash-command';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { Tokens } from '../utils/loadContainer';
 import axios from 'axios';
 import { container } from 'tsyringe';
 import logger from '../utils/logger';
+import ISlashCommandsService from 'interfaces/services/slash-commands';
+import { ICommand } from 'schemas/command.schema';
 
 type CommandDataType = {
   commandName: string;
@@ -23,11 +22,8 @@ type CommandDataType = {
 };
 
 export default class MyInstantsSlashCommand extends SlashCommand {
-  private myInstantsRepository = container.resolve<IMyInstantsRepository>(
-    Tokens.IMyInstantsRepository,
-  );
-
-  private environment: IEnvironment = container.resolve<IEnvironment>(Tokens.IEnvironment);
+  private myInstantsRepository = container.resolve<ICommandsRepository>(Tokens.ICommandsRepository);
+  private slashCommandsService = container.resolve<ISlashCommandsService>(Tokens.ISlashCommandsService);
 
   constructor() {
     super(
@@ -203,6 +199,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
         interaction.guildId as string,
         commandName,
         commandValue,
+        'inst',
       );
 
     if (commandCreationError) {
@@ -235,11 +232,12 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    const commandUpdateError =
+    let commandUpdateError =
       await this.myInstantsRepository.editServerCommand(
         interaction.guildId as string,
         commandName,
         commandValue,
+        'inst',
       );
 
     if (commandUpdateError) {
@@ -251,11 +249,16 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    await this.createInstantSlashCommand(
+    commandUpdateError = await this.createInstantSlashCommand(
       interaction,
       commandName,
       commandDescription,
     );
+
+    if (commandUpdateError) {
+      await interaction.editReply('ocorreu um erro ao editar esse comando');
+      return;
+    }
 
     logger.info(
       `Command '${commandName}' edited on server '${interaction.guild?.name}(${interaction.guildId})'`,
@@ -269,7 +272,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     const nameOption = interaction.options.get('name', true);
     const name = nameOption?.value as string;
 
-    const commandDeleteError =
+    let commandDeleteError =
       await this.myInstantsRepository.deleteServerCommand(
         interaction.guildId as string,
         name as string,
@@ -283,7 +286,12 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    await this.deleteInstantSlashCommand(interaction, name);
+    commandDeleteError = await this.deleteInstantSlashCommand(interaction, name);
+
+    if (commandDeleteError) {
+      interaction.editReply('ocorreu um erro ao remover esse comando');
+      return;
+    }
 
     logger.info(
       `Command '${name}' deleted from server '${interaction.guild?.name}(${interaction.guildId})'`,
@@ -300,13 +308,15 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    const commands = server.commands.map(c => ({
-      name:`/${c.alias}`,
-      value: c.value,
-    }));
+    const commandDb = await this.myInstantsRepository.getCommands(server, 'inst');
+    const commands = commandDb.map(c =>
+      ({
+        name:`/${c.alias}`,
+        value: c.value,
+      }));
 
     const embed = new MessageEmbed()
-      .setTitle('Lista de comandos customizados')
+      .setTitle('Lista de comandos customizados (MyInstants)')
       .setColor('BLUE')
       .addFields(commands)
       .setThumbnail(Assets.macacoSpin);
@@ -332,72 +342,41 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     };
   };
 
-  handleCustomCommand = async (interaction: CommandInteraction) => {
-    const dbCommand = await this.myInstantsRepository.getCommandByAlias(
-      interaction.guildId as string,
-      interaction.commandName,
-    );
-
-    if (!dbCommand) {
-      await interaction.reply('ocorreu um erro ao buscar esse comando');
-      logger.info(
-        `command '${interaction.commandName}' not found on server '${interaction.guild?.name} (${interaction.guildId})'`,
-      );
-      return;
-    }
-
-    await this.handleInstantPlay(interaction, dbCommand.value);
-    await interaction.reply('done');
+  handleCustomCommand = async (interaction: CommandInteraction, command: ICommand) => {
+    await this.handleInstantPlay(interaction, command.value);
+    await interaction.editReply('done');
   };
 
   private createInstantSlashCommand = async (
     interaction: CommandInteraction,
     commandName: string,
     commandDescription: string,
-  ) => {
-    const newSlashcommand = new SlashCommandBuilder()
-      .setName(commandName)
-      .setDescription(commandDescription as string);
-
-    const rest = new REST({ version: '10' }).setToken(this.environment.Token);
-    await rest.put(
-      Routes.applicationGuildCommands(
-        this.environment.ClientId,
-        interaction.guildId as string,
-      ),
-      {
-        body: [newSlashcommand.toJSON()],
-      },
+  ): Promise<string | undefined> => {
+    const commandCreationError = await this.slashCommandsService.createInstantSlashCommand(
+      interaction.guildId as string,
+      interaction.guild?.name as string,
+      commandName,
+      commandDescription,
     );
+
+    if (commandCreationError) {
+      return commandCreationError;
+    }
   };
 
   private deleteInstantSlashCommand = async (
     interaction: CommandInteraction,
     commandName: string,
-  ) => {
-    const rest = new REST({ version: '9' }).setToken(this.environment.Token);
-    const guildCommands: ISlashCommand[] = (await rest.get(
-      Routes.applicationGuildCommands(
-        this.environment.ClientId,
-        interaction.guildId as string,
-      ),
-    )) as ISlashCommand[];
-    const command = guildCommands.find((c) => c.name === commandName);
-
-    if (!command) {
-      await interaction.editReply('não foi possível remover esse comando');
-      logger.info(
-        `SlashCommand '${commandName}' not found on server ${interaction.guild?.name}(${interaction.guildId})`,
-      );
-      return;
-    }
-
-    await rest.delete(
-      `${Routes.applicationGuildCommands(
-        this.environment.ClientId,
-        interaction.guildId as string,
-      )}/${command.id}`,
+  ): Promise<string | undefined> => {
+    const commandDeletionError = await this.slashCommandsService.deleteInstantSlashCommand(
+      interaction.guildId as string,
+      interaction.guild?.name as string,
+      commandName,
     );
+
+    if (commandDeletionError) {
+      return commandDeletionError;
+    }
   };
 
   private extractSearch = (input: string): string => {

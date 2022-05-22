@@ -1,11 +1,11 @@
 import { CommandModel, ICommand } from '../schemas/command.schema';
 import { IServer, ServerModel } from '../schemas/server.schema';
 import { Document } from 'mongoose';
-import IMyInstantsRepository from 'interfaces/repositories/my-instants';
+import ICommandsRepository from 'interfaces/repositories/commands';
 import { injectable } from 'tsyringe';
 
 @injectable()
-export default class MyInstantsRepository implements IMyInstantsRepository {
+export default class CommandsRepository implements ICommandsRepository {
   getServer = async (uid: string): Promise<(Document & IServer) | null> => {
     const server = await ServerModel.findOne<Document & IServer>({ uid })
       .populate('commands')
@@ -18,11 +18,13 @@ export default class MyInstantsRepository implements IMyInstantsRepository {
     serverUid: string,
     commandAlias: string,
     commandValue: string,
-  ): Promise<string | null> => {
+    type: 'inst' | 'img',
+  ): Promise<string | undefined> => {
     const existingServer = await this.getServer(serverUid);
     const commandModel = new CommandModel({
       alias: commandAlias,
       value: commandValue,
+      type,
     });
 
     if (!existingServer) {
@@ -44,8 +46,6 @@ export default class MyInstantsRepository implements IMyInstantsRepository {
       existingServer.commands.push(commandModel);
       existingServer.save();
     }
-
-    return null;
   };
 
   async getCommandByAlias(server: IServer | string | null, alias: string): Promise<ICommand | undefined> {
@@ -62,10 +62,27 @@ export default class MyInstantsRepository implements IMyInstantsRepository {
     return existingServer?.commands?.find((c) => c.alias == alias);
   }
 
+  getCommands = async (
+    server: string | IServer | null,
+    type: 'img' | 'inst',
+  ): Promise<ICommand[]> => {
+    let existingServer: IServer | null = null;
+
+    if (!server) return [];
+
+    if (typeof server === 'string') {
+      existingServer = await this.getServer(server as string);
+    } else {
+      existingServer = server as IServer;
+    }
+
+    return existingServer?.commands?.filter((c) => c.type === type) ?? [];
+  };
+
   deleteServerCommand = async (
     serverUid: string,
     commandAlias: string,
-  ): Promise<string | null> => {
+  ): Promise<string | undefined> => {
     const server = await this.getServer(serverUid);
 
     if (!server) {
@@ -80,15 +97,14 @@ export default class MyInstantsRepository implements IMyInstantsRepository {
 
     server.commands.pull(command._id);
     server.save();
-
-    return null;
   };
 
   editServerCommand = async (
     serverUid: string,
     commandAlias: string,
     commandValue: string,
-  ): Promise<string | null> => {
+    type: 'inst' | 'img',
+  ): Promise<string | undefined> => {
     const server = await this.getServer(serverUid);
     const deleteCommandError = await this.deleteServerCommand(
       serverUid,
@@ -99,11 +115,9 @@ export default class MyInstantsRepository implements IMyInstantsRepository {
       return deleteCommandError;
     } else {
       server?.commands.push(
-        new CommandModel({ alias: commandAlias, value: commandValue }),
+        new CommandModel({ alias: commandAlias, value: commandValue, type }),
       );
       server?.save();
     }
-
-    return null;
   };
 }

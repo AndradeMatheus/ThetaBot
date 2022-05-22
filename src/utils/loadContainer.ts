@@ -1,14 +1,18 @@
 import { container } from 'tsyringe';
-import MyInstantsRepository from '../repositories/myinstants.repository';
+import CommandsRepository from '../repositories/commands.repository';
 import MyInstantsSlashCommand from '../slash-commands/inst';
+import ImageSlashCommand from '../slash-commands/img';
 import SlashCommandsService from '../services/slash-commands.service';
+import CustomCommandsService from 'services/custom-command.service';
 import IEnvironment from 'interfaces/environment';
 
 export const Tokens = {
   IEnvironment: Symbol(),
-  IMyInstantsRepository: Symbol(),
+  ICommandsRepository: Symbol(),
   ISlashCommandsService: Symbol(),
+  ICustomCommandsService: Symbol(),
   MyInstantsSlashCommand: Symbol(),
+  ImageSlashCommand: Symbol(),
 };
 
 export default function loadDIContainer() {
@@ -23,13 +27,15 @@ export default function loadDIContainer() {
   });
 
   // repositories
-  container.register(Tokens.IMyInstantsRepository, MyInstantsRepository);
+  container.register(Tokens.ICommandsRepository, CommandsRepository);
 
   // services
   container.register(Tokens.ISlashCommandsService, SlashCommandsService);
+  container.register(Tokens.ICustomCommandsService, CustomCommandsService);
 
   // commands
   container.register(Tokens.MyInstantsSlashCommand, MyInstantsSlashCommand);
+  container.register(Tokens.ImageSlashCommand, ImageSlashCommand);
 }
 
 function validateRequiredEnvironmentVariables() {
