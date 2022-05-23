@@ -1,5 +1,7 @@
-export default interface IEnvironment {
+interface IEnvironment {
   Token: string;
   ClientId: string;
   MongoUri: string;
-};
+}
+
+export default IEnvironment;

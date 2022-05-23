@@ -1,4 +1,4 @@
-import { Client, CommandInteraction } from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import {
   DiscordGatewayAdapterCreator,
   NoSubscriberBehavior,

@@ -2,7 +2,7 @@ import { Document } from 'mongoose';
 import { ICommand } from '../../schemas/command.schema';
 import { IServer } from '../../schemas/server.schema';
 
-export default interface ICommandsRepository {
+interface ICommandsRepository {
   getServer(uid: string): Promise<(Document & IServer) | null>;
 
   createServerCommand(
@@ -28,3 +28,6 @@ export default interface ICommandsRepository {
     type: 'inst' | 'img',
   ): Promise<string | undefined>;
 }
+
+
+export default ICommandsRepository;

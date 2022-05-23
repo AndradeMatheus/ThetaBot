@@ -1,7 +1,9 @@
 import { CommandInteraction } from "discord.js";
 
-export default interface ICustomCommandService {
+interface ICustomCommandService {
   handle(
     interaction: CommandInteraction,
   ): Promise<string | undefined>;
-};
+}
+
+export default ICustomCommandService;

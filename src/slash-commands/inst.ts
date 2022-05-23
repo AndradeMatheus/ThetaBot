@@ -1,4 +1,3 @@
-import IEnvironment from 'interfaces/environment';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import {
   RESTPostAPIApplicationCommandsJSONBody,

@@ -1,4 +1,6 @@
-export default interface ISlashCommand {
+interface ISlashCommand {
   id: string;
   name: string;
 }
+
+export default ISlashCommand;

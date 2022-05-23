@@ -1,3 +1,5 @@
-export default interface IMyInstantResponse {
+interface IMyInstantResponse {
   sound: string;
 }
+
+export default IMyInstantResponse;
