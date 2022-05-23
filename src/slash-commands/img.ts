@@ -56,6 +56,40 @@ export default class GoogleImageScrapperSearchSlashCommand extends SlashCommand 
               .setRequired(true),
           ),
       )
+      .addSubcommand(edit =>
+        edit
+          .setName('edit')
+          .setDescription('edit a custom command that returns an image')
+          .addStringOption(name =>
+            name
+              .setName('name')
+              .setDescription('command name')
+              .setRequired(true),
+          )
+          .addStringOption(url =>
+            url
+              .setName('url')
+              .setDescription('image url')
+              .setRequired(true),
+          )
+          .addStringOption(description =>
+            description
+              .setName('description')
+              .setDescription('image description')
+              .setRequired(true),
+          ),
+      )
+      .addSubcommand(del =>
+        del
+          .setName('delete')
+          .setDescription('delete a custom command that returns an image')
+          .addStringOption(name =>
+            name
+              .setName('name')
+              .setDescription('command name')
+              .setRequired(true),
+          ),
+      )
       .addSubcommand(list =>
         list
           .setName('list')
@@ -64,12 +98,20 @@ export default class GoogleImageScrapperSearchSlashCommand extends SlashCommand 
       .toJSON();
   }
 
-  async handle(interaction: CommandInteraction<CacheType>): Promise<void> {
-    await interaction.deferReply();
+  private getActions = (): Map<string, (interaction: CommandInteraction<CacheType>) => Promise<void>> => {
     const actions = new Map<string, (actionInteraction: CommandInteraction<CacheType>) => Promise<void>>();
     actions.set('search', this.handleSearch);
     actions.set('create', this.handleCreate);
+    actions.set('edit', this.handleEdit);
+    actions.set('delete', this.handleDelete);
     actions.set('list', this.handleList);
+
+    return actions;
+  };
+
+  async handle(interaction: CommandInteraction<CacheType>): Promise<void> {
+    await interaction.deferReply();
+    const actions = this.getActions();
 
     const subcommandName = interaction.options.getSubcommand();
     const action = actions.get(subcommandName);
@@ -136,6 +178,69 @@ export default class GoogleImageScrapperSearchSlashCommand extends SlashCommand 
 
     logger.info(`img custom command ${commandName} created on server '${interaction.guild?.name}'(${interaction.guildId})`);
     await interaction.editReply('comando criado com sucesso');
+  };
+
+  handleEdit = async (interaction: CommandInteraction<CacheType>) => {
+    const commandName = interaction.options.getString('name', true);
+    const commandDescription = interaction.options.getString('description', true);
+    const url = interaction.options.getString('url', true);
+
+    let commandEditError = await this.myInstanstsRepository.editServerCommand(
+      interaction.guildId as string,
+      commandName,
+      url,
+      'img',
+    );
+
+    if (commandEditError) {
+      logger.info(`there was an erro while editing a custom img command: ${commandEditError}`);
+      await interaction.editReply('não foi possível criar esse comando');
+      return;
+    }
+
+    commandEditError = await this.slashCommandsService.createInstantSlashCommand(
+      interaction.guildId as string,
+      interaction.guild?.name as string,
+      commandName,
+      commandDescription,
+    );
+
+    if (commandEditError) {
+      await interaction.editReply('não foi possível editar esse comando');
+      return;
+    }
+
+    logger.info(`img custom command ${commandName} edited on server '${interaction.guild?.name}'(${interaction.guildId})`);
+    await interaction.editReply('comando editado com sucesso');
+  };
+
+  handleDelete = async (interaction: CommandInteraction<CacheType>) => {
+    const commandName = interaction.options.getString('name', true);
+
+    let commandDeleteError = await this.myInstanstsRepository.deleteServerCommand(
+      interaction.guildId as string,
+      commandName,
+    );
+
+    if (commandDeleteError) {
+      logger.info(`there was an erro while deleting a custom img command: ${commandDeleteError}`);
+      await interaction.editReply('não foi possível remover esse comando');
+      return;
+    }
+
+    commandDeleteError = await this.slashCommandsService.deleteInstantSlashCommand(
+      interaction.guildId as string,
+      interaction.guild?.name as string,
+      commandName,
+    );
+
+    if (commandDeleteError) {
+      await interaction.editReply('não foi possível remover esse comando');
+      return;
+    }
+
+    logger.info(`img custom command ${commandName} removed on server '${interaction.guild?.name}'(${interaction.guildId})`);
+    await interaction.editReply('comando removido com sucesso');
   };
 
   handleList = async (interaction: CommandInteraction<CacheType>) => {

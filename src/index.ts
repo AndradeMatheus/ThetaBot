@@ -32,6 +32,7 @@ client.login(environment.Token);
 
 client.once('ready', () => {
   client?.user?.setActivity({
+    name: 'Thetabot',
     type: 'STREAMING',
     url: 'http://twitch.tv/tetistiger',
   });
