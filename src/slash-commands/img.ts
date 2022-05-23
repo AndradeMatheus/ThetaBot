@@ -11,7 +11,7 @@ import { getImage } from 'utils/scrapers/google-images';
 import logger from 'utils/logger';
 import Assets from '../utils/assets';
 export default class ImagesSlashCommand extends SlashCommand {
-  private myInstanstsRepository: ICommandsRepository = container.resolve<ICommandsRepository>(Tokens.ICommandsRepository);
+  private commandsRepository: ICommandsRepository = container.resolve<ICommandsRepository>(Tokens.ICommandsRepository);
   private slashCommandsService: ISlashCommandsService = container.resolve<ISlashCommandsService>(Tokens.ISlashCommandsService);
 
   constructor() {
@@ -151,7 +151,7 @@ export default class ImagesSlashCommand extends SlashCommand {
     const commandDescription = interaction.options.getString('description', true);
     const url = interaction.options.getString('url', true);
 
-    let commandCreationError = await this.myInstanstsRepository.createServerCommand(
+    let commandCreationError = await this.commandsRepository.createServerCommand(
       interaction.guildId as string,
       commandName,
       url,
@@ -185,7 +185,7 @@ export default class ImagesSlashCommand extends SlashCommand {
     const commandDescription = interaction.options.getString('description', true);
     const url = interaction.options.getString('url', true);
 
-    let commandEditError = await this.myInstanstsRepository.editServerCommand(
+    let commandEditError = await this.commandsRepository.editServerCommand(
       interaction.guildId as string,
       commandName,
       url,
@@ -217,7 +217,7 @@ export default class ImagesSlashCommand extends SlashCommand {
   handleDelete = async (interaction: CommandInteraction<CacheType>) => {
     const commandName = interaction.options.getString('name', true);
 
-    let commandDeleteError = await this.myInstanstsRepository.deleteServerCommand(
+    let commandDeleteError = await this.commandsRepository.deleteServerCommand(
       interaction.guildId as string,
       commandName,
     );
@@ -244,7 +244,7 @@ export default class ImagesSlashCommand extends SlashCommand {
   };
 
   handleList = async (interaction: CommandInteraction<CacheType>) => {
-    const server = await this.myInstanstsRepository.getServer(interaction.guildId as string);
+    const server = await this.commandsRepository.getServer(interaction.guildId as string);
 
     if (!server?.commands?.length) {
       logger.info(`server '${interaction.guild?.name}' not found`);
@@ -252,7 +252,7 @@ export default class ImagesSlashCommand extends SlashCommand {
       return;
     }
 
-    const commandDb = await this.myInstanstsRepository.getCommands(server, 'img');
+    const commandDb = await this.commandsRepository.getCommands(server, 'img');
     const commands = commandDb.map(c =>
       ({
         name:`/${c.alias}`,
