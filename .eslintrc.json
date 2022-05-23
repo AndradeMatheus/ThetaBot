@@ -23,6 +23,7 @@
         "allowTemplateLiterals": true
       }
     ],
+    "@typescript-eslint/semi": ["error"],
     "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
     "comma-dangle": ["error", "always-multiline"],
     "comma-spacing": "error",
@@ -49,7 +50,7 @@
     "no-var": "error",
     "object-curly-spacing": ["error", "always"],
     "prefer-const": "error",
-    "semi": ["error", "always"],
+    "semi": ["off"],
     "space-before-blocks": "error",
     "space-before-function-paren": [
       "error",
