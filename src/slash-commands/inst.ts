@@ -1,7 +1,5 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import {
-  RESTPostAPIApplicationCommandsJSONBody,
-} from 'discord-api-types/v10';
+import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import Assets from '../utils/assets';
 import IMyInstantResponse from 'interfaces/responses/IMyInstantResponse';
 import ICommandsRepository from '../interfaces/repositories/commands';
@@ -21,14 +19,15 @@ type CommandDataType = {
 };
 
 export default class MyInstantsSlashCommand extends SlashCommand {
-  private myInstantsRepository = container.resolve<ICommandsRepository>(Tokens.ICommandsRepository);
-  private slashCommandsService = container.resolve<ISlashCommandsService>(Tokens.ISlashCommandsService);
+  private myInstantsRepository = container.resolve<ICommandsRepository>(
+    Tokens.ICommandsRepository,
+  );
+  private slashCommandsService = container.resolve<ISlashCommandsService>(
+    Tokens.ISlashCommandsService,
+  );
 
   constructor() {
-    super(
-      'inst',
-      'MyInstants commands',
-    );
+    super('inst', 'MyInstants commands');
   }
 
   getSlashCommandJson(): RESTPostAPIApplicationCommandsJSONBody {
@@ -104,9 +103,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
           ),
       )
       .addSubcommand((list) =>
-        list
-          .setName('list')
-          .setDescription('list MyInstant custom commands'),
+        list.setName('list').setDescription('list MyInstant custom commands'),
       )
       .toJSON();
   }
@@ -129,16 +126,12 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     }
   }
 
-  handle = async (
-    interaction: CommandInteraction,
-  ): Promise<void> => {
+  handle = async (interaction: CommandInteraction): Promise<void> => {
     await interaction.deferReply();
     const subCommandName = interaction.options.getSubcommand();
     const subcommands = new Map<
       string,
-      (
-        fnInteraction: CommandInteraction
-      ) => Promise<void>
+      (fnInteraction: CommandInteraction) => Promise<void>
     >();
     subcommands.set('play', this.handlePlay);
     subcommands.set('create', this.handleCreate);
@@ -231,13 +224,12 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    let commandUpdateError =
-      await this.myInstantsRepository.editServerCommand(
-        interaction.guildId as string,
-        commandName,
-        commandValue,
-        'inst',
-      );
+    let commandUpdateError = await this.myInstantsRepository.editServerCommand(
+      interaction.guildId as string,
+      commandName,
+      commandValue,
+      'inst',
+    );
 
     if (commandUpdateError) {
       await interaction.editReply('ocorreu um erro ao editar esse comando');
@@ -285,7 +277,10 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    commandDeleteError = await this.deleteInstantSlashCommand(interaction, name);
+    commandDeleteError = await this.deleteInstantSlashCommand(
+      interaction,
+      name,
+    );
 
     if (commandDeleteError) {
       interaction.editReply('ocorreu um erro ao remover esse comando');
@@ -299,7 +294,9 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   };
 
   handleList = async (interaction: CommandInteraction) => {
-    const server = await this.myInstantsRepository.getServer(interaction.guildId as string);
+    const server = await this.myInstantsRepository.getServer(
+      interaction.guildId as string,
+    );
 
     if (!server?.commands?.length) {
       logger.info(`server '${interaction.guild?.name}' not found`);
@@ -307,12 +304,14 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    const commandDb = await this.myInstantsRepository.getCommands(server, 'inst');
-    const commands = commandDb.map(c =>
-      ({
-        name:`/${c.alias}`,
-        value: c.value,
-      }));
+    const commandDb = await this.myInstantsRepository.getCommands(
+      server,
+      'inst',
+    );
+    const commands = commandDb.map((c) => ({
+      name: `/${c.alias}`,
+      value: c.value,
+    }));
 
     const embed = new MessageEmbed()
       .setTitle('Lista de comandos customizados (MyInstants)')
@@ -321,9 +320,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       .setThumbnail(Assets.macacoSpin);
 
     interaction.editReply({
-      embeds: [
-        embed,
-      ],
+      embeds: [embed],
     });
   };
 
@@ -332,7 +329,10 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   ): CommandDataType => {
     const commandName = interaction.options.getString('name', true);
     const commandValue = interaction.options.getString('value', true);
-    const commandDescription = interaction.options.getString('description', true);
+    const commandDescription = interaction.options.getString(
+      'description',
+      true,
+    );
 
     return {
       commandName,
@@ -341,7 +341,10 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     };
   };
 
-  handleCustomCommand = async (interaction: CommandInteraction, command: ICommand) => {
+  handleCustomCommand = async (
+    interaction: CommandInteraction,
+    command: ICommand,
+  ) => {
     await this.handleInstantPlay(interaction, command.value);
     await interaction.editReply('done');
   };
@@ -351,12 +354,13 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     commandName: string,
     commandDescription: string,
   ): Promise<string | undefined> => {
-    const commandCreationError = await this.slashCommandsService.createInstantSlashCommand(
-      interaction.guildId as string,
-      interaction.guild?.name as string,
-      commandName,
-      commandDescription,
-    );
+    const commandCreationError =
+      await this.slashCommandsService.createInstantSlashCommand(
+        interaction.guildId as string,
+        interaction.guild?.name as string,
+        commandName,
+        commandDescription,
+      );
 
     if (commandCreationError) {
       return commandCreationError;
@@ -367,11 +371,12 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     interaction: CommandInteraction,
     commandName: string,
   ): Promise<string | undefined> => {
-    const commandDeletionError = await this.slashCommandsService.deleteInstantSlashCommand(
-      interaction.guildId as string,
-      interaction.guild?.name as string,
-      commandName,
-    );
+    const commandDeletionError =
+      await this.slashCommandsService.deleteInstantSlashCommand(
+        interaction.guildId as string,
+        interaction.guild?.name as string,
+        commandName,
+      );
 
     if (commandDeletionError) {
       return commandDeletionError;
@@ -381,11 +386,11 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   private extractSearch = (input: string): string => {
     const search = input.includes('myinstants.com')
       ? input
-        .replace('https://', '')
-        .replace('http://', '')
-        .replace('www.', '')
-        .replace('myinstants.com/instant/', '')
-        .replace('/', '')
+          .replace('https://', '')
+          .replace('http://', '')
+          .replace('www.', '')
+          .replace('myinstants.com/instant/', '')
+          .replace('/', '')
       : input.replace('/', '');
 
     return search;

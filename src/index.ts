@@ -12,9 +12,8 @@ import ISlashCommandsService from './interfaces/services/slash-commands';
 import ICustomCommandsService from './interfaces/services/custom-command';
 loadDIContainer();
 
-const environment = container.resolve<IEnvironment>(
-  Tokens.IEnvironment,
-);
+const environment = container.resolve<IEnvironment>(Tokens.IEnvironment);
+
 const slashCommandService = container.resolve<ISlashCommandsService>(
   Tokens.ISlashCommandsService,
 );

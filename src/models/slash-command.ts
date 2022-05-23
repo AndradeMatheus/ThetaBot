@@ -10,24 +10,20 @@ import {
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/rest/v10/interactions';
 
 export default abstract class SlashCommand {
-  constructor(
-    public name: string,
-    public description: string,
-  ) {
+  constructor(public name: string, public description: string) {
     //
   }
 
   abstract getSlashCommandJson(): RESTPostAPIApplicationCommandsJSONBody;
 
-  abstract handle(
-    interaction: CommandInteraction,
-  ): Promise<void>;
+  abstract handle(interaction: CommandInteraction): Promise<void>;
 
   getVoiceChannelConnection = async (
     interaction: CommandInteraction,
   ): Promise<VoiceConnection | null | undefined> => {
     const connection = joinVoiceChannel({
-      adapterCreator: interaction.guild?.voiceAdapterCreator as DiscordGatewayAdapterCreator,
+      adapterCreator: interaction.guild
+        ?.voiceAdapterCreator as DiscordGatewayAdapterCreator,
       channelId: (interaction.member as any)?.voice?.channelId!,
       guildId: interaction.guildId!,
     });

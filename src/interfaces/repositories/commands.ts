@@ -12,9 +12,15 @@ interface ICommandsRepository {
     type: 'inst' | 'img',
   ): Promise<string | undefined>;
 
-  getCommandByAlias(server: IServer | string | null, alias: string): Promise<ICommand | undefined>;
+  getCommandByAlias(
+    server: IServer | string | null,
+    alias: string,
+  ): Promise<ICommand | undefined>;
 
-  getCommands(server: IServer | string | null, type: 'img' | 'inst'): Promise<ICommand[]>;
+  getCommands(
+    server: IServer | string | null,
+    type: 'img' | 'inst',
+  ): Promise<ICommand[]>;
 
   deleteServerCommand(
     serverUid: string,
@@ -28,6 +34,5 @@ interface ICommandsRepository {
     type: 'inst' | 'img',
   ): Promise<string | undefined>;
 }
-
 
 export default ICommandsRepository;

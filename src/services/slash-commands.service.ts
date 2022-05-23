@@ -14,7 +14,9 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import ISlashCommand from 'interfaces/ISlashCommand';
 
 export default class SlashCommandsService implements ISlashCommandsService {
-  private environment: IEnvironment = container.resolve<IEnvironment>(Tokens.IEnvironment);
+  private environment: IEnvironment = container.resolve<IEnvironment>(
+    Tokens.IEnvironment,
+  );
   private commands: Map<string, SlashCommand> = new Map();
 
   createInstantSlashCommand = async (
@@ -30,10 +32,7 @@ export default class SlashCommandsService implements ISlashCommandsService {
 
       const rest = new REST({ version: '10' }).setToken(this.environment.Token);
       await rest.put(
-        Routes.applicationGuildCommands(
-          this.environment.ClientId,
-          guildId,
-        ),
+        Routes.applicationGuildCommands(this.environment.ClientId, guildId),
         {
           body: [newSlashcommand.toJSON()],
         },
@@ -53,18 +52,13 @@ export default class SlashCommandsService implements ISlashCommandsService {
     try {
       const rest = new REST({ version: '9' }).setToken(this.environment.Token);
       const guildCommands: ISlashCommand[] = (await rest.get(
-        Routes.applicationGuildCommands(
-          this.environment.ClientId,
-          guildId,
-        ),
+        Routes.applicationGuildCommands(this.environment.ClientId, guildId),
       )) as ISlashCommand[];
       const command = guildCommands.find((c) => c.name === commandName);
 
       if (!command) {
         const errorMessage = `SlashCommand '${commandName}' not found on server ${guildName}(${guildId})`;
-        logger.info(
-          errorMessage,
-        );
+        logger.info(errorMessage);
         return errorMessage;
       }
 

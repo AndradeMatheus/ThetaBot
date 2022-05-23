@@ -1,8 +1,4 @@
-import {
-  CacheType,
-  CommandInteraction,
-  MessageEmbed,
-} from 'discord.js';
+import { CacheType, CommandInteraction, MessageEmbed } from 'discord.js';
 import Assets from '../utils/assets';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import SlashCommand from 'models/slash-command';
@@ -25,11 +21,10 @@ export default class InfoSlashCommand extends SlashCommand {
       .toJSON();
   }
 
-  async handle(
-    interaction: CommandInteraction<CacheType>,
-  ): Promise<void> {
+  async handle(interaction: CommandInteraction<CacheType>): Promise<void> {
     const guilds = {
-      list: '- ' + interaction.client?.guilds.cache.map((g) => g.name).join('\n- '),
+      list:
+        '- ' + interaction.client?.guilds.cache.map((g) => g.name).join('\n- '),
       count: interaction.client?.guilds.cache.size,
     };
 

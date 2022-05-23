@@ -48,7 +48,10 @@ export default class CommandsRepository implements ICommandsRepository {
     }
   };
 
-  async getCommandByAlias(server: IServer | string | null, alias: string): Promise<ICommand | undefined> {
+  async getCommandByAlias(
+    server: IServer | string | null,
+    alias: string,
+  ): Promise<ICommand | undefined> {
     let existingServer: IServer | null = null;
 
     if (!server) return;

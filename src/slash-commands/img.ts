@@ -12,95 +12,98 @@ import logger from 'utils/logger';
 import Assets from '../utils/assets';
 
 export default class ImagesSlashCommand extends SlashCommand {
-  private commandsRepository: ICommandsRepository = container.resolve<ICommandsRepository>(Tokens.ICommandsRepository);
-  private slashCommandsService: ISlashCommandsService = container.resolve<ISlashCommandsService>(Tokens.ISlashCommandsService);
+  private commandsRepository: ICommandsRepository =
+    container.resolve<ICommandsRepository>(Tokens.ICommandsRepository);
+  private slashCommandsService: ISlashCommandsService =
+    container.resolve<ISlashCommandsService>(Tokens.ISlashCommandsService);
 
   constructor() {
-    super('img', 'search an image on Google Images or create custom commands with images');
+    super(
+      'img',
+      'search an image on Google Images or create custom commands with images',
+    );
   }
 
   getSlashCommandJson(): RESTPostAPIApplicationCommandsJSONBody {
     return new SlashCommandBuilder()
       .setName(this.name)
       .setDescription(this.description)
-      .addSubcommand(search =>
+      .addSubcommand((search) =>
         search
           .setName('search')
           .setDescription('create a custom command that returns an image')
-          .addStringOption(query =>
+          .addStringOption((query) =>
             query
               .setName('query')
               .setDescription('what you want to search for?')
               .setRequired(true),
           ),
       )
-      .addSubcommand(create =>
+      .addSubcommand((create) =>
         create
           .setName('create')
           .setDescription('create a custom command that returns an image')
-          .addStringOption(name =>
+          .addStringOption((name) =>
             name
               .setName('name')
               .setDescription('command name')
               .setRequired(true),
           )
-          .addStringOption(url =>
-            url
-              .setName('url')
-              .setDescription('image url')
-              .setRequired(true),
+          .addStringOption((url) =>
+            url.setName('url').setDescription('image url').setRequired(true),
           )
-          .addStringOption(description =>
+          .addStringOption((description) =>
             description
               .setName('description')
               .setDescription('image description')
               .setRequired(true),
           ),
       )
-      .addSubcommand(edit =>
+      .addSubcommand((edit) =>
         edit
           .setName('edit')
           .setDescription('edit a custom command that returns an image')
-          .addStringOption(name =>
+          .addStringOption((name) =>
             name
               .setName('name')
               .setDescription('command name')
               .setRequired(true),
           )
-          .addStringOption(url =>
-            url
-              .setName('url')
-              .setDescription('image url')
-              .setRequired(true),
+          .addStringOption((url) =>
+            url.setName('url').setDescription('image url').setRequired(true),
           )
-          .addStringOption(description =>
+          .addStringOption((description) =>
             description
               .setName('description')
               .setDescription('image description')
               .setRequired(true),
           ),
       )
-      .addSubcommand(del =>
+      .addSubcommand((del) =>
         del
           .setName('delete')
           .setDescription('delete a custom command that returns an image')
-          .addStringOption(name =>
+          .addStringOption((name) =>
             name
               .setName('name')
               .setDescription('command name')
               .setRequired(true),
           ),
       )
-      .addSubcommand(list =>
-        list
-          .setName('list')
-          .setDescription('list custom image commands'),
+      .addSubcommand((list) =>
+        list.setName('list').setDescription('list custom image commands'),
       )
       .toJSON();
   }
 
-  private getActions = (): Map<string, (interaction: CommandInteraction<CacheType>) => Promise<void>> => {
-    const actions = new Map<string, (actionInteraction: CommandInteraction<CacheType>) => Promise<void>>();
+  private getActions = (): Map<
+    string,
+    (interaction: CommandInteraction<CacheType>) => Promise<void>
+  > => {
+    const actions = new Map<
+      string,
+      (actionInteraction: CommandInteraction<CacheType>) => Promise<void>
+    >();
     actions.set('search', this.handleSearch);
     actions.set('create', this.handleCreate);
     actions.set('edit', this.handleEdit);
@@ -139,51 +142,59 @@ export default class ImagesSlashCommand extends SlashCommand {
     }
 
     interaction.editReply({
-      embeds: [
-        new MessageEmbed()
-          .setImage(imageUri)
-          .setURL(imageUri),
-      ],
+      embeds: [new MessageEmbed().setImage(imageUri).setURL(imageUri)],
     });
   };
 
   handleCreate = async (interaction: CommandInteraction<CacheType>) => {
     const commandName = interaction.options.getString('name', true);
-    const commandDescription = interaction.options.getString('description', true);
+    const commandDescription = interaction.options.getString(
+      'description',
+      true,
+    );
     const url = interaction.options.getString('url', true);
 
-    let commandCreationError = await this.commandsRepository.createServerCommand(
-      interaction.guildId as string,
-      commandName,
-      url,
-      'img',
-    );
+    let commandCreationError =
+      await this.commandsRepository.createServerCommand(
+        interaction.guildId as string,
+        commandName,
+        url,
+        'img',
+      );
 
     if (commandCreationError) {
-      logger.info(`there was an erro while creating a custom img command: ${commandCreationError}`);
+      logger.info(
+        `there was an erro while creating a custom img command: ${commandCreationError}`,
+      );
       await interaction.editReply('não foi possível criar esse comando');
       return;
     }
 
-    commandCreationError = await this.slashCommandsService.createInstantSlashCommand(
-      interaction.guildId as string,
-      interaction.guild?.name as string,
-      commandName,
-      commandDescription,
-    );
+    commandCreationError =
+      await this.slashCommandsService.createInstantSlashCommand(
+        interaction.guildId as string,
+        interaction.guild?.name as string,
+        commandName,
+        commandDescription,
+      );
 
     if (commandCreationError) {
       await interaction.editReply('não foi possível criar esse comando');
       return;
     }
 
-    logger.info(`img custom command ${commandName} created on server '${interaction.guild?.name}'(${interaction.guildId})`);
+    logger.info(
+      `img custom command ${commandName} created on server '${interaction.guild?.name}'(${interaction.guildId})`,
+    );
     await interaction.editReply('comando criado com sucesso');
   };
 
   handleEdit = async (interaction: CommandInteraction<CacheType>) => {
     const commandName = interaction.options.getString('name', true);
-    const commandDescription = interaction.options.getString('description', true);
+    const commandDescription = interaction.options.getString(
+      'description',
+      true,
+    );
     const url = interaction.options.getString('url', true);
 
     let commandEditError = await this.commandsRepository.editServerCommand(
@@ -194,24 +205,29 @@ export default class ImagesSlashCommand extends SlashCommand {
     );
 
     if (commandEditError) {
-      logger.info(`there was an erro while editing a custom img command: ${commandEditError}`);
+      logger.info(
+        `there was an erro while editing a custom img command: ${commandEditError}`,
+      );
       await interaction.editReply('não foi possível criar esse comando');
       return;
     }
 
-    commandEditError = await this.slashCommandsService.createInstantSlashCommand(
-      interaction.guildId as string,
-      interaction.guild?.name as string,
-      commandName,
-      commandDescription,
-    );
+    commandEditError =
+      await this.slashCommandsService.createInstantSlashCommand(
+        interaction.guildId as string,
+        interaction.guild?.name as string,
+        commandName,
+        commandDescription,
+      );
 
     if (commandEditError) {
       await interaction.editReply('não foi possível editar esse comando');
       return;
     }
 
-    logger.info(`img custom command ${commandName} edited on server '${interaction.guild?.name}'(${interaction.guildId})`);
+    logger.info(
+      `img custom command ${commandName} edited on server '${interaction.guild?.name}'(${interaction.guildId})`,
+    );
     await interaction.editReply('comando editado com sucesso');
   };
 
@@ -224,28 +240,35 @@ export default class ImagesSlashCommand extends SlashCommand {
     );
 
     if (commandDeleteError) {
-      logger.info(`there was an erro while deleting a custom img command: ${commandDeleteError}`);
+      logger.info(
+        `there was an erro while deleting a custom img command: ${commandDeleteError}`,
+      );
       await interaction.editReply('não foi possível remover esse comando');
       return;
     }
 
-    commandDeleteError = await this.slashCommandsService.deleteInstantSlashCommand(
-      interaction.guildId as string,
-      interaction.guild?.name as string,
-      commandName,
-    );
+    commandDeleteError =
+      await this.slashCommandsService.deleteInstantSlashCommand(
+        interaction.guildId as string,
+        interaction.guild?.name as string,
+        commandName,
+      );
 
     if (commandDeleteError) {
       await interaction.editReply('não foi possível remover esse comando');
       return;
     }
 
-    logger.info(`img custom command ${commandName} removed on server '${interaction.guild?.name}'(${interaction.guildId})`);
+    logger.info(
+      `img custom command ${commandName} removed on server '${interaction.guild?.name}'(${interaction.guildId})`,
+    );
     await interaction.editReply('comando removido com sucesso');
   };
 
   handleList = async (interaction: CommandInteraction<CacheType>) => {
-    const server = await this.commandsRepository.getServer(interaction.guildId as string);
+    const server = await this.commandsRepository.getServer(
+      interaction.guildId as string,
+    );
 
     if (!server?.commands?.length) {
       logger.info(`server '${interaction.guild?.name}' not found`);
@@ -254,11 +277,10 @@ export default class ImagesSlashCommand extends SlashCommand {
     }
 
     const commandDb = await this.commandsRepository.getCommands(server, 'img');
-    const commands = commandDb.map(c =>
-      ({
-        name:`/${c.alias}`,
-        value: c.value,
-      }));
+    const commands = commandDb.map((c) => ({
+      name: `/${c.alias}`,
+      value: c.value,
+    }));
 
     const embed = new MessageEmbed()
       .setTitle('Lista de comandos customizados (imagem)')
@@ -267,18 +289,16 @@ export default class ImagesSlashCommand extends SlashCommand {
       .setThumbnail(Assets.macacoSpin);
 
     interaction.editReply({
-      embeds: [
-        embed,
-      ],
+      embeds: [embed],
     });
   };
 
-  handleCustomCommand = async (interaction: CommandInteraction<CacheType>, command: ICommand) => {
+  handleCustomCommand = async (
+    interaction: CommandInteraction<CacheType>,
+    command: ICommand,
+  ) => {
     interaction.editReply({
-      embeds: [
-        new MessageEmbed()
-          .setImage(command.value as string),
-      ],
+      embeds: [new MessageEmbed().setImage(command.value as string)],
     });
   };
 }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { load } from 'cheerio';
 
-export const getImage = async function(
+export const getImage = async function (
   query: string,
 ): Promise<string | undefined> {
   try {

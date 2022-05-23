@@ -4,7 +4,7 @@ export interface ICommand {
   _id: string;
   alias: string;
   value: string;
-  type: 'inst' | 'img'
+  type: 'inst' | 'img';
 }
 
 export const CommandSchema = new Schema<ICommand>({

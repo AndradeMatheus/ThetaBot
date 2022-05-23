@@ -39,14 +39,12 @@ export default function loadDIContainer() {
 }
 
 function validateRequiredEnvironmentVariables() {
-  const requiredEnvVariables = [
-    'BOT_TOKEN',
-    'BOT_CLIENTID',
-    'MONGO_URI',
-  ];
+  const requiredEnvVariables = ['BOT_TOKEN', 'BOT_CLIENTID', 'MONGO_URI'];
 
   for (let index = 0; index < requiredEnvVariables.length; index++) {
     const envVar = requiredEnvVariables[index];
-    if (!(envVar in process.env)) throw new Error(`Required environment variable '${envVar}' not found`);
+    if (!(envVar in process.env)) {
+      throw new Error(`Required environment variable '${envVar}' not found`);
+    }
   }
 }
