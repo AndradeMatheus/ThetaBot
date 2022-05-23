@@ -24,8 +24,8 @@ export default abstract class SlashCommand {
     const connection = joinVoiceChannel({
       adapterCreator: interaction.guild
         ?.voiceAdapterCreator as DiscordGatewayAdapterCreator,
-      channelId: (interaction.member as any)?.voice?.channelId!,
-      guildId: interaction.guildId!,
+      channelId: (interaction.member as any)?.voice?.channelId as string,
+      guildId: interaction.guildId as string,
     });
 
     return connection;
