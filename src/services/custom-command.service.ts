@@ -6,7 +6,7 @@ import ICustomCommandService from 'interfaces/services/custom-command';
 import logger from 'utils/logger';
 import MyInstantsSlashCommand from 'slash-commands/inst';
 import ImageSlashCommand from 'slash-commands/img';
-import { ICommand } from 'schemas/command.schema';
+import { ICommand } from 'schemas/server.schema';
 
 export default class CustomCommandService implements ICustomCommandService {
   private commandsRepository: ICommandsRepository =
@@ -47,10 +47,10 @@ export default class CustomCommandService implements ICustomCommandService {
     // handle img command by type 'img'
     actions.set('img', this.imageSlashCommand.handleCustomCommand);
 
-    const action = actions.get(command.type);
+    const action = actions.get(command.$type);
 
     if (!action) {
-      const errorMessage = `action '${command.type}' not found as custom command`;
+      const errorMessage = `action '${command.$type}' not found as custom command`;
       logger.info(errorMessage);
       return errorMessage;
     }

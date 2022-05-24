@@ -1,5 +1,4 @@
-import { CommandModel, ICommand } from '../schemas/command.schema';
-import { IServer, ServerModel } from '../schemas/server.schema';
+import { IServer, ICommand, ServerModel } from '../schemas/server.schema';
 import { Document } from 'mongoose';
 import ICommandsRepository from 'interfaces/repositories/commands';
 import { injectable } from 'tsyringe';
@@ -21,16 +20,16 @@ export default class CommandsRepository implements ICommandsRepository {
     type: 'inst' | 'img',
   ): Promise<string | undefined> => {
     const existingServer = await this.getServer(serverUid);
-    const commandModel = new CommandModel({
+    const command: ICommand = {
       alias: commandAlias,
       value: commandValue,
-      type,
-    });
+      $type: type,
+    };
 
     if (!existingServer) {
       const newServer = new ServerModel({
         uid: serverUid,
-        commands: [commandModel],
+        commands: [command],
       });
       newServer.save();
     } else {
@@ -43,7 +42,7 @@ export default class CommandsRepository implements ICommandsRepository {
         return `the alias '${commandAlias}' already exists on server ${serverUid}`;
       }
 
-      existingServer.commands.push(commandModel);
+      existingServer.commands.push(command);
       existingServer.save();
     }
   };
@@ -79,7 +78,7 @@ export default class CommandsRepository implements ICommandsRepository {
       existingServer = server as IServer;
     }
 
-    return existingServer?.commands?.filter((c) => c.type === type) ?? [];
+    return existingServer?.commands?.filter((c) => c.$type === type) ?? [];
   };
 
   deleteServerCommand = async (
@@ -118,7 +117,7 @@ export default class CommandsRepository implements ICommandsRepository {
       return deleteCommandError;
     } else {
       server?.commands.push(
-        new CommandModel({ alias: commandAlias, value: commandValue, type }),
+        { alias: commandAlias, value: commandValue, type },
       );
       server?.save();
     }

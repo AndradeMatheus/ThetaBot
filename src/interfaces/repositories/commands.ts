@@ -1,6 +1,5 @@
 import { Document } from 'mongoose';
-import { ICommand } from '../../schemas/command.schema';
-import { IServer } from '../../schemas/server.schema';
+import { IServer, ICommand } from '../../schemas/server.schema';
 
 interface ICommandsRepository {
   getServer(uid: string): Promise<(Document & IServer) | null>;

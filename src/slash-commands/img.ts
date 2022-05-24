@@ -1,4 +1,4 @@
-import { ICommand } from './../schemas/command.schema';
+import { ICommand } from './../schemas/server.schema';
 import { CacheType, CommandInteraction, MessageEmbed } from 'discord.js';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { SlashCommandBuilder } from '@discordjs/builders';

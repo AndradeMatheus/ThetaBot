@@ -10,7 +10,7 @@ import axios from 'axios';
 import { container } from 'tsyringe';
 import logger from '../utils/logger';
 import ISlashCommandsService from 'interfaces/services/slash-commands';
-import { ICommand } from 'schemas/command.schema';
+import { ICommand } from 'schemas/server.schema';
 
 type CommandDataType = {
   commandName: string;
