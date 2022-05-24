@@ -116,9 +116,7 @@ export default class CommandsRepository implements ICommandsRepository {
     if (deleteCommandError) {
       return deleteCommandError;
     } else {
-      server?.commands.push(
-        { alias: commandAlias, value: commandValue, type },
-      );
+      server?.commands.push({ alias: commandAlias, value: commandValue, type });
       server?.save();
     }
   };

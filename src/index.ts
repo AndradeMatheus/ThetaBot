@@ -18,6 +18,10 @@ const slashCommandService = container.resolve<ISlashCommandsService>(
   Tokens.ISlashCommandsService,
 );
 
+const customCommandService = container.resolve<ICustomCommandsService>(
+  Tokens.ICustomCommandsService,
+);
+
 initDatabase(environment);
 
 slashCommandService.loadCommands();
@@ -47,9 +51,6 @@ client.on('interactionCreate', async (interaction) => {
   if (command) {
     await command.handle(interaction);
   } else {
-    const customCommandService = container.resolve<ICustomCommandsService>(
-      Tokens.ICustomCommandsService,
-    );
     customCommandService.handle(interaction);
   }
 });
