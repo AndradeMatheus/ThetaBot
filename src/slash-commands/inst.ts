@@ -19,7 +19,7 @@ type CommandDataType = {
 };
 
 export default class MyInstantsSlashCommand extends SlashCommand {
-  private myInstantsRepository = container.resolve<ICommandsRepository>(
+  private commandsRepository = container.resolve<ICommandsRepository>(
     Tokens.ICommandsRepository,
   );
   private slashCommandsService = container.resolve<ISlashCommandsService>(
@@ -187,7 +187,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       this.getCommandData(interaction);
 
     const commandCreationError =
-      await this.myInstantsRepository.createServerCommand(
+      await this.commandsRepository.createServerCommand(
         interaction.guildId as string,
         commandName,
         commandValue,
@@ -224,7 +224,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    let commandUpdateError = await this.myInstantsRepository.editServerCommand(
+    let commandUpdateError = await this.commandsRepository.editServerCommand(
       interaction.guildId as string,
       commandName,
       commandValue,
@@ -263,11 +263,10 @@ export default class MyInstantsSlashCommand extends SlashCommand {
     const nameOption = interaction.options.get('name', true);
     const name = nameOption?.value as string;
 
-    let commandDeleteError =
-      await this.myInstantsRepository.deleteServerCommand(
-        interaction.guildId as string,
-        name as string,
-      );
+    let commandDeleteError = await this.commandsRepository.deleteServerCommand(
+      interaction.guildId as string,
+      name as string,
+    );
 
     if (commandDeleteError) {
       interaction.editReply('ocorreu um erro ao remover esse comando');
@@ -294,7 +293,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
   };
 
   handleList = async (interaction: CommandInteraction) => {
-    const server = await this.myInstantsRepository.getServer(
+    const server = await this.commandsRepository.getServer(
       interaction.guildId as string,
     );
 
@@ -304,10 +303,7 @@ export default class MyInstantsSlashCommand extends SlashCommand {
       return;
     }
 
-    const commandDb = await this.myInstantsRepository.getCommands(
-      server,
-      'inst',
-    );
+    const commandDb = await this.commandsRepository.getCommands(server, 'inst');
     const commands = commandDb.map((c) => ({
       name: `/${c.alias}`,
       value: c.value,
